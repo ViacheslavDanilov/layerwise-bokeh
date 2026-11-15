@@ -11,8 +11,8 @@ from pathlib import Path
 
 import pytest
 
-from video_bokeh.core import _worker as worker
-from video_bokeh.core._worker import model_command
+from layerwise_bokeh.core import _worker as worker
+from layerwise_bokeh.core._worker import model_command
 
 _SETUP = "scripts/setup_x.sh"
 

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from video_bokeh.core._worker import WorkerError, WorkerProcess
+from layerwise_bokeh.core._worker import WorkerError, WorkerProcess
 
 # What a real worker does: keeps fd 1 for the protocol, so that the model's own output,
 # even native code writing straight to fd 1, lands on stderr.

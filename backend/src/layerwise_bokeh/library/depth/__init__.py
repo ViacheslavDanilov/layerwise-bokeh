@@ -1,0 +1,37 @@
+"""Depth estimator registry, and resolution of `--model` to a class."""
+
+from __future__ import annotations
+
+from layerwise_bokeh.core._plugins import resolve_class
+from layerwise_bokeh.library.depth.base import DepthEstimator
+from layerwise_bokeh.library.depth.depth_anything_v2 import (
+    DepthAnythingV2Base,
+    DepthAnythingV2Large,
+    DepthAnythingV2Small,
+)
+from layerwise_bokeh.library.depth.depth_anything_v3 import (
+    DepthAnything3MetricLarge,
+    DepthAnything3MonoLarge,
+)
+from layerwise_bokeh.library.depth.depth_pro import DepthPro
+
+ESTIMATORS: dict[str, type[DepthEstimator]] = {
+    DepthAnythingV2Small.name: DepthAnythingV2Small,
+    DepthAnythingV2Base.name: DepthAnythingV2Base,
+    DepthAnythingV2Large.name: DepthAnythingV2Large,
+    DepthPro.name: DepthPro,
+    DepthAnything3MonoLarge.name: DepthAnything3MonoLarge,
+    DepthAnything3MetricLarge.name: DepthAnything3MetricLarge,
+}
+
+
+#: What a depth estimator must provide; ``name`` matters only to this registry.
+ESTIMATOR_METHODS = ("load", "infer")
+
+
+def resolve_estimator(spec: str) -> type[DepthEstimator]:
+    """A registered name, or ``package.module:ClassName`` for a model outside this package.
+
+    See ``layerwise_bokeh.core._plugins.resolve_class`` for the errors it raises.
+    """
+    return resolve_class(spec, ESTIMATORS, ESTIMATOR_METHODS, "depth estimator")

@@ -11,7 +11,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from video_bokeh.preview._colormap import COLORMAPS, apply_colormap
+from layerwise_bokeh.preview._colormap import COLORMAPS, apply_colormap
 
 
 def test_matches_matplotlib_spectral_r() -> None:
@@ -55,8 +55,8 @@ def test_runtime_does_not_import_matplotlib() -> None:
 
     code = (
         "import sys\n"
-        "import video_bokeh.preview._colormap\n"
-        "import video_bokeh.preview.pack\n"
+        "import layerwise_bokeh.preview._colormap\n"
+        "import layerwise_bokeh.preview.pack\n"
         "sys.exit(1 if 'matplotlib' in sys.modules else 0)\n"
     )
     assert COLORMAPS  # the module under test is the one imported above

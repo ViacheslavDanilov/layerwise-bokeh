@@ -12,21 +12,21 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from video_bokeh.core import _library
-from video_bokeh.core._library import write_background, write_foreground
-from video_bokeh.core._seq_io import sequence_seed
-from video_bokeh.core._sequence_geometry import EASING_FNS
-from video_bokeh.core._streams import (
+from layerwise_bokeh.core import _library
+from layerwise_bokeh.core._library import write_background, write_foreground
+from layerwise_bokeh.core._seq_io import sequence_seed
+from layerwise_bokeh.core._sequence_geometry import EASING_FNS
+from layerwise_bokeh.core._streams import (
     read_alpha_tiff,
     read_disparity_png,
     read_disparity_tiff,
     read_paint_order,
     read_rgb_tiff,
 )
-from video_bokeh.library.build import DEFAULT_BG_MARGIN
-from video_bokeh.scenes._compositor import library_ids, render_scene, sample_scene
-from video_bokeh.scenes.generate import generate_dataset, main, sample_sequence
-from video_bokeh.scenes.stats import main as stats_main
+from layerwise_bokeh.library.build import DEFAULT_BG_MARGIN
+from layerwise_bokeh.scenes._compositor import library_ids, render_scene, sample_scene
+from layerwise_bokeh.scenes.generate import generate_dataset, main, sample_sequence
+from layerwise_bokeh.scenes.stats import main as stats_main
 
 
 def _tiny_library(root, n_fg: int = 2, half: int = 8) -> None:
@@ -113,15 +113,15 @@ def test_render_scene_disparity_never_exceeds_one(tmp_path) -> None:
 def test_zoom_in_raises_object_disparity(tmp_path) -> None:
     # Uses a gradient foreground depth so place_in_band exercises real percentile
     # stretch (not the degenerate-band fallback that flat depth triggers).
-    from video_bokeh.core._library import (
+    from layerwise_bokeh.core._library import (
         load_background,
         load_foreground,
         write_background,
         write_foreground,
     )
-    from video_bokeh.core._sequence_geometry import Pose
-    from video_bokeh.core._trajectory import DepthRange, derive_end_range
-    from video_bokeh.scenes._compositor import ObjectTrack, Scene
+    from layerwise_bokeh.core._sequence_geometry import Pose
+    from layerwise_bokeh.core._trajectory import DepthRange, derive_end_range
+    from layerwise_bokeh.scenes._compositor import ObjectTrack, Scene
 
     size = 32
     rgba = np.zeros((size, size, 4), dtype=np.uint8)
@@ -232,14 +232,14 @@ def test_a_listed_library_samples_the_scene_a_fresh_listing_does(tmp_path) -> No
 
 def _overlapping_pair_scene(tmp_path, range_a, range_b, n_frames=2, size=32):
     """Two fully-overlapping opaque squares with hand-picked depth ranges."""
-    from video_bokeh.core._library import (
+    from layerwise_bokeh.core._library import (
         load_background,
         load_foreground,
         write_background,
         write_foreground,
     )
-    from video_bokeh.core._sequence_geometry import Pose
-    from video_bokeh.scenes._compositor import ObjectTrack, Scene
+    from layerwise_bokeh.core._sequence_geometry import Pose
+    from layerwise_bokeh.scenes._compositor import ObjectTrack, Scene
 
     def _square(rgb):
         arr = np.zeros((size, size, 4), dtype=np.uint8)
@@ -290,7 +290,7 @@ def test_unrestricted_paint_order_is_frame_local(tmp_path) -> None:
     # Goal 6. Object a starts near and ends far; b does the opposite. They fully
     # overlap on screen, so the center pixel color must change between the
     # first and last frame.
-    from video_bokeh.core._trajectory import DepthRange
+    from layerwise_bokeh.core._trajectory import DepthRange
 
     scene = _overlapping_pair_scene(
         tmp_path,
@@ -307,8 +307,8 @@ def test_alpha_channels_stay_with_their_object_when_order_swaps(tmp_path) -> Non
     # indexed by object position, not by draw order.
     from dataclasses import replace as dc_replace
 
-    from video_bokeh.core._sequence_geometry import Pose
-    from video_bokeh.core._trajectory import DepthRange
+    from layerwise_bokeh.core._sequence_geometry import Pose
+    from layerwise_bokeh.core._trajectory import DepthRange
 
     scene = _overlapping_pair_scene(
         tmp_path,
@@ -338,15 +338,15 @@ def test_shrunk_range_still_shapes_the_object(tmp_path) -> None:
     # law moves it away and narrows its range by the same 0.25: start width
     # 0.05 -> end width 0.0125, below the old constant threshold of
     # 0.25 * _ACTIVE_WIDTH = 0.02.
-    from video_bokeh.core._library import (
+    from layerwise_bokeh.core._library import (
         load_background,
         load_foreground,
         write_background,
         write_foreground,
     )
-    from video_bokeh.core._sequence_geometry import Pose
-    from video_bokeh.core._trajectory import DepthRange
-    from video_bokeh.scenes._compositor import ObjectTrack, Scene
+    from layerwise_bokeh.core._sequence_geometry import Pose
+    from layerwise_bokeh.core._trajectory import DepthRange
+    from layerwise_bokeh.scenes._compositor import ObjectTrack, Scene
 
     size = 32
     rgba = np.zeros((size, size, 4), dtype=np.uint8)
@@ -437,8 +437,8 @@ def test_unrestricted_depth_moves_with_scale_not_against_it(tmp_path) -> None:
 
 def test_unrestricted_scene_is_collision_free(tmp_path) -> None:
     # Goal 5.
-    from video_bokeh.core._collision import pair_collides
-    from video_bokeh.core._sequence_geometry import (
+    from layerwise_bokeh.core._collision import pair_collides
+    from layerwise_bokeh.core._sequence_geometry import (
         EASING_FNS,
         build_fg_homography,
         warp_pillow,
@@ -510,8 +510,8 @@ def test_exhausted_retries_raise_instead_of_emitting_a_collision(
     # fully-opaque objects in adjacent slots, so no sample can be
     # collision-free: the slots are 0.02 apart and the collision margin is
     # also 0.02, which is not strict separation.
-    import video_bokeh.scenes._compositor as compositor_module
-    from video_bokeh.core._sequence_geometry import SampleConfig
+    import layerwise_bokeh.scenes._compositor as compositor_module
+    from layerwise_bokeh.core._sequence_geometry import SampleConfig
 
     size = 32
     for fid in ("fg_0", "fg_1"):
@@ -574,8 +574,8 @@ def test_generate_dataset_skips_a_sequence_it_cannot_sample(
 ) -> None:
     # Goal 8, writer half. A raising sample_scene must cost one sequence, not
     # the whole run, and the surviving sequences keep their seed-derived names.
-    import video_bokeh.scenes.generate as writer_module
-    from video_bokeh.scenes._compositor import CollisionRetriesExhausted
+    import layerwise_bokeh.scenes.generate as writer_module
+    from layerwise_bokeh.scenes._compositor import CollisionRetriesExhausted
 
     library = tmp_path / "lib"
     _tiny_library(library)
@@ -639,7 +639,7 @@ def _composite_layers(frame) -> tuple[np.ndarray, np.ndarray]:
 def test_layers_composited_in_paint_order_give_back_the_frame(tmp_path) -> None:
     # The two squares overlap fully and swap depth over the clip, so a wrong paint
     # order, or an object layer that is not the whole object, shows in the color.
-    from video_bokeh.core._trajectory import DepthRange
+    from layerwise_bokeh.core._trajectory import DepthRange
 
     scene = _overlapping_pair_scene(
         tmp_path,
@@ -771,7 +771,7 @@ def test_rewriting_a_sequence_drops_its_old_layers(tmp_path) -> None:
 def test_scene_records_match_the_sampled_scene(
     tmp_path, monkeypatch, n_frames, fallback
 ):
-    import video_bokeh.scenes._compositor as compositor
+    import layerwise_bokeh.scenes._compositor as compositor
 
     library = tmp_path / "lib"
     _tiny_library(library)
@@ -1150,8 +1150,8 @@ def test_stats_names_missing_record(tmp_path, capsys, missing):
 
 
 def test_records_are_rewritten_and_include_skipped_seeds(tmp_path, monkeypatch):
-    import video_bokeh.scenes.generate as writer
-    from video_bokeh.scenes._compositor import CollisionRetriesExhausted
+    import layerwise_bokeh.scenes.generate as writer
+    from layerwise_bokeh.scenes._compositor import CollisionRetriesExhausted
 
     library = tmp_path / "lib"
     _tiny_library(library)

@@ -9,8 +9,8 @@ from pathlib import Path
 import pytest
 from PIL import Image
 
-from video_bokeh.acquire import classify
-from video_bokeh.acquire.classify import read_predictions, unclassified
+from layerwise_bokeh.acquire import classify
+from layerwise_bokeh.acquire.classify import read_predictions, unclassified
 
 
 def test_only_images_without_a_prediction_are_left_to_classify() -> None:

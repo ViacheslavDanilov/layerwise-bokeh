@@ -101,7 +101,7 @@ from the test split, 79 GB, for evaluation.
 download the library into the layout Stage B reads, in about 20 minutes, train on its train
 split as step 5 does, and evaluate on the fixed set.
 
-[cli](docs/reference/cli.md#video_bokehlibraryhub-publish-or-download-a-library-and-its-fixed-set)
+[cli](docs/reference/cli.md#layerwise_bokehlibraryhub-publish-or-download-a-library-and-its-fixed-set)
 says how the library is packed and published.
 
 1. **Install** the dataset extras from the repository root, with Python 3.13+ and
@@ -143,7 +143,7 @@ says how the library is packed and published.
 
    ```bash
    cd backend
-   uv run --frozen --no-sync python -m video_bokeh.library.build \
+   uv run --frozen --no-sync python -m layerwise_bokeh.library.build \
      --fg-data-root data/magick --bg-data-root data/bg-20k \
      --output data/library/da2-large --size 1024 --model da2-large
    ```
@@ -158,7 +158,7 @@ says how the library is packed and published.
    frame's color, mattes and disparity.
 
    ```bash
-   uv run python -m video_bokeh.scenes.generate \
+   uv run python -m layerwise_bokeh.scenes.generate \
      --library-root data/library/da2-large --output data/synth \
      --count 4 --frames 80 --size 512 --bokeh --bokeh-strength 16 --flow forward
    ```
@@ -169,18 +169,18 @@ says how the library is packed and published.
      blur radius in pixels, at a 1024-pixel width, one unit of disparity from the focus.
    - `--layers`, `--flow` and `--occlusion` each add a stream. The last two take a direction,
      `forward`, `backward` or `both`.
-     [cli](docs/reference/cli.md#video_bokehscenesgenerate-stage-b) has every flag, and
+     [cli](docs/reference/cli.md#layerwise_bokehscenesgenerate-stage-b) has every flag, and
      [dataset-layout](docs/reference/dataset-layout.md#stage-b-a-generated-sequence) every
      stream.
 
-5. **Or train on the fly.** `SequenceStream`, in `video_bokeh.loader`, generates a new
+5. **Or train on the fly.** `SequenceStream`, in `layerwise_bokeh.loader`, generates a new
    sequence from the library for every item a training loop asks for and writes nothing to
    disk, so it needs step 3's library, not step 4's sequences. It takes the same frame count,
    size, streams and bokeh strength as step 4. This example trains a small network on it for
    20 steps:
 
    ```bash
-   uv run python -m video_bokeh.loader.example --library-root data/library/da2-large
+   uv run python -m layerwise_bokeh.loader.example --library-root data/library/da2-large
    ```
 
    [train-on-the-sequence-stream](docs/how-to/train-on-the-sequence-stream.md) reads its source

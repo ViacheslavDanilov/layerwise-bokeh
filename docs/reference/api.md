@@ -35,7 +35,7 @@ bokeh renders on.
 `foregrounds/` and `backgrounds/` is one library:
 
 ```bash
-VIDEO_BOKEH_LIBRARY=data/library_dev/da2-large uv run uvicorn video_bokeh.api.main:app --port 8000
+VIDEO_BOKEH_LIBRARY=data/library_dev/da2-large uv run uvicorn layerwise_bokeh.api.main:app --port 8000
 ```
 
 Any other directory is read one level down, and every subdirectory holding both is a library.
@@ -417,11 +417,11 @@ specifies. Firefox playback was not tested here.
 Existing cached MP4s keep their original encoding. The API re-encodes only when a video
 is missing or its stream directory's modification or change time is newer than the video. Changing the
 encoder settings alone does not invalidate cached files. The
-[CLI reference](cli.md#video_bokehpreviewpack-png-streams-to-mp4) measures file sizes,
+[CLI reference](cli.md#layerwise_bokehpreviewpack-png-streams-to-mp4) measures file sizes,
 encoding times and fidelity for all five streams.
 
 **`?colormap=` applies to `disparity` only.** It is 16-bit grayscale on disk and gets its
-color when served, so `spectral_r` (the default, matching what `video_bokeh.preview.pack`
+color when served, so `spectral_r` (the default, matching what `layerwise_bokeh.preview.pack`
 writes) and `grey` are two renderings of one stream. Each is cached as its own file,
 `disparity.mp4` and `disparity.grey.mp4`. Every other stream has one rendering, so the
 parameter is dropped rather than forking that stream's cache into identical copies. An unknown name

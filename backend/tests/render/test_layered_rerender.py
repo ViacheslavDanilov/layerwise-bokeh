@@ -10,10 +10,10 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from video_bokeh.core._streams import read_alpha_tiff, read_disparity_png
-from video_bokeh.render import run as cli
-from video_bokeh.render.layered import Layered
-from video_bokeh.scenes.generate import generate_dataset
+from layerwise_bokeh.core._streams import read_alpha_tiff, read_disparity_png
+from layerwise_bokeh.render import run as cli
+from layerwise_bokeh.render.layered import Layered
+from layerwise_bokeh.scenes.generate import generate_dataset
 
 FRAMES, SIZE = 4, 64
 

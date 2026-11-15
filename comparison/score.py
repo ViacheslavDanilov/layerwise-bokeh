@@ -26,8 +26,8 @@ from scipy import ndimage
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "backend" / "src"))
 
-from video_bokeh.core._seq_io import frame_names, list_sequences  # noqa: E402
-from video_bokeh.core._streams import read_alpha_tiff  # noqa: E402
+from layerwise_bokeh.core._seq_io import frame_names, list_sequences  # noqa: E402
+from layerwise_bokeh.core._streams import read_alpha_tiff  # noqa: E402
 
 #: An alpha that changes by more than this between neighbors marks an edge.
 EDGE_STEP = 0.02

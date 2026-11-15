@@ -7,18 +7,18 @@ related: [dataset-layout, generate-a-dataset]
 
 # CLI reference
 
-Every flag of every `video_bokeh.*` module, read out of the `argparse` parsers. Defaults here are
+Every flag of every `layerwise_bokeh.*` module, read out of the `argparse` parsers. Defaults here are
 the parser's defaults, not what a recipe happens to pass.
 
 All commands run from `backend/` and go through `uv run`, so they use the locked environment:
 
 ```bash
-uv run python -m video_bokeh.<role>.<module> [flags]
+uv run python -m layerwise_bokeh.<role>.<module> [flags]
 ```
 
 ---
 
-## `video_bokeh.library.build`: Stage A
+## `layerwise_bokeh.library.build`: Stage A
 
 Estimates depth once per image and writes the asset library.
 
@@ -113,9 +113,9 @@ to this repository. Stage A creates it with no arguments, then calls two methods
 
 `my_package` has to be importable from the environment `uv run` uses. A missing module, a
 missing class, or a class without `load` and `infer` stops the command before any weights
-load. The interface is `video_bokeh.library.depth.base.DepthEstimator`.
+load. The interface is `layerwise_bokeh.library.depth.base.DepthEstimator`.
 
-Three optional parts let `video_bokeh.library.check`, below, say more about the class.
+Three optional parts let `layerwise_bokeh.library.check`, below, say more about the class.
 Without them it still checks the class, and reports what it cannot know as unknown:
 
 - `hf_model_id`, a class attribute naming the Hugging Face checkpoint, or a local checkpoint
@@ -125,14 +125,14 @@ Without them it still checks the class, and reports what it cannot know as unkno
 - `peak_memory(self)`, for an estimator that keeps its weights in another process: the bytes
   that process has used on its device.
 
-## `video_bokeh.library.check`: will it run here?
+## `layerwise_bokeh.library.check`: will it run here?
 
 Asks, before a library build, whether each depth estimator can run on this machine. Needs
 `--extra library`, like Stage A.
 
 ```bash
-uv run --extra library python -m video_bokeh.library.check
-uv run --extra library python -m video_bokeh.library.check --measure
+uv run --extra library python -m layerwise_bokeh.library.check
+uv run --extra library python -m layerwise_bokeh.library.check --measure
 ```
 
 | flag | type | default | meaning |
@@ -190,10 +190,10 @@ weights.
 The command exits 1 when any estimator it checked is not `ready`, or failed to measure. A
 `--model` that names no estimator is a usage error, before anything is checked.
 
-## `video_bokeh.library.split`: draw the test foregrounds
+## `layerwise_bokeh.library.split`: draw the test foregrounds
 
 Draws the foregrounds of the test split and writes their ids, sorted, one per line, to
-`backend/src/video_bokeh/core/test_foregrounds.txt`. It takes `--fraction` of each subject that
+`backend/src/layerwise_bokeh/core/test_foregrounds.txt`. It takes `--fraction` of each subject that
 CLIP gave the library's foregrounds, so each subject is in the test split in its own share.
 Backgrounds need no draw, because they follow BG-20k's split
 ([dataset-layout](dataset-layout.md#the-train-and-test-splits)).
@@ -202,7 +202,7 @@ Backgrounds need no draw, because they follow BG-20k's split
 with other flags or from another library, changes the fixed set and the scene every seed names.
 
 ```bash
-uv run python -m video_bokeh.library.split --library-root data/library/da2-large \
+uv run python -m layerwise_bokeh.library.split --library-root data/library/da2-large \
   --predictions data/magick/predictions.csv
 ```
 
@@ -214,7 +214,7 @@ uv run python -m video_bokeh.library.split --library-root data/library/da2-large
 | `--seed` | int | `0` | seeds the draw, with the subject |
 | `--output` | path | the tracked list | where the ids are written |
 
-## `video_bokeh.library.hub`: publish or download a library and its fixed set
+## `layerwise_bokeh.library.hub`: publish or download a library and its fixed set
 
 `pack` writes a library into tar shards of about 2 GB under `library/`, with
 `library/index.json`, a dataset card `README.md`, the card's figure `assets/preview.jpg` and
@@ -238,7 +238,7 @@ not unpacked yet. `fetch` needs `huggingface-hub`, which the `loader` and `libra
 install, and so does `hf upload-large-folder`. The card names Depth Anything V2 Large, so
 `pack` takes only a library built with it.
 
-- **The card's text is `backend/src/video_bokeh/library/hub_card.md`.** Edit it there. `pack`
+- **The card's text is `backend/src/layerwise_bokeh/library/hub_card.md`.** Edit it there. `pack`
   fills in each `$name` from the index: counts, image sizes, shards and gigabytes.
 - **The figure shows the library, and the video what Stage B makes of it.** The figure holds
   four foregrounds and three backgrounds on tinted cards under two headed sections, a JPEG
@@ -279,25 +279,25 @@ install, and so does `hf upload-large-folder`. The card names Depth Anything V2 
   the shards it describes.
 
 ```bash
-uv run python -m video_bokeh.library.hub pack --library-root data/library/da2-large \
+uv run python -m layerwise_bokeh.library.hub pack --library-root data/library/da2-large \
   --output data/library-packed
-uv run python -m video_bokeh.library.hub preview --library-root data/library/da2-large \
+uv run python -m layerwise_bokeh.library.hub preview --library-root data/library/da2-large \
   --packed data/library-packed --foregrounds 6M__6MV7SSxmwd 0S__0SUuLNXyEz 3n__3nqLIHRgfa \
   ID__IDbo1YsCOt --backgrounds train__h_a415d5e8 train__h_a7671d5b testval__h_ea29ed84 \
   --seeds 1005 1033 1050
-uv run python -m video_bokeh.library.hub stage --packed data/library-packed \
+uv run python -m layerwise_bokeh.library.hub stage --packed data/library-packed \
   --output data/library-staged --every 5
 hf upload-large-folder vdanilov/video-bokeh data/library-staged --repo-type dataset \
   --exclude README.md
 hf upload vdanilov/video-bokeh data/library-staged/README.md README.md --repo-type dataset
-uv run python -m video_bokeh.library.hub pack-sequences --data-root data/fixed-set \
+uv run python -m layerwise_bokeh.library.hub pack-sequences --data-root data/fixed-set \
   --packed data/library-packed
 hf upload-large-folder vdanilov/video-bokeh data/library-packed --repo-type dataset \
   --exclude README.md
 hf upload vdanilov/video-bokeh data/library-packed/README.md README.md --repo-type dataset
-uv run python -m video_bokeh.library.hub fetch --repo vdanilov/video-bokeh \
+uv run python -m layerwise_bokeh.library.hub fetch --repo vdanilov/video-bokeh \
   --output data/library/da2-large
-uv run python -m video_bokeh.library.hub fetch-sequences --repo vdanilov/video-bokeh \
+uv run python -m layerwise_bokeh.library.hub fetch-sequences --repo vdanilov/video-bokeh \
   --output data/fixed-set
 ```
 
@@ -329,7 +329,7 @@ uv run python -m video_bokeh.library.hub fetch-sequences --repo vdanilov/video-b
 | `fetch-sequences` | `--output` | **required** | the folder to write the run into |
 | `fetch-sequences` | `--revision` | latest | a branch, tag or commit of the repository |
 
-## `video_bokeh.scenes.generate`: Stage B
+## `layerwise_bokeh.scenes.generate`: Stage B
 
 Samples scenes from the library and writes the sequence tree in [dataset-layout](dataset-layout.md).
 Each run also rewrites `manifest.csv` (including the background asset id), `objects.csv`
@@ -357,7 +357,7 @@ and `run.json` first, then writes `manifest.csv` atomically as the run's complet
 
 `bg_band_top` is not exposed on the CLI. Changing it needs the Python API.
 
-## `video_bokeh.scenes.stats`: dataset statistics
+## `layerwise_bokeh.scenes.stats`: dataset statistics
 
 Reads the current run's records and manifest-listed sequence files, without resampling.
 Prints JSON with counts, object-count distribution, depth motion and fallback shares,
@@ -366,7 +366,7 @@ and per frame, and the original run record. Formats and denominators are in
 [dataset-layout](dataset-layout.md#dataset-statistics).
 
 ```bash
-uv run python -m video_bokeh.scenes.stats --data-root data/synth_dev --output stats.json
+uv run python -m layerwise_bokeh.scenes.stats --data-root data/synth_dev --output stats.json
 ```
 
 | flag | type | default | meaning |
@@ -376,7 +376,7 @@ uv run python -m video_bokeh.scenes.stats --data-root data/synth_dev --output st
 
 Datasets without `objects.csv` or `run.json` produce a usage error naming the missing file.
 
-## `video_bokeh.render.run`: render bokeh again
+## `layerwise_bokeh.render.run`: render bokeh again
 
 Renders the bokeh again for written sequences, and writes each one's `bokeh/` stream, as
 [dataset-layout](dataset-layout.md) describes. The layered renderer needs their layers. It
@@ -425,9 +425,9 @@ adding `focus_object=` only when `--focus-object` is given; a renderer without t
 then fails.
 It must write `<sequence>/bokeh/<frame>.png` for each one: RGB uint8, the sequence's own size,
 named like the `all_in_focus` frames. The interface is
-`video_bokeh.render.base.BokehRenderer`.
+`layerwise_bokeh.render.base.BokehRenderer`.
 
-## `video_bokeh.preview.pack`: PNG streams to MP4
+## `layerwise_bokeh.preview.pack`: PNG streams to MP4
 
 | flag | type | default | meaning |
 |---|---|---|---|
@@ -481,7 +481,7 @@ hidden in the previous frame, with the black frame first.
 The output name doesn't include the colormap, so re-running `--streams disparity` with a
 different `--colormap` overwrites the previous `disparity.mp4` rather than writing a second file.
 
-## `video_bokeh.loader.example`: a training loop on the sequence stream
+## `layerwise_bokeh.loader.example`: a training loop on the sequence stream
 
 Needs the `loader` extra.
 [train-on-the-sequence-stream](../how-to/train-on-the-sequence-stream.md) runs it and reads its
@@ -492,7 +492,7 @@ source.
 | `--library-root` | path | `data/library_dev/da2-large` | library the stream draws its sequences from |
 | `--steps` | int | `20` | training steps to run before it stops |
 
-## `video_bokeh.loader.benchmark`: sequence-stream throughput
+## `layerwise_bokeh.loader.benchmark`: sequence-stream throughput
 
 Needs the `loader` extra. Measures the protocol in [loader](loader.md#what-each-choice-costs),
 prints one line per number, and optionally saves the flags, measurements and environment as JSON.
@@ -521,9 +521,9 @@ includes warm-up and timed rendering; CPU and MPS runs leave that JSON field nul
 
 | module | flags |
 |---|---|
-| `video_bokeh.acquire.magick` | `--metadata` (csv), `--output`, `--count`, `--seed`, `--picked` |
-| `video_bokeh.acquire.bg20k` | `--output`, and `--count`, `--seed` (default 11) to grow a pool one file at a time instead of downloading the archive. Needs no Kaggle account, and uses a token in `~/.kaggle/access_token`, or a legacy `~/.kaggle/kaggle.json`, when one exists |
-| `video_bokeh.acquire.classify` | `--data-root`, `--output`, `--model`, `--pretrained`, `--device`, `--batch-size`, `--num-workers`, `--keep-existing` to classify only the images the output lacks, with the model that made the rest. Writes `predictions.json` beside the predictions, recording each run's rows, model, weights and date |
+| `layerwise_bokeh.acquire.magick` | `--metadata` (csv), `--output`, `--count`, `--seed`, `--picked` |
+| `layerwise_bokeh.acquire.bg20k` | `--output`, and `--count`, `--seed` (default 11) to grow a pool one file at a time instead of downloading the archive. Needs no Kaggle account, and uses a token in `~/.kaggle/access_token`, or a legacy `~/.kaggle/kaggle.json`, when one exists |
+| `layerwise_bokeh.acquire.classify` | `--data-root`, `--output`, `--model`, `--pretrained`, `--device`, `--batch-size`, `--num-workers`, `--keep-existing` to classify only the images the output lacks, with the model that made the rest. Writes `predictions.json` beside the predictions, recording each run's rows, model, weights and date |
 
 **The two sources carry licenses of their own.** MAGICK's images are
 CC BY-NC 4.0, as its [project page](https://ryanndagreat.github.io/MAGICK/) states; its Hugging

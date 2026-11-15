@@ -46,7 +46,7 @@ without rebuilding.
   sequence and the same k again comes from the cache. Outside the page, k is
   `bokeh_strength` in the API's request ([api.md](../docs/reference/api.md#post-sequences)),
   `--bokeh-strength` for `scenes.generate`
-  ([cli.md](../docs/reference/cli.md#video_bokehscenesgenerate-stage-b)), and
+  ([cli.md](../docs/reference/cli.md#layerwise_bokehscenesgenerate-stage-b)), and
   `bokeh_strength` for the training stream ([loader.md](../docs/reference/loader.md#bokeh)).
 - **Generate**: one call, with one bar for the whole of it. The API names its steps first:
   choosing the trajectories, composing the frames, writing them, and rendering the bokeh. The

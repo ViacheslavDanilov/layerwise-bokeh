@@ -3,8 +3,8 @@
 #
 # Depth Anything 3 cannot share the backend environment: it pins numpy<2, its
 # requires-python stops before Python 3.13.1, and it depends on xformers, which has no
-# macOS wheel. So it gets its own Python 3.12 venv, and video_bokeh drives it through a
-# worker process (backend/src/video_bokeh/library/depth/_da3_worker.py).
+# macOS wheel. So it gets its own Python 3.12 venv, and layerwise_bokeh drives it through a
+# worker process (backend/src/layerwise_bokeh/library/depth/_da3_worker.py).
 #
 # What this does:
 #   1. Creates a Python 3.12 venv at backend/envs/depth-anything-3/.venv via uv.
@@ -57,4 +57,4 @@ from depth_anything_3.api import DepthAnything3  # noqa: F401
 print(f"ok: torch {torch.__version__}, numpy {numpy.__version__}")
 PY
 
-echo "Done. Use it with: uv run python -m video_bokeh.library.build --model da3-mono-large ..."
+echo "Done. Use it with: uv run python -m layerwise_bokeh.library.build --model da3-mono-large ..."

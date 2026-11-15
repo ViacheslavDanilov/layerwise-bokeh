@@ -26,7 +26,7 @@ export default defineConfig({
         `rm -rf "${DATA_ROOT}"`,
         `uv run --directory ../backend --extra api python tests/api/fixture_library.py "${LIBRARY}/da2-small"`,
         `uv run --directory ../backend --extra api python tests/api/fixture_library.py "${LIBRARY}/depth-pro" depth-pro`,
-        `uv run --directory ../backend --extra api uvicorn video_bokeh.api.main:app --host 127.0.0.1 --port ${API_PORT}`,
+        `uv run --directory ../backend --extra api uvicorn layerwise_bokeh.api.main:app --host 127.0.0.1 --port ${API_PORT}`,
       ].join(" && "),
       url: `http://127.0.0.1:${API_PORT}/health`,
       env: {

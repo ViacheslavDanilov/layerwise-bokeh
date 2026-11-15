@@ -4,8 +4,8 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from video_bokeh.api._settings import Settings, load_settings
-from video_bokeh.api.main import create_app
+from layerwise_bokeh.api._settings import Settings, load_settings
+from layerwise_bokeh.api.main import create_app
 
 
 def _settings(tmp_path: Path, origins: tuple[str, ...] | None = None) -> Settings:

@@ -22,7 +22,7 @@ has no license file, so it stays on the machine that runs it and is not redistri
 ```bash
 comparison/setup.sh drbokeh
 # Sequences written with layers and bokeh, so that there is a focus record to match:
-cd backend && uv run python -m video_bokeh.scenes.generate \
+cd backend && uv run python -m layerwise_bokeh.scenes.generate \
   --library-root data/library/da2-large --output data/cmp --count 5 --frames 24 --size 1024 \
   --seed 0 --layers --bokeh
 cd .. && comparison/envs/render/bin/python comparison/run_drbokeh.py --data-root backend/data/cmp

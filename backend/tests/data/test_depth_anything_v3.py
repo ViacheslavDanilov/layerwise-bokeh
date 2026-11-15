@@ -11,8 +11,8 @@ import pytest
 import torch
 from PIL import Image
 
-from video_bokeh.library.depth import ESTIMATORS
-from video_bokeh.library.depth import depth_anything_v3 as mod
+from layerwise_bokeh.library.depth import ESTIMATORS
+from layerwise_bokeh.library.depth import depth_anything_v3 as mod
 
 # Every Depth Anything 3 checkpoint the registry knows, each through the same worker.
 _DA3 = [

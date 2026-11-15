@@ -71,14 +71,14 @@ from PIL import Image, ImageFilter
 from review import focus_alpha
 from scipy import ndimage
 
-from video_bokeh.core._library import (
+from layerwise_bokeh.core._library import (
     BACKGROUNDS,
     FOREGROUNDS,
     list_backgrounds,
 )
-from video_bokeh.core._split import ALL
-from video_bokeh.core._streams import read_alpha_tiff, read_paint_order
-from video_bokeh.scenes.generate import generate_dataset
+from layerwise_bokeh.core._split import ALL
+from layerwise_bokeh.core._streams import read_alpha_tiff, read_paint_order
+from layerwise_bokeh.scenes.generate import generate_dataset
 
 FRAMES = 24
 SIZE = 1024

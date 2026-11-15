@@ -9,8 +9,8 @@ from pathlib import Path
 
 import pytest
 
-from video_bokeh.api._sequences import SequenceRequest, ensure_sequence, sequence_id
-from video_bokeh.core._streams import BOKEH_STRENGTH
+from layerwise_bokeh.api._sequences import SequenceRequest, ensure_sequence, sequence_id
+from layerwise_bokeh.core._streams import BOKEH_STRENGTH
 
 BASE = SequenceRequest(seed=0, frames=3, size=64, n_objects_min=1, n_objects_max=2)
 
@@ -196,7 +196,7 @@ def test_a_half_written_sequence_is_never_visible(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """A crash during generation must not leave a directory that later looks cached."""
-    monkeypatch.setattr("video_bokeh.api._sequences.iter_frames", _explode)
+    monkeypatch.setattr("layerwise_bokeh.api._sequences.iter_frames", _explode)
     sequences = tmp_path / "sequences"
     with pytest.raises(RuntimeError, match="boom"):
         ensure_sequence(library, "libaaa", sequences, BASE)
@@ -211,12 +211,12 @@ def test_matches_what_the_cli_writes_for_the_same_seed(
     library: Path,
     tmp_path: Path,
 ) -> None:
-    """The API and video_bokeh.scenes.generate must not drift into different sequences.
+    """The API and layerwise_bokeh.scenes.generate must not drift into different sequences.
 
     They share sample_sequence for exactly this reason: a seed that means four
     objects on the command line has to mean four objects over HTTP.
     """
-    from video_bokeh.scenes.generate import generate_dataset
+    from layerwise_bokeh.scenes.generate import generate_dataset
 
     api = ensure_sequence(library, "libaaa", tmp_path / "sequences", BASE)
 

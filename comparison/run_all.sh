@@ -3,7 +3,7 @@
 # MPIB's ray tracer composited in gamma values, and print a table of each. The sequences must
 # hold their layers and bokeh, so that the focus and the strength are ours: write them with
 #
-#   uv run python -m video_bokeh.scenes.generate --library-root <library> --output <dir> \
+#   uv run python -m layerwise_bokeh.scenes.generate --library-root <library> --output <dir> \
 #     --count <n> --frames 24 --size 1024 --seed <s> --layers --bokeh
 #
 # Usage: comparison/run_all.sh <data-root> [sequence ids, comma-separated]

@@ -10,8 +10,8 @@ import pytest
 import torch
 from PIL import Image
 
-from video_bokeh.acquire import classify
-from video_bokeh.acquire.classify import prediction_fieldnames
+from layerwise_bokeh.acquire import classify
+from layerwise_bokeh.acquire.classify import prediction_fieldnames
 
 
 class _FakeClip:

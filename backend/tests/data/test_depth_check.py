@@ -1,4 +1,4 @@
-"""`video_bokeh.library.check` says whether a depth estimator will run here."""
+"""`layerwise_bokeh.library.check` says whether a depth estimator will run here."""
 
 from __future__ import annotations
 
@@ -13,8 +13,8 @@ import huggingface_hub.constants
 import pytest
 import torch
 
-from video_bokeh.library import check
-from video_bokeh.library.depth import ESTIMATORS
+from layerwise_bokeh.library import check
+from layerwise_bokeh.library.depth import ESTIMATORS
 
 # Estimators of the user's own, the way a plugin would live outside this package. Their
 # checkpoints are fake Hugging Face repos laid out by `fake_cache` below.

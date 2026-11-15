@@ -11,12 +11,12 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from video_bokeh.core._streams import (
+from layerwise_bokeh.core._streams import (
     write_disparity_png,
     write_flow_png,
     write_mask_png,
 )
-from video_bokeh.preview.pack import _build_parser, encode_stream, load_frame, main
+from layerwise_bokeh.preview.pack import _build_parser, encode_stream, load_frame, main
 
 
 def _write_ramp(path, height=8, width=16):
@@ -53,7 +53,7 @@ def test_quality_maps_to_explicit_crf_and_high_profile(
     tmp_path, monkeypatch, quality, crf
 ):
     writer_factory = MagicMock()
-    monkeypatch.setattr("video_bokeh.preview.pack.iio.get_writer", writer_factory)
+    monkeypatch.setattr("layerwise_bokeh.preview.pack.iio.get_writer", writer_factory)
     frame = tmp_path / "01.png"
     _write_ramp(frame)
 

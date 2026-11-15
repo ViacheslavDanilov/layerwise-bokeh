@@ -17,7 +17,7 @@ import torch  # noqa: E402
 from bench_speed import build, main, read_frames, resample  # noqa: E402
 from fixture_library import build_library  # noqa: E402
 
-from video_bokeh.scenes.generate import generate_dataset  # noqa: E402
+from layerwise_bokeh.scenes.generate import generate_dataset  # noqa: E402
 
 SIZE = 128
 FRAMES = 3

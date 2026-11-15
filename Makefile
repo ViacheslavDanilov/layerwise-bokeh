@@ -33,14 +33,14 @@ pools: ## Download the full MAGICK and BG-20k pools into backend/data
 	    \( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' \) 2> /dev/null | grep -q . && \
 	  ! ls -d data/bg-20k/datasets/*/*/versions/*/ > /dev/null 2>&1; then \
 	  echo "bg-20k: data/bg-20k/images holds images and no archive is left, skipped"; \
-	elif ! uv run --extra acquire python -m video_bokeh.acquire.bg20k --output data/bg-20k; then \
+	elif ! uv run --extra acquire python -m layerwise_bokeh.acquire.bg20k --output data/bg-20k; then \
 	  echo "error: BG-20k did not download. If Kaggle refused it, save a Kaggle API token in" >&2; \
 	  echo "~/.kaggle/access_token (or a legacy kaggle.json in ~/.kaggle/) and run make pools" >&2; \
 	  echo "again. Or download BG-20k by hand into backend/data/bg-20k/images/train and" >&2; \
 	  echo "images/testval; make pools then skips it." >&2; \
 	  exit 1; \
 	fi
-	cd backend && uv run --extra acquire python -m video_bokeh.acquire.magick \
+	cd backend && uv run --extra acquire python -m layerwise_bokeh.acquire.magick \
 	  --metadata data/magick/metadata.csv --output data/magick --count 11868
 
 # Builds under a hidden name and renames when done, so a half-built library is never
@@ -49,7 +49,7 @@ libraries: ## Build one dev library per depth estimator into LIBRARY
 	@out="$(abspath $(LIBRARY))"; for estimator in $(ESTIMATORS); do \
 	  if [ -d "$$out/$$estimator" ]; then echo "$$estimator: exists, skipped"; continue; fi; \
 	  rm -rf "$$out/.$$estimator" && \
-	  (cd backend && VIDEO_BOKEH_RUNNER=$(RUNNER) uv run --extra library python -m video_bokeh.library.build \
+	  (cd backend && VIDEO_BOKEH_RUNNER=$(RUNNER) uv run --extra library python -m layerwise_bokeh.library.build \
 	    --fg-data-root data/magick_dev --bg-data-root data/bg-20k_dev \
 	    --output "$$out/.$$estimator" --model $$estimator $(BUILD_FLAGS)) && \
 	  mv "$$out/.$$estimator" "$$out/$$estimator" || exit 1; \
@@ -59,7 +59,7 @@ images: ## Build Depth Anything 3's Docker image (NVIDIA only)
 	docker build -t video-bokeh-da3 -f backend/docker/depth-anything-3/Dockerfile .
 
 api: ## Serve the API on :8000 from LIBRARY
-	cd backend && VIDEO_BOKEH_LIBRARY="$(abspath $(LIBRARY))" uv run uvicorn video_bokeh.api.main:app --reload --port 8000
+	cd backend && VIDEO_BOKEH_LIBRARY="$(abspath $(LIBRARY))" uv run uvicorn layerwise_bokeh.api.main:app --reload --port 8000
 
 web: ## Serve the page on :3000
 	cd frontend && pnpm dev

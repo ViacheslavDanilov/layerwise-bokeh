@@ -294,14 +294,14 @@ def collect(
 ) -> None:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend" / "src"))
-    from video_bokeh.core._seq_io import frame_names, list_sequences
+    from layerwise_bokeh.core._seq_io import frame_names, list_sequences
 
     out.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(data_root / "manifest.csv", out / "manifest.csv")
     for path in sorted(data_root.glob("**/comparison_*.json")):
         name = path.relative_to(data_root).as_posix().replace("/", "_")
         _place(path, out / "scores" / name, link=False)
-    from video_bokeh.core._streams import read_alpha_tiff, read_paint_order
+    from layerwise_bokeh.core._streams import read_alpha_tiff, read_paint_order
 
     for seq in list_sequences(data_root, None):
         streams = streams_of(seq)

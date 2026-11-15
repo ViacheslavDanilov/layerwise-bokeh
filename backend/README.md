@@ -5,7 +5,7 @@ FastAPI backend and dataset pipeline for the depth-aware synthetic bokeh video p
 ## 📁 Structure
 
 ```
-backend/src/video_bokeh/
+backend/src/layerwise_bokeh/
 ├── api/            # HTTP surface
 ├── acquire/        # Source pools
 ├── core/           # Geometry, streams, and shared contracts
@@ -45,7 +45,7 @@ like. Both numbers below were measured on an Apple M3 Pro.
 **Stage A: build the library.** Install `uv sync --no-dev --extra library`.
 
 ```bash
-uv run python -m video_bokeh.library.build \
+uv run python -m layerwise_bokeh.library.build \
   --fg-data-root data/magick_dev --bg-data-root data/bg-20k_dev \
   --output data/library_dev/da2-small --size 512 --model da2-small
 ```
@@ -57,7 +57,7 @@ default elsewhere and is slower and better. The CLIP filter keeps 17 of the 30 f
 **Stage B: generate sequences.** `uv sync --no-dev` is enough; Stage B needs no torch.
 
 ```bash
-uv run python -m video_bokeh.scenes.generate \
+uv run python -m layerwise_bokeh.scenes.generate \
   --library-root data/library_dev/da2-small --output data/synth_dev \
   --count 4 --frames 80 --size 512 --seed 0
 ```
@@ -69,7 +69,7 @@ frame, so a smaller library is only upscaled.
 **The bokeh's strength is k**, the blur radius in pixels at a 1024-pixel width, one unit of
 disparity from the focus, 16 by default. `--bokeh` renders each sequence's bokeh in the same
 run, which needs torch from the `render` or `loader` extra, and `--bokeh-strength` sets k, one
-value for the whole run. In Python, `video_bokeh.scenes.generate.generate_dataset` and the training
+value for the whole run. In Python, `layerwise_bokeh.scenes.generate.generate_dataset` and the training
 stream's `SequenceStream` take it as `bokeh_strength`. The API takes `bokeh_strength` in each
 request, and the demo has a slider for it.
 
@@ -92,7 +92,7 @@ it at one library, or at a directory with one library per subdirectory:
 
 ```bash
 VIDEO_BOKEH_LIBRARY=data/library_dev/da2-small \
-  uv run uvicorn video_bokeh.api.main:app --reload --port 8000
+  uv run uvicorn layerwise_bokeh.api.main:app --reload --port 8000
 ```
 
 - API: http://localhost:8000

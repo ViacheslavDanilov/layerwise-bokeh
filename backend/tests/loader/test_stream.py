@@ -16,9 +16,9 @@ from fixture_library import build_library
 from PIL import Image
 from torch.utils.data import DataLoader
 
-from video_bokeh.core import _library
-from video_bokeh.core._split import listed_test_foregrounds
-from video_bokeh.core._streams import (
+from layerwise_bokeh.core import _library
+from layerwise_bokeh.core._split import listed_test_foregrounds
+from layerwise_bokeh.core._streams import (
     read_alpha_tiff,
     read_disparity_png,
     read_disparity_tiff,
@@ -27,12 +27,12 @@ from video_bokeh.core._streams import (
     read_paint_order,
     read_rgb_tiff,
 )
-from video_bokeh.layered import render_bokeh
-from video_bokeh.loader import SequenceStream, batch_bokeh
-from video_bokeh.loader import _stream as mod
-from video_bokeh.render.layered import Layered
-from video_bokeh.scenes._compositor import CollisionRetriesExhausted
-from video_bokeh.scenes.generate import generate_dataset
+from layerwise_bokeh.layered import render_bokeh
+from layerwise_bokeh.loader import SequenceStream, batch_bokeh
+from layerwise_bokeh.loader import _stream as mod
+from layerwise_bokeh.render.layered import Layered
+from layerwise_bokeh.scenes._compositor import CollisionRetriesExhausted
+from layerwise_bokeh.scenes.generate import generate_dataset
 
 FRAMES, SIZE = 3, 64
 

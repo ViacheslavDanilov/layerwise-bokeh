@@ -16,7 +16,10 @@ from balanced_test_set import build, pools, read_objects  # noqa: E402
 from fixture_library import FG_SIZE, _gradient, _object_alpha  # noqa: E402
 from PIL import Image  # noqa: E402
 
-from video_bokeh.core._library import write_background, write_foreground  # noqa: E402
+from layerwise_bokeh.core._library import (  # noqa: E402
+    write_background,
+    write_foreground,
+)
 
 BG_SIZE = 256
 #: Each object's gray level and category: light edges, dark ones, and a middling one that

@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from video_bokeh.core._plugins import missing_methods
-from video_bokeh.render import RENDERERS, resolve_renderer
+from layerwise_bokeh.core._plugins import missing_methods
+from layerwise_bokeh.render import RENDERERS, resolve_renderer
 
 
 @pytest.mark.parametrize(("key", "cls"), sorted(RENDERERS.items()))

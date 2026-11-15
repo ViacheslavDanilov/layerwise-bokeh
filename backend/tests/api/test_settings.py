@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from video_bokeh.api._settings import (
+from layerwise_bokeh.api._settings import (
     LibraryUnavailableError,
     Settings,
     find_libraries,

@@ -24,7 +24,7 @@ flag, see [cli](../reference/cli.md). For why the pipeline is shaped this way, s
 1. Foregrounds in `data/magick_dev` (see [datasets](../explanation/datasets.md#magick-foregrounds)).
 2. Backgrounds in `data/bg-20k_dev` (see [datasets](../explanation/datasets.md#bg-20k-backgrounds)).
 3. Dependencies: `uv sync --extra library` from the repo root.
-4. On a new machine, `uv run --extra library python -m video_bokeh.library.check` says whether
+4. On a new machine, `uv run --extra library python -m layerwise_bokeh.library.check` says whether
    each depth estimator can run there, before a build finds out. See [cli](../reference/cli.md).
 
 If `data/library_dev/da2-large/` already holds `foregrounds/` and `backgrounds/`, as `make
@@ -36,17 +36,17 @@ with the filter off. Either is enough for every recipe below.
 
 From `backend/`, keeping the 20 of each that were there:
 
-1. `uv run --extra acquire python -m video_bokeh.acquire.magick --metadata data/magick_metadata.csv --output data/magick_dev --count 30 --seed 11`
+1. `uv run --extra acquire python -m layerwise_bokeh.acquire.magick --metadata data/magick_metadata.csv --output data/magick_dev --count 30 --seed 11`
    downloads ten foregrounds. Seed 11 drew the first twenty, and a larger count keeps them,
    because the sample keeps its order as it grows.
-2. `uv run --extra acquire python -m video_bokeh.acquire.classify --data-root data/magick_dev --keep-existing --num-workers 0`
+2. `uv run --extra acquire python -m layerwise_bokeh.acquire.classify --data-root data/magick_dev --keep-existing --num-workers 0`
    classifies the ten new ones and keeps the twenty predictions there. The default model,
    ViT-L-14, classified the ten, while the twenty came from PE-Core-bigG-14-448, as
    `data/magick_dev/predictions.json` records. A ViT-L-14 run over those twenty gave five of
    them another top class and would have shrunk the class filter's keep from 12 to 8.
    `--keep-existing` now refuses predictions another model made, so this step would stop
    today; classifying all thirty afresh with one model is how to grow the pool next time.
-3. `uv run --extra acquire python -m video_bokeh.acquire.bg20k --output data/bg-20k_dev --count 30 --seed 11`
+3. `uv run --extra acquire python -m layerwise_bokeh.acquire.bg20k --output data/bg-20k_dev --count 30 --seed 11`
    fetches ten backgrounds one file at a time from Kaggle, with no archive download. It needs
    no Kaggle account, as [Full pools](#full-pools) says.
 
@@ -64,9 +64,9 @@ Then download all 11,868 hand-picked MAGICK foregrounds and the whole BG-20k arc
 from `backend/`:
 
 ```bash
-uv run --frozen --no-sync python -m video_bokeh.acquire.magick \
+uv run --frozen --no-sync python -m layerwise_bokeh.acquire.magick \
   --metadata data/magick/metadata.csv --output data/magick --count 11868
-uv run --frozen --no-sync python -m video_bokeh.acquire.bg20k --output data/bg-20k
+uv run --frozen --no-sync python -m layerwise_bokeh.acquire.bg20k --output data/bg-20k
 ```
 
 `make pools`, from the repository root, runs both commands, BG-20k first, so a Kaggle refusal
@@ -109,12 +109,12 @@ pools a fresh clone carries:
 
 ```bash
 # Full pools: the library for the final dataset
-uv run --frozen --no-sync python -m video_bokeh.library.build \
+uv run --frozen --no-sync python -m layerwise_bokeh.library.build \
   --fg-data-root data/magick --bg-data-root data/bg-20k \
   --output data/library/da2-large --size 1024 --model da2-large
 
 # Dev pools: the library for the demo and examples
-uv run --frozen --no-sync python -m video_bokeh.library.build \
+uv run --frozen --no-sync python -m layerwise_bokeh.library.build \
   --fg-data-root data/magick_dev --bg-data-root data/bg-20k_dev \
   --output data/library_dev/da2-large --size 1024 --model da2-large
 ```
@@ -166,7 +166,7 @@ A fast check with no large download (3 foregrounds, 2 backgrounds, the small mod
 **6.7 s** on an M-series Mac using `mps`:
 
 ```bash
-uv run python -m video_bokeh.library.build \
+uv run python -m layerwise_bokeh.library.build \
   --fg-data-root data/magick_dev --bg-data-root data/bg-20k_dev \
   --output /tmp/lib_smoke --size 256 --model da2-small \
   --limit-fg 3 --limit-bg 2
@@ -177,7 +177,7 @@ uv run python -m video_bokeh.library.build \
 ## 2. Stage B: generate sequences
 
 ```bash
-uv run python -m video_bokeh.scenes.generate \
+uv run python -m layerwise_bokeh.scenes.generate \
   --library-root data/library_dev/da2-large --output data/demo \
   --count 4 --frames 80 --size 512 --seed 0
 ```
@@ -200,7 +200,7 @@ There is no format ceiling: the alpha stream is a multi-page TIFF and takes as m
 it is given. `--n-objects-max` defaults to 5.
 
 ```bash
-uv run python -m video_bokeh.scenes.generate \
+uv run python -m layerwise_bokeh.scenes.generate \
   --library-root data/library_dev/da2-large --output data/demo5 \
   --count 3 --frames 8 --size 512 --n-objects-min 5 --n-objects-max 5
 ```
@@ -219,7 +219,7 @@ and `--flow both` writes both. `--occlusion` takes the same three directions and
 `occlusion/` and `occlusion_back/`.
 
 ```bash
-uv run python -m video_bokeh.scenes.generate \
+uv run python -m layerwise_bokeh.scenes.generate \
   --library-root data/library_dev/da2-large --output data/demo_flow \
   --count 3 --frames 80 --size 512 --seed 0 --flow forward
 ```
@@ -288,7 +288,7 @@ A fuller set of checks on the trajectory model is in
 installed.
 
 ```bash
-uv run python -m video_bokeh.scenes.generate \
+uv run python -m layerwise_bokeh.scenes.generate \
   --library-root data/library_dev/da2-large --output data/demo_bokeh \
   --count 2 --frames 24 --size 512 --seed 0 --bokeh
 ```
@@ -299,10 +299,10 @@ It took 7 s on an Apple M3 Pro.
 Stage B wrote with `--layers`. This step is optional:
 
 ```bash
-uv run python -m video_bokeh.scenes.generate \
+uv run python -m layerwise_bokeh.scenes.generate \
   --library-root data/library_dev/da2-large --output data/demo_layers \
   --count 2 --frames 24 --size 512 --seed 0 --layers
-uv run --extra render python -m video_bokeh.render.run --data-root data/demo_layers \
+uv run --extra render python -m layerwise_bokeh.render.run --data-root data/demo_layers \
   --renderer layered
 ```
 

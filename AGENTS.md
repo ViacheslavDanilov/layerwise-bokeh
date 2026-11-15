@@ -190,7 +190,7 @@ Run the actual check, don't assume. Type-checking and tests verify correctness o
 
 ## Where things live
 
-- `backend/src/video_bokeh/`: FastAPI runtime and dataset pipeline (run scripts from `backend/`)
+- `backend/src/layerwise_bokeh/`: FastAPI runtime and dataset pipeline (run scripts from `backend/`)
 - `frontend/src/`: Next.js app
 - `docs/`: documentation and the Obsidian vault root (see `docs/README.md`). `explanation/`, `how-to/`, `reference/` and `adr/` are tracked; `meetings/`, `reports/`, `specs/`, `plans/`, `templates/` and `attachments/` are local-only. `docs/STYLE.md` has the writing conventions.
 - `scripts/`: repo-level setup, analysis and review scripts (`setup_depth_anything_3.sh`, `analyze_magick_distribution.py`, `check_prose.py`). `scripts/README.md` describes each

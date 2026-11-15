@@ -15,15 +15,15 @@ import numpy as np
 import pytest
 from PIL import Image, ImageFilter
 
-from video_bokeh.core._library import write_background, write_foreground
-from video_bokeh.core._streams import (
+from layerwise_bokeh.core._library import write_background, write_foreground
+from layerwise_bokeh.core._streams import (
     read_alpha_tiff,
     read_flow_png,
     read_mask_png,
     read_paint_order,
 )
-from video_bokeh.scenes._compositor import iter_frames, occlusion_mask
-from video_bokeh.scenes.generate import generate_dataset, main, sample_sequence
+from layerwise_bokeh.scenes._compositor import iter_frames, occlusion_mask
+from layerwise_bokeh.scenes.generate import generate_dataset, main, sample_sequence
 
 FRAMES, SIZE = 6, 96
 

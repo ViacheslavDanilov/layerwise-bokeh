@@ -78,7 +78,7 @@ are built here from the same source images. From `backend/`, with the lab reacha
 
    ```bash
    for m in da2-base da2-small depth-pro; do
-     VIDEO_BOKEH_RUNNER=local uv run --extra library python -m video_bokeh.library.build \
+     VIDEO_BOKEH_RUNNER=local uv run --extra library python -m layerwise_bokeh.library.build \
        --fg-data-root data/magick_demo --bg-data-root data/bg-20k_demo \
        --output data/library_demo/.$m --model $m && mv data/library_demo/.$m data/library_demo/$m
    done
