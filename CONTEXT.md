@@ -95,6 +95,12 @@ holds the full silhouette including the hidden part. Alpha masks of different ob
 overlap.
 _Avoid_: mask, segmentation, label map, matte
 
+**Union alpha**:
+The pixelwise maximum of a frame's alpha masks: one soft map that covers every object, hidden
+parts included. The sequence stream holds it under `alpha`; the dataset does not, since its
+alpha stream keeps each alpha mask on a page of its own.
+_Avoid_: alpha (for the union)
+
 **Disparity**:
 Inverse distance scaled to [0, 1], where larger means closer. It is the one quantity every map
 in the pipeline stores.
