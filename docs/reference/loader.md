@@ -77,7 +77,7 @@ All tensors are float32 in `[0, 1]`, frames first, except `paint_order`, `flow` 
 |---|---|---|---|
 | `rgb` | `rgb` | (T, 3, H, W) | the all-in-focus frames |
 | `disparity` | `disparity` | (T, 1, H, W) | disparity, near larger, as in the `disparity` stream |
-| `alpha` | `alpha` | (T, 1, H, W) | the union of every object's matte |
+| `alpha` | `alpha` | (T, 1, H, W) | the union alpha: the pixelwise maximum of the alpha masks |
 | `object_alphas` | `object_alphas` | (T, N, H, W) | one matte per object, in the alpha stream's page order, zero past `n_objects` |
 | `layers` | `background` | (T, 3, H, W) | the whole background, nothing in front of it |
 | | `background_disparity` | (T, 1, H, W) | its disparity |
