@@ -47,19 +47,19 @@ not fetched again unless its mark is deleted:
         testval__h_ea29ed84 --seeds 1005 1033 1050
     uv run python -m layerwise_bokeh.library.hub stage --packed data/library-packed \
         --output data/library-staged --every 5
-    hf upload-large-folder vdanilov/video-bokeh data/library-staged \
+    hf upload-large-folder vdanilov/layerwise-bokeh data/library-staged \
         --repo-type dataset --exclude README.md
-    hf upload vdanilov/video-bokeh data/library-staged/README.md README.md \
+    hf upload vdanilov/layerwise-bokeh data/library-staged/README.md README.md \
         --repo-type dataset
     uv run python -m layerwise_bokeh.library.hub pack-sequences --data-root data/fixed-set \
         --packed data/library-packed
-    hf upload-large-folder vdanilov/video-bokeh data/library-packed \
+    hf upload-large-folder vdanilov/layerwise-bokeh data/library-packed \
         --repo-type dataset --exclude README.md
-    hf upload vdanilov/video-bokeh data/library-packed/README.md README.md \
+    hf upload vdanilov/layerwise-bokeh data/library-packed/README.md README.md \
         --repo-type dataset
-    uv run python -m layerwise_bokeh.library.hub fetch --repo vdanilov/video-bokeh \
+    uv run python -m layerwise_bokeh.library.hub fetch --repo vdanilov/layerwise-bokeh \
         --output data/library/da2-large
-    uv run python -m layerwise_bokeh.library.hub fetch-sequences --repo vdanilov/video-bokeh \
+    uv run python -m layerwise_bokeh.library.hub fetch-sequences --repo vdanilov/layerwise-bokeh \
         --output data/fixed-set
 
 Shards are plain tar: the images are PNG already, so compressing them again saves little.
@@ -115,7 +115,7 @@ ESTIMATOR = "da2-large"
 #: Where fetch marks the shards it has unpacked, under the library root.
 FETCHED = ".fetched"
 #: The repository the card's commands name, and its folder that holds the library.
-REPO = "vdanilov/video-bokeh"
+REPO = "vdanilov/layerwise-bokeh"
 LIBRARY = "library"
 #: The index of the library's shards, whose file names are relative to ``LIBRARY``.
 INDEX = f"{LIBRARY}/index.json"
@@ -227,7 +227,7 @@ data/fixed-set/
   `<id>.focus.json` and `<id>.json`, the sequence's rows of the records.
 
 The code repository's
-[dataset layout](https://github.com/ViacheslavDanilov/video-bokeh/blob/main/docs/reference/dataset-layout.md)
+[dataset layout](https://github.com/ViacheslavDanilov/layerwise-bokeh/blob/main/docs/reference/dataset-layout.md)
 describes every stream in full.
 """)
 

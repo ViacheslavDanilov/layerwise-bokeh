@@ -38,7 +38,7 @@ into the folder layout Stage B reads, so the disk needs the library plus room fo
 shard:
 
 ```bash
-uv run python -m layerwise_bokeh.library.hub fetch --repo vdanilov/video-bokeh \
+uv run python -m layerwise_bokeh.library.hub fetch --repo vdanilov/layerwise-bokeh \
   --output data/library/da2-large
 ```
 
@@ -135,7 +135,7 @@ trained as above has seen none of their objects or backgrounds. Each has 80 fram
 occlusion. It takes 79 GB, and about 15 minutes at 100 MB/s:
 
 ```bash
-uv run python -m layerwise_bokeh.library.hub fetch-sequences --repo vdanilov/video-bokeh \
+uv run python -m layerwise_bokeh.library.hub fetch-sequences --repo vdanilov/layerwise-bokeh \
   --output data/fixed-set
 ```
 
@@ -190,7 +190,7 @@ nothing else:
 uv run --no-project --with datasets --with pillow python - <<'EOF'
 from datasets import load_dataset
 
-foregrounds = load_dataset("vdanilov/video-bokeh", "foregrounds", split="train", streaming=True)
+foregrounds = load_dataset("vdanilov/layerwise-bokeh", "foregrounds", split="train", streaming=True)
 item = next(iter(foregrounds))
 print(sorted(item), item["depth.png"].mode)
 EOF

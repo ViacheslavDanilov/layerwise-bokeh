@@ -259,7 +259,7 @@ def test_the_card_follows_the_hub_metadata_and_counts_what_it_holds(
     assert set(meta["task_categories"]) == {"image-to-image", "depth-estimation"}
     assert meta["size_categories"] == ["10K<n<100K"]
     assert meta["source_datasets"] == ["OneOverZero/MAGICK", "BG-20k"]
-    assert meta["pretty_name"] == "Video Bokeh"
+    assert meta["pretty_name"] == "LayerWise"
     # Every number is filled in from the index, and no placeholder is left.
     assert "$" not in card
     assert "| | Foregrounds | Backgrounds |\n" in card
@@ -272,7 +272,7 @@ def test_the_card_follows_the_hub_metadata_and_counts_what_it_holds(
     # No figure was drawn, so the card shows none; the whole library is in it.
     assert "assets/" not in card
     assert "Upload status" not in card
-    assert "@misc{danilov2026videobokeh," in card
+    assert "@misc{danilov2026layerwisebokeh," in card
     assert "Danilov, Viacheslav and Dewil, Valéry and Arias, Pablo" in card
 
 

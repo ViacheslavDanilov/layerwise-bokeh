@@ -287,17 +287,17 @@ uv run python -m layerwise_bokeh.library.hub preview --library-root data/library
   --seeds 1005 1033 1050
 uv run python -m layerwise_bokeh.library.hub stage --packed data/library-packed \
   --output data/library-staged --every 5
-hf upload-large-folder vdanilov/video-bokeh data/library-staged --repo-type dataset \
+hf upload-large-folder vdanilov/layerwise-bokeh data/library-staged --repo-type dataset \
   --exclude README.md
-hf upload vdanilov/video-bokeh data/library-staged/README.md README.md --repo-type dataset
+hf upload vdanilov/layerwise-bokeh data/library-staged/README.md README.md --repo-type dataset
 uv run python -m layerwise_bokeh.library.hub pack-sequences --data-root data/fixed-set \
   --packed data/library-packed
-hf upload-large-folder vdanilov/video-bokeh data/library-packed --repo-type dataset \
+hf upload-large-folder vdanilov/layerwise-bokeh data/library-packed --repo-type dataset \
   --exclude README.md
-hf upload vdanilov/video-bokeh data/library-packed/README.md README.md --repo-type dataset
-uv run python -m layerwise_bokeh.library.hub fetch --repo vdanilov/video-bokeh \
+hf upload vdanilov/layerwise-bokeh data/library-packed/README.md README.md --repo-type dataset
+uv run python -m layerwise_bokeh.library.hub fetch --repo vdanilov/layerwise-bokeh \
   --output data/library/da2-large
-uv run python -m layerwise_bokeh.library.hub fetch-sequences --repo vdanilov/video-bokeh \
+uv run python -m layerwise_bokeh.library.hub fetch-sequences --repo vdanilov/layerwise-bokeh \
   --output data/fixed-set
 ```
 
@@ -306,22 +306,22 @@ uv run python -m layerwise_bokeh.library.hub fetch-sequences --repo vdanilov/vid
 | `pack` | `--library-root` | **required** | the library to publish |
 | `pack` | `--output` | **required** | where the shards, index, card and figure go |
 | `pack` | `--shard-gb` | `2` | a shard closes once it holds this many gigabytes |
-| `pack` | `--repo` | `vdanilov/video-bokeh` | the repository the card's commands name |
+| `pack` | `--repo` | `vdanilov/layerwise-bokeh` | the repository the card's commands name |
 | `pack` | `--no-preview` | off | draw no figure or video, and show neither in the card |
 | `preview` | `--library-root` | **required** | the library the packed folder holds |
 | `preview` | `--packed` | **required** | a folder `pack` wrote |
-| `preview` | `--repo` | `vdanilov/video-bokeh` | the repository the card's commands name |
+| `preview` | `--repo` | `vdanilov/layerwise-bokeh` | the repository the card's commands name |
 | `preview` | `--foregrounds` | spread evenly | up to four foreground ids for the figure |
 | `preview` | `--backgrounds` | spread evenly | up to three background ids for the figure |
 | `preview` | `--seeds` | `0 1 2` | the sequences the video plays |
 | `stage` | `--packed` | **required** | a folder `pack` wrote |
 | `stage` | `--output` | **required** | the folder to upload first |
 | `stage` | `--every` | **required** | stage shards 0, n, 2n, … of each kind; `1` stages all |
-| `stage` | `--repo` | `vdanilov/video-bokeh` | the repository the card's commands name |
+| `stage` | `--repo` | `vdanilov/layerwise-bokeh` | the repository the card's commands name |
 | `pack-sequences` | `--data-root` | **required** | the run of the fixed set that `scenes.generate` wrote |
 | `pack-sequences` | `--packed` | **required** | a folder `pack` wrote |
 | `pack-sequences` | `--shard-gb` | `2` | a shard closes once it holds this many gigabytes |
-| `pack-sequences` | `--repo` | `vdanilov/video-bokeh` | the repository the card's commands name |
+| `pack-sequences` | `--repo` | `vdanilov/layerwise-bokeh` | the repository the card's commands name |
 | `fetch` | `--repo` | **required** | a Hugging Face dataset repository of shards |
 | `fetch` | `--output` | **required** | the library root to write |
 | `fetch` | `--revision` | latest | a branch, tag or commit of the repository |

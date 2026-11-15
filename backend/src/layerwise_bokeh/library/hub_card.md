@@ -1,6 +1,6 @@
 ---
 license: cc-by-nc-4.0
-pretty_name: Video Bokeh
+pretty_name: LayerWise
 task_categories:
 - image-to-image
 - depth-estimation
@@ -36,11 +36,11 @@ configs:
     path: "library/backgrounds/test-*.tar"
 $sequences_config---
 
-# Video Bokeh
+# LayerWise
 
-[![Code: GitHub](https://img.shields.io/badge/GitHub-video--bokeh-181717.svg?logo=github)](https://github.com/ViacheslavDanilov/video-bokeh)
-[![Docs: Tutorial](https://img.shields.io/badge/Docs-Tutorial-2ea44f.svg)](https://github.com/ViacheslavDanilov/video-bokeh/blob/main/docs/how-to/train-on-the-sequence-stream.md)
-[![PyTorch: SequenceStream](https://img.shields.io/badge/PyTorch-SequenceStream-ee4c2c.svg?logo=pytorch&logoColor=white)](https://github.com/ViacheslavDanilov/video-bokeh/blob/main/docs/reference/loader.md)
+[![Code: GitHub](https://img.shields.io/badge/GitHub-layerwise--bokeh-181717.svg?logo=github)](https://github.com/ViacheslavDanilov/layerwise-bokeh)
+[![Docs: Tutorial](https://img.shields.io/badge/Docs-Tutorial-2ea44f.svg)](https://github.com/ViacheslavDanilov/layerwise-bokeh/blob/main/docs/how-to/train-on-the-sequence-stream.md)
+[![PyTorch: SequenceStream](https://img.shields.io/badge/PyTorch-SequenceStream-ee4c2c.svg?logo=pytorch&logoColor=white)](https://github.com/ViacheslavDanilov/layerwise-bokeh/blob/main/docs/reference/loader.md)
 [![Format: WebDataset](https://img.shields.io/badge/Format-WebDataset-orange.svg)](https://github.com/webdataset/webdataset)
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/downloads/)
 
@@ -51,7 +51,7 @@ and backward optical flow and its two occlusion masks match it by construction.
 - **The library**, under `library/`: $foregrounds cut-out foregrounds and $backgrounds
   background photos, each with a disparity map. It holds no sequences. The code's generator
   composes new ones from it while a network trains, as many as the training asks for.$sequences_part
-- **The code**, at [github.com/ViacheslavDanilov/video-bokeh](https://github.com/ViacheslavDanilov/video-bokeh):
+- **The code**, at [github.com/ViacheslavDanilov/layerwise-bokeh](https://github.com/ViacheslavDanilov/layerwise-bokeh):
   the generator, the PyTorch loader and the download tools.
 
 The code works in two stages. Stage A built the library once, from MAGICK and BG-20k images
@@ -67,7 +67,7 @@ $glance
 **Every asset is in the train split or the test split.** The backgrounds follow BG-20k's own
 split. MAGICK has no split, so 10% of the foregrounds of each subject were drawn once, with a
 fixed seed, for the test split; the code repository lists them in
-[`test_foregrounds.txt`](https://github.com/ViacheslavDanilov/video-bokeh/blob/main/backend/src/layerwise_bokeh/core/test_foregrounds.txt).
+[`test_foregrounds.txt`](https://github.com/ViacheslavDanilov/layerwise-bokeh/blob/main/backend/src/layerwise_bokeh/core/test_foregrounds.txt).
 
 | | Train | Test |
 |---|---|---|
@@ -84,8 +84,8 @@ It needs Python 3.13, [uv](https://docs.astral.sh/uv/) and $total_gb GB of disk 
 library, plus room for one shard of at most $largest_gb GB.
 
 ```bash
-git clone https://github.com/ViacheslavDanilov/video-bokeh
-cd video-bokeh/backend
+git clone https://github.com/ViacheslavDanilov/layerwise-bokeh
+cd layerwise-bokeh/backend
 uv sync --no-dev --extra loader
 uv run python -m layerwise_bokeh.library.hub fetch --repo $repo --output data/library/da2-large
 ```
@@ -124,7 +124,7 @@ what an item carries. `bokeh_strength` is the bokeh's strength `k`: the blur rad
 pixels at a 1024-pixel width, of a point one unit of disparity from the focus.
 `uv run python -m layerwise_bokeh.loader.example --library-root data/library/da2-large` trains a
 small network on the stream for 20 steps, and the project's
-[README](https://github.com/ViacheslavDanilov/video-bokeh) shows how to write sequences to
+[README](https://github.com/ViacheslavDanilov/layerwise-bokeh) shows how to write sequences to
 disk instead.
 $fixed_set
 ## Read the files without the code
@@ -234,7 +234,7 @@ $layout
 - **The subjects are uneven.** Of the 8,586 foregrounds, 3,974 are people, 2,327 objects,
   1,406 food, 483 plants and 396 animals, by the classifier's labels. The labels are not
   shipped: they stay in the code repository, in
-  [`predictions.csv`](https://github.com/ViacheslavDanilov/video-bokeh/blob/main/backend/data/magick/predictions.csv), keyed by `page_id`, the part of a
+  [`predictions.csv`](https://github.com/ViacheslavDanilov/layerwise-bokeh/blob/main/backend/data/magick/predictions.csv), keyed by `page_id`, the part of a
   foreground id after `__`.
 
 ## Sources and license
@@ -253,9 +253,9 @@ require. It holds images of two datasets, resized and cropped, and the output of
 If you use this dataset, please cite it:
 
 ```bibtex
-@misc{danilov2026videobokeh,
+@misc{danilov2026layerwisebokeh,
   author       = {Danilov, Viacheslav and Dewil, Valéry and Arias, Pablo},
-  title        = {{Video Bokeh}},
+  title        = {{LayerWise}},
   year         = {2026},
   publisher    = {Hugging Face},
   howpublished = {\url{https://huggingface.co/datasets/$repo}}
