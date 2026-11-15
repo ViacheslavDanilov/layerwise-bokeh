@@ -1,4 +1,4 @@
-# Video Bokeh: Agent Guide
+# LayerWise: Agent Guide
 
 Depth-aware synthetic bokeh pipeline for video. FastAPI backend (Python 3.13, `uv`), Next.js frontend (Node 24, `pnpm`). Two stacks, two toolchains: read the area-specific guide before touching code:
 

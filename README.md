@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="frontend/src/app/icon.svg" width="100" alt="Video Bokeh logo">
+<img src="frontend/src/app/icon.svg" width="100" alt="LayerWise logo">
 
-# Video Bokeh
+# LayerWise
 
-[![Hugging Face Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-FFD21E.svg)](https://huggingface.co/datasets/vdanilov/video-bokeh)
+[![Hugging Face Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-FFD21E.svg)](https://huggingface.co/datasets/vdanilov/layerwise-bokeh)
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/downloads/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6.svg)](https://www.typescriptlang.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688.svg)](https://fastapi.tiangolo.com/)
@@ -20,7 +20,7 @@ https://github.com/user-attachments/assets/fb40b59c-5443-4031-8233-ef18633911cd
 
 ## Features
 
-- **Synthetic training data with known depth** – Objects composited onto backgrounds at disparities we assign, written as video sequences with one matte per object and 16-bit disparity. The library and a fixed set of 300 sequences are on [Hugging Face](https://huggingface.co/datasets/vdanilov/video-bokeh).
+- **Synthetic training data with known depth** – Objects composited onto backgrounds at disparities we assign, written as video sequences with one matte per object and 16-bit disparity. The library and a fixed set of 300 sequences are on [Hugging Face](https://huggingface.co/datasets/vdanilov/layerwise-bokeh).
 - **Swappable parts** – Depth (Depth Anything V2, Depth Pro, Depth Anything 3 or your own) in Stage A, and bokeh: our layered renderer inside Stage B, or your own over written sequences.
 - **Training on the fly** – A PyTorch stream that generates a new sequence for every item.
 - **Web demo** – Generate a sequence and compare its streams side by side.
@@ -94,7 +94,7 @@ a link to the page that has the details.
 
 **To skip building a library, download ours.** The library of 8,586 foregrounds and 20,000
 backgrounds that step 3 builds is on
-[Hugging Face](https://huggingface.co/datasets/vdanilov/video-bokeh), in 115 GB of shards,
+[Hugging Face](https://huggingface.co/datasets/vdanilov/layerwise-bokeh), in 115 GB of shards,
 each asset in a train or a test split. Beside it is the fixed set: 300 sequences written once
 from the test split, 79 GB, for evaluation.
 [train-on-the-sequence-stream](docs/how-to/train-on-the-sequence-stream.md) explains how to

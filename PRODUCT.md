@@ -18,7 +18,7 @@ All of them know what a matte, a disparity map and optical flow are. None needs 
 
 ## Product Purpose
 
-A local web demo of the Video Bokeh pipeline. It generates one sequence from a seed and shows
+A local web demo of the LayerWise pipeline. It generates one sequence from a seed and shows
 its streams side by side, in step, so a person can judge them against each other. It is a
 viewer for a dataset, not a product with accounts, and it does not edit anything.
 

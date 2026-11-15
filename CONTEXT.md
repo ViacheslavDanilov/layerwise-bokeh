@@ -1,4 +1,4 @@
-# Video Bokeh
+# LayerWise
 
 Synthetic training data for depth-aware video bokeh: cut-out objects composited onto
 backgrounds at disparities we assign and therefore know, composed into sequences, plus a demo

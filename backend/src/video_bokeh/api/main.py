@@ -155,7 +155,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     """
     settings = settings or load_settings()
     application = FastAPI(
-        title="Video Bokeh",
+        title="LayerWise",
         description=(
             "Depth-aware synthetic bokeh pipeline for video, with a FastAPI backend "
             "and Next.js frontend."

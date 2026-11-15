@@ -8,7 +8,7 @@ import "./globals.css";
 // comes from the tokens in globals.css rather than from anything installed.
 
 export const metadata: Metadata = {
-  title: "Video Bokeh",
+  title: "LayerWise",
   description:
     "Generate a synthetic sequence from the mounted asset library and compare its streams.",
 };

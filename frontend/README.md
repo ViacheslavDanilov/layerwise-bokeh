@@ -1,4 +1,4 @@
-# Video Bokeh Frontend
+# LayerWise Frontend
 
 The sequence browser: pick a depth estimator, set the parameters, generate a sequence from that
 estimator's library, and compare its streams side by side.

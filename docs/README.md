@@ -1,4 +1,4 @@
-# video-bokeh docs
+# LayerWise docs
 
 This directory is the Obsidian vault root and the project's documentation tree. Open Obsidian on `docs/`, not on the repo root.
 

@@ -1,4 +1,4 @@
-# 🐍 Video Bokeh Backend
+# 🐍 LayerWise Backend
 
 FastAPI backend and dataset pipeline for the depth-aware synthetic bokeh video project.
 

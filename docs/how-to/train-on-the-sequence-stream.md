@@ -23,15 +23,15 @@ You need Python 3.13 and [uv](https://docs.astral.sh/uv/). Clone the code and in
 `loader` extra, which brings torch and the Hugging Face client:
 
 ```bash
-git clone https://github.com/ViacheslavDanilov/video-bokeh
-cd video-bokeh/backend
+git clone https://github.com/ViacheslavDanilov/layerwise-bokeh
+cd layerwise-bokeh/backend
 uv sync --no-dev --extra loader
 ```
 
 ## 2. Download the library
 
 **The library is on Hugging Face as
-[vdanilov/video-bokeh](https://huggingface.co/datasets/vdanilov/video-bokeh).** It holds 8,586
+[vdanilov/layerwise-bokeh](https://huggingface.co/datasets/vdanilov/layerwise-bokeh).** It holds 8,586
 cut-out foregrounds and 20,000 background photos in 115 GB of tar shards. Every `depth.png` holds
 disparity, larger values nearer. `fetch` downloads the shards one at a time and unpacks each
 into the folder layout Stage B reads, so the disk needs the library plus room for one 2 GB
