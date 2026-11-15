@@ -153,7 +153,7 @@ STYLE_TAXONOMY: dict[str, list[str]] = {
     ],
     "painting": [
         "an oil painting",
-        "a watercolour painting",
+        "a watercolor painting",
         "a digital painting",
         "an acrylic painting",
     ],
