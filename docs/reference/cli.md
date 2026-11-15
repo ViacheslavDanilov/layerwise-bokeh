@@ -89,10 +89,10 @@ scripts/setup_depth_anything_3.sh
 Run it from the repository root. It puts the venv at `backend/envs/depth-anything-3/.venv`,
 which git ignores. It leaves out `xformers`, which inference does not need, and `pycolmap`,
 whose own OpenMP runtime clashes with torch's. To use a venv somewhere else, set
-`VIDEO_BOKEH_DA3_PYTHON` to its interpreter. Without either, a `--model da3-*` stops before any
+`LAYERWISE_BOKEH_DA3_PYTHON` to its interpreter. Without either, a `--model da3-*` stops before any
 image is processed and names the script.
 
-`VIDEO_BOKEH_RUNNER=docker` runs the worker in the `video-bokeh-da3` image instead, which
+`LAYERWISE_BOKEH_RUNNER=docker` runs the worker in the `layerwise-bokeh-da3` image instead, which
 `make images` builds with the same packages; nothing else changes. On the RTX 5090 a
 Mono-Large library from the dev pools took 56 s that way, and its depth maps matched the venv's
 to 0.003% of the range on average over 47 assets, 0.12% at the worst pixel.
@@ -412,7 +412,7 @@ the object, each frame's in-focus disparity, the renderer and its strength.
 **`layered` is the layered renderer** that [layered-bokeh](../explanation/layered-bokeh.md)
 explains. It reads `layers/`, `alpha/` and `disparity/` and writes `bokeh/` losslessly. It
 refuses the whole batch, before rendering any, when a sequence has no complete `layers/`. It
-runs on the CPU unless `VIDEO_BOKEH_LAYERED_DEVICE` is `cuda` or `mps`, and falls back to the
+runs on the CPU unless `LAYERWISE_BOKEH_LAYERED_DEVICE` is `cuda` or `mps`, and falls back to the
 CPU when that device is not there. On the lab machine, an 80-frame sequence at 512 pixels
 took 13 s on its 24 CPU cores and 6 s on the RTX 5090. At 1024 pixels it took 40 s and 20 s.
 Most of the time on the GPU is reading the layers and writing the PNGs.

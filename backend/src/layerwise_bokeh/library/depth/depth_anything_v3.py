@@ -2,7 +2,7 @@
 
 Depth Anything 3 cannot share ours; ``docs/reference/cli.md`` says why and how to build
 its venv. These classes drive that venv through a worker process, ``_da3_worker.py``, or the
-``video-bokeh-da3`` image with ``VIDEO_BOKEH_RUNNER=docker``.
+``layerwise-bokeh-da3`` image with ``LAYERWISE_BOKEH_RUNNER=docker``.
 
 Both checkpoints predict depth, far larger than near, at a 504 px working size, so
 ``infer`` takes the reciprocal and resizes back to each image's own size. Both are
@@ -40,8 +40,8 @@ _DEFAULT_PYTHON = (
 )
 
 
-#: The image ``make images`` builds, for ``VIDEO_BOKEH_RUNNER=docker``.
-_IMAGE = "video-bokeh-da3"
+#: The image ``make images`` builds, for ``LAYERWISE_BOKEH_RUNNER=docker``.
+_IMAGE = "layerwise-bokeh-da3"
 
 #: What the worker imports before it loads a model, pycolmap stub included.
 _IMPORT_CHECK = (
@@ -52,9 +52,9 @@ _IMPORT_CHECK = (
 
 
 def _python() -> list[str]:
-    """The venv's interpreter, or ``python`` in the image with ``VIDEO_BOKEH_RUNNER=docker``."""
+    """The venv's interpreter, or ``python`` in the image with ``LAYERWISE_BOKEH_RUNNER=docker``."""
     return model_command(
-        "VIDEO_BOKEH_DA3_PYTHON",
+        "LAYERWISE_BOKEH_DA3_PYTHON",
         _DEFAULT_PYTHON,
         "scripts/setup_depth_anything_3.sh",
         _IMAGE,

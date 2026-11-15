@@ -6,7 +6,7 @@ import { defineConfig } from "@playwright/test";
 // never mistaken for the one this run started against the fixture library.
 const WEB_PORT = 3765;
 const API_PORT = 8765;
-const DATA_ROOT = path.join(os.tmpdir(), "video-bokeh-e2e");
+const DATA_ROOT = path.join(os.tmpdir(), "layerwise-bokeh-e2e");
 const LIBRARY = path.join(DATA_ROOT, "library");
 
 export default defineConfig({
@@ -32,9 +32,9 @@ export default defineConfig({
       env: {
         // Off, as it is without torch in CI, so the run is the same everywhere; the
         // bokeh pane is still checked, with frames faked into the sequence.
-        VIDEO_BOKEH_RENDER_BOKEH: "0",
-        VIDEO_BOKEH_DATA_ROOT: DATA_ROOT,
-        VIDEO_BOKEH_LIBRARY: LIBRARY,
+        LAYERWISE_BOKEH_RENDER_BOKEH: "0",
+        LAYERWISE_BOKEH_DATA_ROOT: DATA_ROOT,
+        LAYERWISE_BOKEH_LIBRARY: LIBRARY,
         CORS_ORIGINS: `http://localhost:${WEB_PORT},http://127.0.0.1:${WEB_PORT}`,
       },
       reuseExistingServer: false,

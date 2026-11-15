@@ -1,6 +1,6 @@
 # Depth Anything 3's environment, for the da3-* depth estimators with
-# VIDEO_BOKEH_RUNNER=docker. Built from the repository root:
-#   docker build -t video-bokeh-da3 -f backend/docker/depth-anything-3/Dockerfile .
+# LAYERWISE_BOKEH_RUNNER=docker. Built from the repository root:
+#   docker build -t layerwise-bokeh-da3 -f backend/docker/depth-anything-3/Dockerfile .
 # The worker script and the weights are not in it: the repository and the Hugging Face cache
 # are mounted at run time. The packages are scripts/setup_depth_anything_3.sh's, which says
 # why three declared dependencies are left out.

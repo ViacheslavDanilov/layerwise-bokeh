@@ -8,7 +8,7 @@ A generated sequence comes with its optical flow and occlusion mask, each forwar
 backward, written in the same request.
 
 It comes with its bokeh too, rendered in the same request by the layered renderer, when
-torch is installed and ``VIDEO_BOKEH_RENDER_BOKEH`` does not turn it off. Without torch,
+torch is installed and ``LAYERWISE_BOKEH_RENDER_BOKEH`` does not turn it off. Without torch,
 as in the browser smoke test's install, sequences come without bokeh, and a bokeh stream
 written into one later is served once it is there. The layered renderer cannot write it
 there, because the API writes no ``layers/``; only a renderer of one's own that needs none

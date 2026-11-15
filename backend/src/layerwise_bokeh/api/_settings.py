@@ -2,7 +2,7 @@
 
 Four environment variables, all optional:
 
-``VIDEO_BOKEH_DATA_ROOT``
+``LAYERWISE_BOKEH_DATA_ROOT``
     The single directory everything generated lives under. Defaults to ``data``,
     which is where it already is when the API runs from ``backend/``. Compose sets
     it to ``/data`` and mounts the real root there.
@@ -12,13 +12,13 @@ Four environment variables, all optional:
     frontend, ``http://localhost:3000``. The page and the API are always on different
     ports, so without this every request from the browser is refused.
 
-``VIDEO_BOKEH_LIBRARY``
-    Where the libraries are, when it is not ``$VIDEO_BOKEH_DATA_ROOT/library``. Either one
+``LAYERWISE_BOKEH_LIBRARY``
+    Where the libraries are, when it is not ``$LAYERWISE_BOKEH_DATA_ROOT/library``. Either one
     library, such as ``data/library_dev/da2-large``, which holds ``foregrounds/`` and
     ``backgrounds/`` directly, or a directory with one library per subdirectory, such as
     one per depth estimator.
 
-``VIDEO_BOKEH_RENDER_BOKEH``
+``LAYERWISE_BOKEH_RENDER_BOKEH``
     Whether a generated sequence gets its bokeh, rendered with it by the layered renderer.
     On unless it is ``0``, ``false`` or ``no``, and only ever when torch is installed. The
     browser smoke test turns it off, so it behaves the same with and without torch.
@@ -62,8 +62,8 @@ def load_settings(env: Mapping[str, str] | None = None) -> Settings:
     ``docker compose`` passes through for a ``.env`` key with nothing after the ``=``.
     """
     env = os.environ if env is None else env
-    data_root = Path(env.get("VIDEO_BOKEH_DATA_ROOT") or DEFAULT_DATA_ROOT)
-    library = Path(env.get("VIDEO_BOKEH_LIBRARY") or data_root / "library")
+    data_root = Path(env.get("LAYERWISE_BOKEH_DATA_ROOT") or DEFAULT_DATA_ROOT)
+    library = Path(env.get("LAYERWISE_BOKEH_LIBRARY") or data_root / "library")
     origins = tuple(
         o.strip() for o in env.get("CORS_ORIGINS", "").split(",") if o.strip()
     )
@@ -71,7 +71,7 @@ def load_settings(env: Mapping[str, str] | None = None) -> Settings:
         library=library,
         sequences=data_root / "sequences",
         cors_origins=origins or DEFAULT_CORS_ORIGINS,
-        render_bokeh=(env.get("VIDEO_BOKEH_RENDER_BOKEH") or "1").strip().lower()
+        render_bokeh=(env.get("LAYERWISE_BOKEH_RENDER_BOKEH") or "1").strip().lower()
         not in ("0", "false", "no"),
     )
 
@@ -92,7 +92,7 @@ def find_libraries(settings: Settings) -> list[Path]:
     if not root.is_dir():
         raise LibraryUnavailableError(
             f"no library at {root}. Build one with layerwise_bokeh.library.build, "
-            f"or point VIDEO_BOKEH_LIBRARY at an existing one.",
+            f"or point LAYERWISE_BOKEH_LIBRARY at an existing one.",
         )
     missing = _missing_subdirs(root)
     if not missing:
@@ -111,7 +111,7 @@ def find_libraries(settings: Settings) -> list[Path]:
     if not libraries:
         raise LibraryUnavailableError(
             f"no library at {root}: it is neither a library nor a directory of them. "
-            f"Build one with layerwise_bokeh.library.build, or point VIDEO_BOKEH_LIBRARY "
+            f"Build one with layerwise_bokeh.library.build, or point LAYERWISE_BOKEH_LIBRARY "
             f"at one.",
         )
     return libraries

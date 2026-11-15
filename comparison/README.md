@@ -131,7 +131,7 @@ and the 16-bit disparity the frame is written at add a little more. Nothing to s
 the render environment.
 
 ```bash
-VIDEO_BOKEH_LAYERED_DEVICE=cuda comparison/envs/render/bin/python \
+LAYERWISE_BOKEH_LAYERED_DEVICE=cuda comparison/envs/render/bin/python \
   comparison/run_ours_one_frame.py --data-root backend/data/cmp
 comparison/envs/render/bin/python comparison/score.py --data-root backend/data/cmp --method ours_one_frame
 ```

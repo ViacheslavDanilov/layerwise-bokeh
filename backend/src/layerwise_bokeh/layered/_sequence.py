@@ -22,7 +22,7 @@ from layerwise_bokeh.scenes._compositor import RenderedFrame
 #: The renderer's name, as ``focus.json`` and ``render.run``'s ``--renderer`` give it.
 RENDERER = "layered"
 #: Names the torch device that renders a sequence's bokeh: ``cuda``, ``mps`` or ``cpu``.
-DEVICE_VARIABLE = "VIDEO_BOKEH_LAYERED_DEVICE"
+DEVICE_VARIABLE = "LAYERWISE_BOKEH_LAYERED_DEVICE"
 #: Frames rendered at once. Eight 1024-pixel frames with five objects hold about 1 GiB of
 #: layers; a whole 80-frame sequence would hold ten.
 CHUNK = 8
@@ -72,7 +72,7 @@ def bokeh_record(
 
 
 def bokeh_device() -> torch.device:
-    """The device ``VIDEO_BOKEH_LAYERED_DEVICE`` names, the CPU when unset or absent."""
+    """The device ``LAYERWISE_BOKEH_LAYERED_DEVICE`` names, the CPU when unset or absent."""
     return select_device(os.environ.get(DEVICE_VARIABLE, "cpu"))
 
 

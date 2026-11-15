@@ -81,9 +81,9 @@ cp .env.example .env          # only to serve something other than backend/data/
 docker compose up api
 ```
 
-The containers are `video-bokeh-api` and `video-bokeh-web`. `api` mounts the libraries
+The containers are `layerwise-bokeh-api` and `layerwise-bokeh-web`. `api` mounts the libraries
 read-only at `/data/library` and writes sequences to `/data/sequences`; both come from
-`VIDEO_BOKEH_DATA_ROOT`, which defaults to `backend/data`. Generating a sequence in the container
+`LAYERWISE_BOKEH_DATA_ROOT`, which defaults to `backend/data`. Generating a sequence in the container
 costs roughly half again what it costs natively. The numbers are in
 [docs/reference/api.md](docs/reference/api.md).
 

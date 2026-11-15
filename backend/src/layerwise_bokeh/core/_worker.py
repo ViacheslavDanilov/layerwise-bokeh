@@ -55,10 +55,12 @@ _SHM_SIZE = "16g"
 
 
 def runner() -> str:
-    """``VIDEO_BOKEH_RUNNER``: ``local``, the default, or ``docker``."""
-    value = os.environ.get("VIDEO_BOKEH_RUNNER", "local")
+    """``LAYERWISE_BOKEH_RUNNER``: ``local``, the default, or ``docker``."""
+    value = os.environ.get("LAYERWISE_BOKEH_RUNNER", "local")
     if value not in ("local", "docker"):
-        raise ValueError(f"VIDEO_BOKEH_RUNNER must be local or docker, not {value!r}")
+        raise ValueError(
+            f"LAYERWISE_BOKEH_RUNNER must be local or docker, not {value!r}"
+        )
     return value
 
 
@@ -71,7 +73,7 @@ def model_command(
     mounts: Iterable[Path] = (),
     workdir: Path | None = None,
 ) -> list[str]:
-    """The command a model's own Python runs under, by ``VIDEO_BOKEH_RUNNER``.
+    """The command a model's own Python runs under, by ``LAYERWISE_BOKEH_RUNNER``.
 
     ``local``, the default, is the interpreter ``interpreter`` finds. ``docker`` is
     ``python`` in ``image``, with the GPU. The repository, the temporary directory, the
@@ -101,11 +103,11 @@ def model_command(
     hf_home.mkdir(parents=True, exist_ok=True)
     # The user has no home in the image. This one is theirs, not a name in the shared /tmp
     # that someone else could take first.
-    home = Path.home() / ".cache" / "video-bokeh-home"
+    home = Path.home() / ".cache" / "layerwise-bokeh-home"
     home.mkdir(mode=0o700, parents=True, exist_ok=True)
     argv = ["docker", "run", "--rm", "-i", "--init", "--gpus", "all"]
     # Labeled, so a container left behind by a killed run can be found and stopped.
-    argv += ["--label", f"video-bokeh.model={image}"]
+    argv += ["--label", f"layerwise-bokeh.model={image}"]
     argv += [f"--shm-size={_SHM_SIZE}", "--user", f"{os.getuid()}:{os.getgid()}"]
     argv += ["-e", f"HF_HOME={hf_home}", "-e", f"HOME={home}"]
     # Nor a name: getpass, which torch asks for its cache path, falls back to these.

@@ -25,7 +25,7 @@ def test_names_a_library_mounted_as_the_working_directory(
     library: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """`VIDEO_BOKEH_LIBRARY=.` must not produce a library with an empty name."""
+    """`LAYERWISE_BOKEH_LIBRARY=.` must not produce a library with an empty name."""
     monkeypatch.chdir(library)
     assert summarize(Path()).name == library.name
 

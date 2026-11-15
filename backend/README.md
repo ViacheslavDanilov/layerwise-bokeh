@@ -91,18 +91,18 @@ The API mounts libraries and generates sequences from the one a request names, o
 it at one library, or at a directory with one library per subdirectory:
 
 ```bash
-VIDEO_BOKEH_LIBRARY=data/library_dev/da2-small \
+LAYERWISE_BOKEH_LIBRARY=data/library_dev/da2-small \
   uv run uvicorn layerwise_bokeh.api.main:app --reload --port 8000
 ```
 
 - API: http://localhost:8000
 - Docs: http://localhost:8000/docs
 
-Without `VIDEO_BOKEH_LIBRARY` it looks for `$VIDEO_BOKEH_DATA_ROOT/library`, and
-`VIDEO_BOKEH_DATA_ROOT` itself defaults to `data`. `make libraries`, from the repository
+Without `LAYERWISE_BOKEH_LIBRARY` it looks for `$LAYERWISE_BOKEH_DATA_ROOT/library`, and
+`LAYERWISE_BOKEH_DATA_ROOT` itself defaults to `data`. `make libraries`, from the repository
 root, writes dev-pool libraries into `data/library_dev/<estimator>`, and `make api` serves
-that root by setting `VIDEO_BOKEH_LIBRARY`. Full-pool libraries belong in
-`data/library/<estimator>`. Sequences are written under `$VIDEO_BOKEH_DATA_ROOT/sequences/`.
+that root by setting `LAYERWISE_BOKEH_LIBRARY`. Full-pool libraries belong in
+`data/library/<estimator>`. Sequences are written under `$LAYERWISE_BOKEH_DATA_ROOT/sequences/`.
 
 Against `data/library_dev/da2-small`, generate a sequence and watch it:
 
@@ -127,7 +127,7 @@ Timings for other frame counts, and for the container, are in `docs/reference/ap
 
 `docker compose up` from the repository root is the entry point. It builds this image and the
 frontend together, publishes 8000 and 3000, and mounts the data root named by
-`VIDEO_BOKEH_DATA_ROOT`. See `compose.yaml` and `.env.example`, both at the root.
+`LAYERWISE_BOKEH_DATA_ROOT`. See `compose.yaml` and `.env.example`, both at the root.
 
 ```bash
 # From the repository root
@@ -138,8 +138,8 @@ To build and run this service on its own:
 
 ```bash
 # From the repository root, where uv.lock is
-docker build -t video-bokeh-api -f backend/Dockerfile .
-docker run -p 8000:8000 video-bokeh-api
+docker build -t layerwise-bokeh-api -f backend/Dockerfile .
+docker run -p 8000:8000 layerwise-bokeh-api
 ```
 
 ## Development

@@ -17,7 +17,7 @@ def test_defaults_to_the_data_directory() -> None:
 
 
 def test_data_root_moves_library_and_sequences_together() -> None:
-    settings = load_settings({"VIDEO_BOKEH_DATA_ROOT": "/mnt/big"})
+    settings = load_settings({"LAYERWISE_BOKEH_DATA_ROOT": "/mnt/big"})
     assert settings.library == Path("/mnt/big/library")
     assert settings.sequences == Path("/mnt/big/sequences")
 
@@ -26,8 +26,8 @@ def test_library_can_be_named_independently() -> None:
     """A flat library like data/library/da2-large is named directly, not under the root."""
     settings = load_settings(
         {
-            "VIDEO_BOKEH_DATA_ROOT": "/mnt/big",
-            "VIDEO_BOKEH_LIBRARY": "/elsewhere/da2-large",
+            "LAYERWISE_BOKEH_DATA_ROOT": "/mnt/big",
+            "LAYERWISE_BOKEH_LIBRARY": "/elsewhere/da2-large",
         },
     )
     assert settings.library == Path("/elsewhere/da2-large")
@@ -36,7 +36,9 @@ def test_library_can_be_named_independently() -> None:
 
 def test_empty_variable_is_treated_as_unset() -> None:
     """Compose writes an empty value when a .env key exists with no value."""
-    settings = load_settings({"VIDEO_BOKEH_DATA_ROOT": "", "VIDEO_BOKEH_LIBRARY": ""})
+    settings = load_settings(
+        {"LAYERWISE_BOKEH_DATA_ROOT": "", "LAYERWISE_BOKEH_LIBRARY": ""}
+    )
     assert settings.library == Path("data/library")
 
 
@@ -106,6 +108,8 @@ def test_a_half_library_names_what_it_is_missing(tmp_path: Path) -> None:
 
 def test_bokeh_is_rendered_unless_turned_off() -> None:
     assert load_settings({}).render_bokeh is True
-    assert load_settings({"VIDEO_BOKEH_RENDER_BOKEH": "0"}).render_bokeh is False
-    assert load_settings({"VIDEO_BOKEH_RENDER_BOKEH": "false"}).render_bokeh is False
-    assert load_settings({"VIDEO_BOKEH_RENDER_BOKEH": "1"}).render_bokeh is True
+    assert load_settings({"LAYERWISE_BOKEH_RENDER_BOKEH": "0"}).render_bokeh is False
+    assert (
+        load_settings({"LAYERWISE_BOKEH_RENDER_BOKEH": "false"}).render_bokeh is False
+    )
+    assert load_settings({"LAYERWISE_BOKEH_RENDER_BOKEH": "1"}).render_bokeh is True

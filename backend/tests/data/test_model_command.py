@@ -29,25 +29,27 @@ def test_local_runs_the_venv_s_interpreter(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.delenv("VIDEO_BOKEH_RUNNER", raising=False)
+    monkeypatch.delenv("LAYERWISE_BOKEH_RUNNER", raising=False)
     python = tmp_path / "python"
     python.touch()
-    assert model_command("X_PYTHON", python, _SETUP, "video-bokeh-x") == [str(python)]
+    assert model_command("X_PYTHON", python, _SETUP, "layerwise-bokeh-x") == [
+        str(python)
+    ]
 
 
 def test_local_without_the_venv_names_the_setup_script(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("VIDEO_BOKEH_RUNNER", "local")
+    monkeypatch.setenv("LAYERWISE_BOKEH_RUNNER", "local")
     with pytest.raises(RuntimeError, match="scripts/setup_x.sh"):
-        model_command("X_PYTHON", tmp_path / "missing", _SETUP, "video-bokeh-x")
+        model_command("X_PYTHON", tmp_path / "missing", _SETUP, "layerwise-bokeh-x")
 
 
 def test_an_unknown_runner_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("VIDEO_BOKEH_RUNNER", "podman")
-    with pytest.raises(ValueError, match="VIDEO_BOKEH_RUNNER"):
-        model_command("X_PYTHON", Path("/x"), _SETUP, "video-bokeh-x")
+    monkeypatch.setenv("LAYERWISE_BOKEH_RUNNER", "podman")
+    with pytest.raises(ValueError, match="LAYERWISE_BOKEH_RUNNER"):
+        model_command("X_PYTHON", Path("/x"), _SETUP, "layerwise-bokeh-x")
 
 
 def test_docker_runs_the_image_s_python_with_the_gpu(
@@ -55,19 +57,19 @@ def test_docker_runs_the_image_s_python_with_the_gpu(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
-    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "video-bokeh-x")
+    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "layerwise-bokeh-x")
     monkeypatch.setenv("HF_HOME", str(tmp_path / "hf"))
     data = tmp_path / "data"
     argv = model_command(
         "X_PYTHON",
         tmp_path / "unused",
         _SETUP,
-        "video-bokeh-x",
+        "layerwise-bokeh-x",
         mounts=[data],
         workdir=data,
     )
     assert argv[:2] == ["docker", "run"]
-    image = argv.index("video-bokeh-x")
+    image = argv.index("layerwise-bokeh-x")
     assert argv[image + 1 :] == ["python"]
     flags = argv[2:image]
     assert "--rm" in flags and "-i" in flags
@@ -92,13 +94,13 @@ def test_docker_mounts_a_path_once(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
-    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "video-bokeh-x")
+    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "layerwise-bokeh-x")
     repo = Path(__file__).resolve().parents[3]
     argv = model_command(
         "X_PYTHON",
         tmp_path,
         _SETUP,
-        "video-bokeh-x",
+        "layerwise-bokeh-x",
         mounts=[repo / "backend" / "data", repo],
     )
     targets = [v.split(":")[1] for v in _pairs(argv, "-v")]
@@ -112,8 +114,8 @@ def test_docker_without_the_image_says_how_to_build_it(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setenv("FAKE_DOCKER_IMAGES", "")
-    with pytest.raises(RuntimeError, match="video-bokeh-x.*make images"):
-        model_command("X_PYTHON", Path("/x"), _SETUP, "video-bokeh-x")
+    with pytest.raises(RuntimeError, match="layerwise-bokeh-x.*make images"):
+        model_command("X_PYTHON", Path("/x"), _SETUP, "layerwise-bokeh-x")
 
 
 def test_the_fake_docker_runs_the_command(
@@ -122,12 +124,12 @@ def test_the_fake_docker_runs_the_command(
     tmp_path: Path,
 ) -> None:
     """The fixture the end-to-end tests stand on: what docker would run, it runs."""
-    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "video-bokeh-x")
+    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "layerwise-bokeh-x")
     argv = model_command(
         "X_PYTHON",
         tmp_path,
         _SETUP,
-        "video-bokeh-x",
+        "layerwise-bokeh-x",
         workdir=tmp_path,
     )
     out = subprocess.run(
@@ -146,7 +148,7 @@ def test_an_unreachable_daemon_is_not_blamed_on_the_image(
 ) -> None:
     monkeypatch.setenv("FAKE_DOCKER_DOWN", "1")
     with pytest.raises(RuntimeError, match="permission denied") as exc:
-        model_command("X_PYTHON", Path("/x"), _SETUP, "video-bokeh-x")
+        model_command("X_PYTHON", Path("/x"), _SETUP, "layerwise-bokeh-x")
     assert "make images" not in str(exc.value)
 
 
@@ -157,7 +159,7 @@ def outside(
     fake_docker: Path,
 ) -> Path:
     """A repository, a temporary directory and a cache that cover nothing else."""
-    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "video-bokeh-x")
+    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "layerwise-bokeh-x")
     monkeypatch.setattr(worker, "_REPO", tmp_path / "repo")
     monkeypatch.setattr(worker.tempfile, "gettempdir", lambda: str(tmp_path / "tmp"))
     monkeypatch.setenv("HF_HOME", str(tmp_path / "hf"))
@@ -180,7 +182,9 @@ def test_a_symlink_inside_a_mount_is_mounted_where_it_points(outside: Path) -> N
     """Data on a second disk, linked from inside the repository."""
     link = outside / "repo" / "data"
     link.symlink_to(outside / "disk2")
-    argv = model_command("X_PYTHON", outside, _SETUP, "video-bokeh-x", mounts=[link])
+    argv = model_command(
+        "X_PYTHON", outside, _SETUP, "layerwise-bokeh-x", mounts=[link]
+    )
     assert f"{outside / 'disk2'}:{outside / 'disk2'}" in _pairs(argv, "-v")
 
 
@@ -192,7 +196,7 @@ def test_a_symlink_outside_every_mount_keeps_its_own_name(
     link = outside / "hf-link"
     link.symlink_to(outside / "disk2")
     monkeypatch.setenv("HF_HOME", str(link))
-    argv = model_command("X_PYTHON", outside, _SETUP, "video-bokeh-x")
+    argv = model_command("X_PYTHON", outside, _SETUP, "layerwise-bokeh-x")
     assert f"HF_HOME={link}" in _pairs(argv, "-e")
     assert _resolves(argv, link)
 
@@ -206,12 +210,12 @@ def test_a_symlinked_temporary_directory_still_holds_the_workdir(
     monkeypatch.setattr(worker.tempfile, "gettempdir", lambda: str(link))
     work = link / "run"
     work.mkdir()
-    argv = model_command("X_PYTHON", outside, _SETUP, "video-bokeh-x", workdir=work)
+    argv = model_command("X_PYTHON", outside, _SETUP, "layerwise-bokeh-x", workdir=work)
     assert _resolves(argv, work)
 
 
 def test_the_home_is_the_user_s_own(outside: Path) -> None:
-    argv = model_command("X_PYTHON", outside, _SETUP, "video-bokeh-x")
+    argv = model_command("X_PYTHON", outside, _SETUP, "layerwise-bokeh-x")
     (home,) = [e.split("=", 1)[1] for e in _pairs(argv, "-e") if e.startswith("HOME=")]
     assert Path(home).is_relative_to(outside / "home")
     assert Path(home).stat().st_mode & 0o777 == 0o700
@@ -222,7 +226,7 @@ def test_the_container_knows_the_user_s_name(outside: Path) -> None:
     """The uid has no passwd entry in the image, and torch's cache path asks for a name
     through getpass, which then reads the environment alone.
     """
-    argv = model_command("X_PYTHON", outside, _SETUP, "video-bokeh-x")
+    argv = model_command("X_PYTHON", outside, _SETUP, "layerwise-bokeh-x")
     env = _pairs(argv, "-e")
     assert f"USER={getpass.getuser()}" in env
     assert f"LOGNAME={getpass.getuser()}" in env

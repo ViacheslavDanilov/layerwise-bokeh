@@ -1062,7 +1062,7 @@ def test_stats_command_counts_records_focus_and_files(
 ):
     if bokeh:
         pytest.importorskip("torch")
-        monkeypatch.setenv("VIDEO_BOKEH_LAYERED_DEVICE", "cpu")
+        monkeypatch.setenv("LAYERWISE_BOKEH_LAYERED_DEVICE", "cpu")
     library = tmp_path / "lib"
     _tiny_library(library)
     out = tmp_path / "synth"

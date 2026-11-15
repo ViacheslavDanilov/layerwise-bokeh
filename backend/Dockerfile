@@ -1,5 +1,5 @@
 # Built from the repository root, where the workspace's uv.lock is:
-#   docker build -t video-bokeh-api -f backend/Dockerfile .
+#   docker build -t layerwise-bokeh-api -f backend/Dockerfile .
 # backend/Dockerfile.dockerignore keeps that context to the files copied below.
 FROM python:3.13-slim AS base
 

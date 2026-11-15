@@ -53,7 +53,7 @@ export default function Page() {
   const librariesRef = useRef<LibraryInfo[]>([]);
   // Folded away, the parameters leave their width to the panes.
   const [parametersShown, setParametersShown] = useStoredFlag(
-    "video-bokeh.parameters-shown",
+    "layerwise-bokeh.parameters-shown",
     true,
   );
 

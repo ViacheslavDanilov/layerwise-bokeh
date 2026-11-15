@@ -267,7 +267,7 @@ def test_every_registered_estimator_is_checked_by_default(
     capsys: pytest.CaptureFixture[str],
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("VIDEO_BOKEH_DA3_PYTHON", sys.executable)
+    monkeypatch.setenv("LAYERWISE_BOKEH_DA3_PYTHON", sys.executable)
     check.main(["--device", "cpu"])
     out = capsys.readouterr().out
     assert all(name in out for name in ESTIMATORS)
