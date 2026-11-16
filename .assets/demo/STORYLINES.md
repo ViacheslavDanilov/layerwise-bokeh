@@ -1,6 +1,6 @@
 # README video: storylines
 
-Subject: Video Bokeh's web demo, which generates a synthetic sequence and shows its streams
+Subject: LayerWise's web demo, which generates a synthetic sequence and shows its streams
 side by side. Viewer: someone who opened the repository and wants to know, in about a
 minute, what the dataset holds and what the demo does with it. One real sequence travels
 through every option: the paper's night scene, seed 245 from the `da2-large` library at
@@ -19,7 +19,7 @@ fine detail. The sequence is generated on camera, so the progress bar is real.
   place, then a double-click zooms all six panes in on the same strands of hair at once, and
   the slider steps through them frame by frame. The same sequence then loops at three bokeh
   strengths, and then as its six streams. It feels calm and exact.
-- **First two seconds:** the poster: the aperture logo, "Video Bokeh" and "Synthetic video
+- **First two seconds:** the poster: the aperture logo, "LayerWise" and "Synthetic video
   with exact depth, rendered bokeh and optical flow", finished at frame 0.
 - **Beats:** poster, then "Pick an estimator and a seed": estimator list, seed, Generate,
   progress bar (sped up and labeled with its factor), three new panes, Play, Pause on frame
