@@ -97,6 +97,10 @@ it generates must not be cached, or there is no progress bar to film: find its f
    node record.cjs 245 frames
    ```
 
+   `DEMO_URL` names the page when it is not on `http://localhost:3000`, say
+   `DEMO_URL=http://localhost:3100 node record.cjs 245 frames`; the API's `CORS_ORIGINS`
+   must then name that origin too.
+
    The window is 1920 × 1080 CSS px on a 2× screen, so the frames are 3840 × 2160 and the
    app fills them. Off camera the script sets the size to 1024 × 1024 and the objects to 2
    to 2, and shows seed 6 from the first library, `da2-base`: a falcon and a taxi over the

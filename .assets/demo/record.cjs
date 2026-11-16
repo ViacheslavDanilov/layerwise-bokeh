@@ -1,4 +1,4 @@
-// Records the real demo at :3000 through a CDP screencast: JPEG frames with wall-clock timestamps.
+// Records the real demo at DEMO_URL (default http://localhost:3000) through a CDP screencast: JPEG frames with wall-clock timestamps.
 // The window is 1920 x 1080 CSS px, the film's 16:9, on a 2x screen, so the frames are 3840 x 2160
 // and the app fills them edge to edge. The scale is the screen's (--force-device-scale-factor), not
 // Playwright's emulated one: the screencast sends emulated pages at their CSS size.
@@ -19,7 +19,7 @@
 // holds still until every pane has shown a frame, so none of the frames left out hides a move; the
 // spans of every move are in frames.json for the edit to check it.
 //
-// Usage, from this folder: node record.cjs SEED FRAMES_DIR
+// Usage, from this folder: [DEMO_URL=http://localhost:3100] node record.cjs SEED FRAMES_DIR
 const fs = require('node:fs');
 const { createRequire } = require('node:module');
 const { chromium } = createRequire(`${__dirname}/../../frontend/package.json`)('@playwright/test');
@@ -40,6 +40,8 @@ const PAUSE_AT = 71, SCRUB_FRAMES = 4;
 // against the night sky around PAUSE_AT. The 4x view keeps this point where it is.
 const HAIR = { x: 0.76, y: 0.16 };
 const API = 'http://127.0.0.1:8000';
+// The page to film. Another port when :3000 is taken; the API's CORS_ORIGINS must then name it.
+const PAGE = process.env.DEMO_URL || 'http://localhost:3000';
 // Where the cursor waits once there are six panes: in the margin right of them.
 const REST = { x: 1765, y: 600 };
 fs.mkdirSync(out, { recursive: true });
@@ -104,7 +106,7 @@ function watchPanes() {
   const ctx = await b.newContext({ viewport: null });
   const p = await ctx.newPage();
   await p.addInitScript(() => { const st = document.createElement('style'); st.textContent = 'nextjs-portal{display:none!important}'; document.documentElement.appendChild(st); });
-  await p.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+  await p.goto(PAGE, { waitUntil: 'networkidle' });
   await p.getByRole('button', { name: 'Generate sequence' }).waitFor();
   await p.waitForTimeout(500);
   await p.evaluate(installCursor);
