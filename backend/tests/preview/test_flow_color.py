@@ -11,9 +11,9 @@ import imageio.v2 as iio
 import numpy as np
 import pytest
 
-from video_bokeh.core._streams import write_flow_png
-from video_bokeh.preview._flow import flow_to_rgb
-from video_bokeh.preview.pack import encode_stream
+from layerwise_bokeh.core._streams import write_flow_png
+from layerwise_bokeh.preview._flow import flow_to_rgb
+from layerwise_bokeh.preview.pack import encode_stream
 
 
 def _flow(u: float, v: float, size: int = 4) -> np.ndarray:

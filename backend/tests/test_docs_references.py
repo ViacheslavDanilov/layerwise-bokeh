@@ -39,24 +39,24 @@ _DOC_FILES = (
     ".agents/skills/shared/bokeh-conventions.md",
 )
 
-# Any Python module the docs name: `src/video_bokeh/foo.py`, `backend/src/...`, or a bare `foo.py`.
+# Any Python module the docs name: `src/layerwise_bokeh/foo.py`, `backend/src/...`, or a bare `foo.py`.
 _PATH_RE = re.compile(r"\b(?:backend/)?src/[\w/]+\.py\b")
 _NAME_RE = re.compile(r"\b([a-z_][\w]*\.py)\b")
 # Module constants named inside backticks, which is how the docs write them:
 # `_ALPHA_CHANNELS`, `_ALPHA_CHANNELS = 3`, `_Z_NEAR`/`_Z_FAR`.
 _CONST_RE = re.compile(r"\b(_[A-Z][A-Z0-9_]{2,})\b")
-# Dotted module paths named inside backticks, e.g. `video_bokeh.library.build`.
-_MODULE_RE = re.compile(r"\bvideo_bokeh(?:\.[a-zA-Z_][a-zA-Z0-9_]*)+\b")
+# Dotted module paths named inside backticks, e.g. `layerwise_bokeh.library.build`.
+_MODULE_RE = re.compile(r"\blayerwise_bokeh(?:\.[a-zA-Z_][a-zA-Z0-9_]*)+\b")
 _TICKS_RE = re.compile(r"`([^`\n]+)`")
 
 
 def _module_resolves(dotted: str) -> bool:
     """True if `dotted` names a module file, a package, or an attribute in one.
 
-    `video_bokeh.core._streams` is a module file, `video_bokeh.core` is a
-    package (its own `__init__.py`), and `video_bokeh.preview.pack.load_frame`
+    `layerwise_bokeh.core._streams` is a module file, `layerwise_bokeh.core` is a
+    package (its own `__init__.py`), and `layerwise_bokeh.preview.pack.load_frame`
     is a function inside the `pack` module -- so the dotted name doesn't
-    resolve to a file itself, its `video_bokeh.preview.pack` prefix does.
+    resolve to a file itself, its `layerwise_bokeh.preview.pack` prefix does.
     Walk prefixes from the full name down to find one that does.
     """
     parts = dotted.split(".")
@@ -119,7 +119,7 @@ def test_doc_names_only_code_that_exists(doc: Path) -> None:
         {m for m in named_modules if not _module_resolves(m)},
     )
     assert not missing_modules, (
-        f"{rel} names a video_bokeh module that does not resolve to a file under "
+        f"{rel} names a layerwise_bokeh module that does not resolve to a file under "
         f"backend/src/: {missing_modules}. Either the module moved and the doc did not "
         f"follow, or the doc is inventing a path."
     )

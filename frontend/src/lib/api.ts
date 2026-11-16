@@ -104,7 +104,7 @@ async function readError(response: Response): Promise<never> {
 /** Turn a failed connection into the one thing the person can act on. */
 function unreachable(cause: unknown): never {
   throw new ApiError(
-    `Cannot reach the API at ${BASE}. Start it with "uv run uvicorn video_bokeh.api.main:app" ` +
+    `Cannot reach the API at ${BASE}. Start it with "uv run uvicorn layerwise_bokeh.api.main:app" ` +
       `from backend/, or set NEXT_PUBLIC_API_URL. (${String(cause)})`,
   );
 }

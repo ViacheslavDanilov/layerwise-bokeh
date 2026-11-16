@@ -1,6 +1,6 @@
 ---
 name: planner
-description: Plans a structural change to Video Bokeh before anyone writes code, such as the on-disk dataset contract, the API the frontend consumes, build or CI config, the Dockerfiles or the agent configuration. Read-only. Use from the orchestrator when the change matches the planner row in the routing table of root AGENTS.md.
+description: Plans a structural change to LayerWise before anyone writes code, such as the on-disk dataset contract, the API the frontend consumes, build or CI config, the Dockerfiles or the agent configuration. Read-only. Use from the orchestrator when the change matches the planner row in the routing table of root AGENTS.md.
 model: opus
 effort: xhigh
 disallowedTools: Edit, Write, NotebookEdit

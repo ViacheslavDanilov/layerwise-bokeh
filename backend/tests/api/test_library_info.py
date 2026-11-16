@@ -6,9 +6,9 @@ from pathlib import Path
 import pytest
 from PIL import Image
 
-from video_bokeh.api._library import DuplicateLibraryError, summarize, summarize_all
-from video_bokeh.core._metadata import write_asset_metadata
-from video_bokeh.core._split import listed_test_foregrounds
+from layerwise_bokeh.api._library import DuplicateLibraryError, summarize, summarize_all
+from layerwise_bokeh.core._metadata import write_asset_metadata
+from layerwise_bokeh.core._split import listed_test_foregrounds
 
 
 def test_reports_what_is_mounted(library: Path, facts) -> None:
@@ -25,7 +25,7 @@ def test_names_a_library_mounted_as_the_working_directory(
     library: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """`VIDEO_BOKEH_LIBRARY=.` must not produce a library with an empty name."""
+    """`LAYERWISE_BOKEH_LIBRARY=.` must not produce a library with an empty name."""
     monkeypatch.chdir(library)
     assert summarize(Path()).name == library.name
 
@@ -114,7 +114,7 @@ def test_id_is_short_enough_to_read(library: Path) -> None:
 def test_a_request_draws_the_train_assets_the_id_covers(
     make_library: Callable[..., Path],
 ) -> None:
-    from video_bokeh.api._sequences import SequenceRequest, _scene
+    from layerwise_bokeh.api._sequences import SequenceRequest, _scene
 
     root = make_library(
         "lib",

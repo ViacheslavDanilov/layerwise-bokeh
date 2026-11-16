@@ -20,10 +20,13 @@ from fixture_library import build_library  # noqa: E402
 from huggingface_hub import DatasetCard  # noqa: E402
 from huggingface_hub.errors import EntryNotFoundError  # noqa: E402
 
-from video_bokeh.core._library import list_backgrounds, list_foregrounds  # noqa: E402
-from video_bokeh.core._split import listed_test_foregrounds  # noqa: E402
-from video_bokeh.library import hub  # noqa: E402
-from video_bokeh.scenes.generate import generate_dataset  # noqa: E402
+from layerwise_bokeh.core._library import (  # noqa: E402
+    list_backgrounds,
+    list_foregrounds,
+)
+from layerwise_bokeh.core._split import listed_test_foregrounds  # noqa: E402
+from layerwise_bokeh.library import hub  # noqa: E402
+from layerwise_bokeh.scenes.generate import generate_dataset  # noqa: E402
 
 
 @pytest.fixture
@@ -256,7 +259,7 @@ def test_the_card_follows_the_hub_metadata_and_counts_what_it_holds(
     assert set(meta["task_categories"]) == {"image-to-image", "depth-estimation"}
     assert meta["size_categories"] == ["10K<n<100K"]
     assert meta["source_datasets"] == ["OneOverZero/MAGICK", "BG-20k"]
-    assert meta["pretty_name"] == "Video Bokeh"
+    assert meta["pretty_name"] == "LayerWise"
     # Every number is filled in from the index, and no placeholder is left.
     assert "$" not in card
     assert "| | Foregrounds | Backgrounds |\n" in card
@@ -269,15 +272,15 @@ def test_the_card_follows_the_hub_metadata_and_counts_what_it_holds(
     # No figure was drawn, so the card shows none; the whole library is in it.
     assert "assets/" not in card
     assert "Upload status" not in card
-    assert "@misc{danilov2026videobokeh," in card
+    assert "@misc{danilov2026layerwisebokeh," in card
     assert "Danilov, Viacheslav and Dewil, Valéry and Arias, Pablo" in card
 
 
 @pytest.fixture(autouse=True)
 def short_video(monkeypatch: pytest.MonkeyPatch) -> None:
     """Sequences of 4 small frames, so every test that draws the preview stays quick."""
-    monkeypatch.setattr("video_bokeh.library._preview.VIDEO_FRAMES", 4)
-    monkeypatch.setattr("video_bokeh.library._preview.VIDEO_PANEL", 128)
+    monkeypatch.setattr("layerwise_bokeh.library._preview.VIDEO_FRAMES", 4)
+    monkeypatch.setattr("layerwise_bokeh.library._preview.VIDEO_PANEL", 128)
 
 
 def _video_frames(path: Path) -> int:
@@ -308,7 +311,7 @@ def test_the_preview_is_a_figure_and_a_video_the_card_shows(
 def test_the_preview_draws_disparity_only_where_the_matte_reaches_its_core(
     library: Path,
 ) -> None:
-    from video_bokeh.library import _preview
+    from layerwise_bokeh.library import _preview
 
     # A faint halo on the left, as MAGICK's mattes have, and real matte on the right.
     alpha = np.zeros((64, 64), dtype=np.uint8)

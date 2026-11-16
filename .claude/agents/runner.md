@@ -1,6 +1,6 @@
 ---
 name: runner
-description: Runs commands and searches for Video Bokeh and reports the result in a few lines, such as make check, cd backend && uv run pytest, cd frontend && pnpm build, pnpm e2e, a search across the code, or a count. Read-only on source files. Use to keep long output out of the calling session.
+description: Runs commands and searches for LayerWise and reports the result in a few lines, such as make check, cd backend && uv run pytest, cd frontend && pnpm build, pnpm e2e, a search across the code, or a count. Read-only on source files. Use to keep long output out of the calling session.
 model: haiku
 effort: high
 disallowedTools: Edit, Write, NotebookEdit, Agent

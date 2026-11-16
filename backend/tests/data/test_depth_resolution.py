@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from video_bokeh.library.build import _build_parser
-from video_bokeh.library.depth import ESTIMATORS, resolve_estimator
+from layerwise_bokeh.library.build import _build_parser
+from layerwise_bokeh.library.depth import ESTIMATORS, resolve_estimator
 
 _REQUIRED = ["--fg-data-root", "fg", "--bg-data-root", "bg", "--output", "out"]
 

@@ -1,6 +1,6 @@
 ---
 name: crafter
-description: Implements work for Video Bokeh whose quality depends on taste, such as the page under frontend/src, prose under docs/ and the READMEs, or the demo video in .assets/demo. Use from the orchestrator for any change that matches the crafter row in the routing table of root AGENTS.md.
+description: Implements work for LayerWise whose quality depends on taste, such as the page under frontend/src, prose under docs/ and the READMEs, or the demo video in .assets/demo. Use from the orchestrator for any change that matches the crafter row in the routing table of root AGENTS.md.
 model: sonnet
 effort: xhigh
 ---

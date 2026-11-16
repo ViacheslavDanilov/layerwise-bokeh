@@ -3,7 +3,7 @@
 # MPIB's ray tracer composited in gamma values, and print a table of each. The sequences must
 # hold their layers and bokeh, so that the focus and the strength are ours: write them with
 #
-#   uv run python -m video_bokeh.scenes.generate --library-root <library> --output <dir> \
+#   uv run python -m layerwise_bokeh.scenes.generate --library-root <library> --output <dir> \
 #     --count <n> --frames 24 --size 1024 --seed <s> --layers --bokeh
 #
 # Usage: comparison/run_all.sh <data-root> [sequence ids, comma-separated]
@@ -39,7 +39,7 @@ if [ "${#missing[@]}" -gt 0 ]; then
 fi
 
 # Our renderer on one frame runs on the GPU unless told otherwise.
-export VIDEO_BOKEH_LAYERED_DEVICE="${VIDEO_BOKEH_LAYERED_DEVICE:-cuda}"
+export LAYERWISE_BOKEH_LAYERED_DEVICE="${LAYERWISE_BOKEH_LAYERED_DEVICE:-cuda}"
 
 # The methods' own source has invalid escape sequences in regular expressions, which Python
 # warns of on every start; those warnings are all this hides.

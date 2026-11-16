@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from video_bokeh.library.split import draw, main, page_id
+from layerwise_bokeh.library.split import draw, main, page_id
 
 # Ten people and twenty objects, ids as Stage A names MAGICK images: folder, then page.
 PEOPLE = [f"p{i}__P{i:03d}" for i in range(10)]

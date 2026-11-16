@@ -19,14 +19,14 @@ from PIL import Image
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "backend" / "src"))
 
-from video_bokeh.core._seq_io import (  # noqa: E402
+from layerwise_bokeh.core._seq_io import (  # noqa: E402
     frame_names,
     has_layers,
     list_sequences,
 )
-from video_bokeh.core._streams import read_disparity_png  # noqa: E402
-from video_bokeh.layered import LayeredFrame  # noqa: E402
-from video_bokeh.render.layered import _read_frames  # noqa: E402
+from layerwise_bokeh.core._streams import read_disparity_png  # noqa: E402
+from layerwise_bokeh.layered import LayeredFrame  # noqa: E402
+from layerwise_bokeh.render.layered import _read_frames  # noqa: E402
 
 #: The power the renderers raise colors to, around the blur, as an approximation of linear light.
 GAMMA = 2.2

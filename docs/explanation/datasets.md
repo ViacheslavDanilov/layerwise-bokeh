@@ -16,7 +16,7 @@ matting model.
 ## MAGICK foregrounds
 
 MAGICK supplies the pipeline's foreground images with red, green, blue, and alpha (RGBA)
-channels. `video_bokeh.acquire.magick` fetches them from
+channels. `layerwise_bokeh.acquire.magick` fetches them from
 [OneOverZero/MAGICK on Hugging Face](https://huggingface.co/datasets/OneOverZero/MAGICK).
 
 ### Source pools
@@ -55,7 +55,7 @@ each frame. [dataset-layout](../reference/dataset-layout.md) describes the outpu
 ## BG-20k backgrounds
 
 BG-20k provides the background images.
-`video_bokeh.acquire.bg20k` uses `kagglehub` to fetch the
+`layerwise_bokeh.acquire.bg20k` uses `kagglehub` to fetch the
 [Kaggle upload](https://www.kaggle.com/datasets/nguyenquocdungk16hl/bg-20o).
 It can download the full archive or grow a sample one image at a time.
 The tracked development pool contains 30 backgrounds.

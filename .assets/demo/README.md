@@ -54,7 +54,7 @@ are built here from the same source images. From `backend/`, with the lab reacha
 1. Copy the `da2-large` assets:
 
    ```bash
-   LAB=upf:/mnt/storage/projects/upf/video-bokeh/backend/data
+   LAB=upf:/mnt/storage/projects/upf/layerwise-bokeh/backend/data
    mkdir -p data/library_demo/da2-large/foregrounds data/library_demo/da2-large/backgrounds
    for id in 1Z__1ZwVfuotr0 4u__4utFk5cf41 6J__6JwGEDXl0A 7M__7M7iteGLJW 8H__8Hq8GqfviD 8V__8V95zPFQAb Xe__Xe17RZvrgx; do
      scp -q -r $LAB/library/da2-large/foregrounds/$id data/library_demo/da2-large/foregrounds/
@@ -78,7 +78,7 @@ are built here from the same source images. From `backend/`, with the lab reacha
 
    ```bash
    for m in da2-base da2-small depth-pro; do
-     VIDEO_BOKEH_RUNNER=local uv run --extra library python -m video_bokeh.library.build \
+     LAYERWISE_BOKEH_RUNNER=local uv run --extra library python -m layerwise_bokeh.library.build \
        --fg-data-root data/magick_demo --bg-data-root data/bg-20k_demo \
        --output data/library_demo/.$m --model $m && mv data/library_demo/.$m data/library_demo/$m
    done

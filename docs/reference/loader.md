@@ -7,9 +7,9 @@ related: [dataset-layout, cli]
 
 # Sequence stream: the on-the-fly loader
 
-`video_bokeh.loader.SequenceStream` generates a new sequence from a library for every item a
+`layerwise_bokeh.loader.SequenceStream` generates a new sequence from a library for every item a
 training loop asks for. Nothing is written to disk. It is the same Stage B that
-`video_bokeh.scenes.generate` runs, so a model trained on the stream sees the same scenes as
+`layerwise_bokeh.scenes.generate` runs, so a model trained on the stream sees the same scenes as
 one trained on a written dataset.
 
 ## Install
@@ -25,7 +25,7 @@ uv sync --no-dev --extra loader
 ```python
 from pathlib import Path
 from torch.utils.data import DataLoader
-from video_bokeh.loader import SequenceStream
+from layerwise_bokeh.loader import SequenceStream
 
 
 def main() -> None:
@@ -152,9 +152,9 @@ a quarter to three tenths, nearly all of it for carrying the layers.** Measured 
 | `rgb`, `object_alphas`, `layers`, `focus` | not rendered | 1.40 | 0.40 |
 | `rgb`, `object_alphas`, `layers`, `focus` | the RTX 5090, with `batch_bokeh` | 1.39 | 0.39 |
 
-`python -m video_bokeh.loader.benchmark --library-root <library> --streams rgb,object_alphas,layers,focus --gpu-bokeh --device cuda`
+`python -m layerwise_bokeh.loader.benchmark --library-root <library> --streams rgb,object_alphas,layers,focus --gpu-bokeh --device cuda`
 runs this measurement, with the run flags the next section lists and `--size 1024` for the
-second column. The [CLI reference](cli.md#video_bokehloaderbenchmark-sequence-stream-throughput)
+second column. The [CLI reference](cli.md#layerwise_bokehloaderbenchmark-sequence-stream-throughput)
 lists every flag.
 
 - **The workers cannot keep up.** At 1024 pixels, with bokeh they deliver 0.094 items per
@@ -173,7 +173,7 @@ So for training, ask the workers for the layers and render each batch on the GPU
 ```python
 from pathlib import Path
 from torch.utils.data import DataLoader
-from video_bokeh.loader import SequenceStream, batch_bokeh
+from layerwise_bokeh.loader import SequenceStream, batch_bokeh
 
 
 def main() -> None:
@@ -198,7 +198,7 @@ cost shared memory too, as the next section says.
 
 ### What each choice costs
 
-`python -m video_bokeh.loader.benchmark --library-root <library>` runs this protocol;
+`python -m layerwise_bokeh.loader.benchmark --library-root <library>` runs this protocol;
 use `--streams` to select each row and `--output` to save the numbers and run settings as JSON.
 
 Measured on the lab machine (24 cores, 125 GiB of memory): 512 and 1024 pixels, 24 frames,
@@ -244,7 +244,7 @@ Worker `w` of `W` takes seeds `seed + w`, `seed + w + W`, `seed + w + 2W`, and s
 - **A run is reproducible.** The same `seed` and the same `num_workers` give the same stream,
   in the same order unless the `DataLoader` runs with `in_order=False`.
 - **One worker matches the written dataset.** With `num_workers` of 0 or 1, the stream yields
-  the scenes of seeds `seed`, `seed + 1`, ...: the ones `video_bokeh.scenes.generate --seed`
+  the scenes of seeds `seed`, `seed + 1`, ...: the ones `layerwise_bokeh.scenes.generate --seed`
   writes. Only the pixels differ: the files on disk are quantized to 8-bit RGB, 8-bit mattes
   and 16-bit disparity, and the stream is not.
 - **Nearby seeds give almost the same stream.** Across its workers, one stream uses every

@@ -11,8 +11,8 @@ import pytest
 import torch
 from PIL import Image
 
-from video_bokeh.library.depth import ESTIMATORS
-from video_bokeh.library.depth import depth_anything_v3 as mod
+from layerwise_bokeh.library.depth import ESTIMATORS
+from layerwise_bokeh.library.depth import depth_anything_v3 as mod
 
 # Every Depth Anything 3 checkpoint the registry knows, each through the same worker.
 _DA3 = [
@@ -64,7 +64,7 @@ def fake_worker(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     (package / "__init__.py").write_text("", encoding="utf-8")
     (package / "api.py").write_text(_FAKE_API, encoding="utf-8")
     monkeypatch.setenv("PYTHONPATH", str(tmp_path))
-    monkeypatch.setenv("VIDEO_BOKEH_DA3_PYTHON", sys.executable)
+    monkeypatch.setenv("LAYERWISE_BOKEH_DA3_PYTHON", sys.executable)
     monkeypatch.setenv("FAKE_DA3_MODEL_ID", mod.DepthAnything3MonoLarge.hf_model_id)
 
 
@@ -91,7 +91,7 @@ def test_missing_environment_names_the_setup_script(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("VIDEO_BOKEH_DA3_PYTHON", str(tmp_path / "no" / "python"))
+    monkeypatch.setenv("LAYERWISE_BOKEH_DA3_PYTHON", str(tmp_path / "no" / "python"))
     with pytest.raises(RuntimeError, match="setup_depth_anything_3.sh"):
         mod.DepthAnything3MonoLarge().load(torch.device("cpu"))
 
@@ -118,7 +118,7 @@ def test_environment_names_the_setup_script_when_the_venv_is_missing(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("VIDEO_BOKEH_DA3_PYTHON", str(tmp_path / "no" / "python"))
+    monkeypatch.setenv("LAYERWISE_BOKEH_DA3_PYTHON", str(tmp_path / "no" / "python"))
     problem = mod.DepthAnything3MonoLarge.environment_problem()
     assert problem is not None
     assert "setup_depth_anything_3.sh" in problem
@@ -133,7 +133,7 @@ def test_a_venv_without_the_package_is_not_ready(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """A half-built venv has the interpreter and not the package; the check imports it."""
-    monkeypatch.setenv("VIDEO_BOKEH_DA3_PYTHON", sys.executable)
+    monkeypatch.setenv("LAYERWISE_BOKEH_DA3_PYTHON", sys.executable)
     monkeypatch.delenv("PYTHONPATH", raising=False)
     problem = mod.DepthAnything3MonoLarge.environment_problem()
     assert problem is not None
@@ -172,7 +172,7 @@ def test_runs_in_its_docker_image(
     fake_docker: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "video-bokeh-da3")
+    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "layerwise-bokeh-da3")
     est = mod.DepthAnything3MonoLarge()
     est.load(torch.device("cpu"))
     try:
@@ -181,7 +181,7 @@ def test_runs_in_its_docker_image(
         est.close()
     assert out.shape == (48, 64)
     (argv,) = _runs(fake_docker)
-    image = argv.index("video-bokeh-da3")
+    image = argv.index("layerwise-bokeh-da3")
     assert argv[image + 1] == "python"
     assert argv[image + 2].endswith("_da3_worker.py")
 
@@ -191,7 +191,7 @@ def test_environment_in_docker_is_ready_once_the_package_imports(
     fake_docker: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "video-bokeh-da3")
+    monkeypatch.setenv("FAKE_DOCKER_IMAGES", "layerwise-bokeh-da3")
     assert mod.DepthAnything3MonoLarge.environment_problem() is None
     assert _runs(fake_docker), "the import check must run in the image"
 
@@ -203,4 +203,4 @@ def test_environment_in_docker_names_the_missing_image(
     monkeypatch.setenv("FAKE_DOCKER_IMAGES", "")
     problem = mod.DepthAnything3MonoLarge.environment_problem()
     assert problem is not None
-    assert "video-bokeh-da3" in problem and "make images" in problem
+    assert "layerwise-bokeh-da3" in problem and "make images" in problem

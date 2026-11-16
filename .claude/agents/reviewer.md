@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Reviews one Video Bokeh pull request with /bokeh-review, in a context that did not write the code. Use from the orchestrator for a first review or a delta pass. Pass effort xhigh when the pull request touches a high-risk path.
+description: Reviews one LayerWise pull request with /bokeh-review, in a context that did not write the code. Use from the orchestrator for a first review or a delta pass. Pass effort xhigh when the pull request touches a high-risk path.
 model: opus
 effort: high
 ---

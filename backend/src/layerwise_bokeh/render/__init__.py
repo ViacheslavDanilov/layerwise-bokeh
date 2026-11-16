@@ -1,0 +1,19 @@
+"""Bokeh renderers for ``render.run``, and resolution of ``--renderer`` to a class."""
+
+from __future__ import annotations
+
+from layerwise_bokeh.core._plugins import resolve_class
+from layerwise_bokeh.render.base import BokehRenderer
+from layerwise_bokeh.render.layered import Layered
+
+RENDERERS: dict[str, type[BokehRenderer]] = {
+    Layered.name: Layered,
+}
+
+
+def resolve_renderer(spec: str) -> type[BokehRenderer]:
+    """A registered name, or ``package.module:ClassName`` for a renderer of one's own.
+
+    See ``layerwise_bokeh.core._plugins.resolve_class`` for the errors it raises.
+    """
+    return resolve_class(spec, RENDERERS, ("render",), "bokeh renderer")

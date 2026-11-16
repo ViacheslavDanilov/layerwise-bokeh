@@ -58,7 +58,7 @@ the collision validator.
 ```bash
 cd backend
 for n in 1 2 3; do
-  uv run python -m video_bokeh.scenes.generate \
+  uv run python -m layerwise_bokeh.scenes.generate \
     --library-root data/library_dev/da2-large --output "data/demo_n$n" \
     --count 4 --frames 80 --size 512 --seed 0 \
     --n-objects-min $n --n-objects-max $n
@@ -76,7 +76,7 @@ vpv "*/all_in_focus/*.png" "*/disparity/*.png"
   cross, one is unambiguously in front.
 - Each object keeps its own alpha page for the whole clip. A mask that jumps between pages
   mid-clip is a bug. `vpv` renders only a TIFF's first page, so read the alpha stream with
-  `read_alpha_tiff` from `src/video_bokeh/core/_streams.py` instead of looking at it.
+  `read_alpha_tiff` from `src/layerwise_bokeh/core/_streams.py` instead of looking at it.
 - Paint order is recomputed per frame, so a pair that swaps depth also swaps which one
   occludes the other. Expect to see it at three objects.
 
@@ -107,7 +107,7 @@ numbering rather than shifting every later sequence onto a different seed.
 
 ```bash
 cd backend
-uv run python -m video_bokeh.scenes.generate \
+uv run python -m layerwise_bokeh.scenes.generate \
   --library-root data/library_dev/da2-large --output data/demo_seeds \
   --count 10 --frames 80 --size 512 --seed 100
 ```

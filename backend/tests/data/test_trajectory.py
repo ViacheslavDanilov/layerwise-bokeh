@@ -4,8 +4,8 @@ import random
 
 import pytest
 
-from video_bokeh.core._sequence_geometry import SampleConfig
-from video_bokeh.core._trajectory import (
+from layerwise_bokeh.core._sequence_geometry import SampleConfig
+from layerwise_bokeh.core._trajectory import (
     DepthRange,
     derive_end_range,
     range_in_bounds,

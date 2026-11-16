@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from video_bokeh.core._metadata import read_asset_metadata, write_asset_metadata
+from layerwise_bokeh.core._metadata import read_asset_metadata, write_asset_metadata
 
 
 def test_metadata_roundtrips(tmp_path) -> None:

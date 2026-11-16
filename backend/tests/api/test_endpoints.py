@@ -15,10 +15,10 @@ from fake_bokeh import render_fake_bokeh
 from fastapi.testclient import TestClient
 from PIL import Image
 
-from video_bokeh.api import main as api_main
-from video_bokeh.api._sequences import SequenceUnsatisfiableError
-from video_bokeh.api._settings import Settings
-from video_bokeh.core._streams import read_alpha_tiff
+from layerwise_bokeh.api import main as api_main
+from layerwise_bokeh.api._sequences import SequenceUnsatisfiableError
+from layerwise_bokeh.api._settings import Settings
+from layerwise_bokeh.core._streams import read_alpha_tiff
 
 SEQUENCE_BODY = {
     "seed": 0,
@@ -465,7 +465,7 @@ def test_a_request_that_would_exhaust_memory_is_refused(client: TestClient) -> N
 
 def test_the_heaviest_shape_anyone_has_measured_still_fits(client: TestClient) -> None:
     """80 frames at 1024 px is 11 s and 2.9 GB -- heavy, but a thing people do."""
-    from video_bokeh.api.main import SequenceParams
+    from layerwise_bokeh.api.main import SequenceParams
 
     SequenceParams(seed=0, frames=80, size=1024, n_objects_min=1, n_objects_max=5)
 

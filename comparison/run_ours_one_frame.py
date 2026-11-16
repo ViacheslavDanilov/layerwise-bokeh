@@ -36,8 +36,8 @@ from common import (
     write_settings,
 )
 
-from video_bokeh.layered import bokeh_device, render_bokeh
-from video_bokeh.layered._renderer import GAMMA, RADIUS_STEP
+from layerwise_bokeh.layered import bokeh_device, render_bokeh
+from layerwise_bokeh.layered._renderer import GAMMA, RADIUS_STEP
 
 STREAM = "bokeh_ours_one_frame"
 

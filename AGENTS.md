@@ -1,4 +1,4 @@
-# Video Bokeh: Agent Guide
+# LayerWise: Agent Guide
 
 Depth-aware synthetic bokeh pipeline for video. FastAPI backend (Python 3.13, `uv`), Next.js frontend (Node 24, `pnpm`). Two stacks, two toolchains: read the area-specific guide before touching code:
 
@@ -183,14 +183,14 @@ Run the actual check, don't assume. Type-checking and tests verify correctness o
 | Frontend format check | `cd frontend && pnpm check` |
 | Frontend build | `cd frontend && pnpm build` |
 | Frontend browser smoke | `cd frontend && pnpm e2e` |
-| Docker build | `docker build -t video-bokeh-api -f backend/Dockerfile .` / `docker build -t video-bokeh-web ./frontend` |
+| Docker build | `docker build -t layerwise-bokeh-api -f backend/Dockerfile .` / `docker build -t layerwise-bokeh-web ./frontend` |
 | Model image (NVIDIA only) | `make images` |
 
 `make check` runs the pre-commit, backend test, frontend lint and format check rows in one go, and `make help` lists the other shortcuts in the root `Makefile`. CI mirrors these in `.github/workflows/ci.yaml`. If a step passes locally but fails in CI, suspect tool-version drift first (e.g., pnpm `latest` may be newer than your local).
 
 ## Where things live
 
-- `backend/src/video_bokeh/`: FastAPI runtime and dataset pipeline (run scripts from `backend/`)
+- `backend/src/layerwise_bokeh/`: FastAPI runtime and dataset pipeline (run scripts from `backend/`)
 - `frontend/src/`: Next.js app
 - `docs/`: documentation and the Obsidian vault root (see `docs/README.md`). `explanation/`, `how-to/`, `reference/` and `adr/` are tracked; `meetings/`, `reports/`, `specs/`, `plans/`, `templates/` and `attachments/` are local-only. `docs/STYLE.md` has the writing conventions.
 - `scripts/`: repo-level setup, analysis and review scripts (`setup_depth_anything_3.sh`, `analyze_magick_distribution.py`, `check_prose.py`). `scripts/README.md` describes each

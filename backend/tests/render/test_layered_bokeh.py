@@ -11,7 +11,7 @@ import math
 import pytest
 import torch
 
-from video_bokeh.layered import render_bokeh
+from layerwise_bokeh.layered import render_bokeh
 
 SIZE = 64
 # On a 64-pixel frame, strength 64 spreads a pixel one unit of disparity from the focus into

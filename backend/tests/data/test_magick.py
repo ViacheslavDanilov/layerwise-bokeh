@@ -11,7 +11,7 @@ import httpx
 import pytest
 from httpx import Client
 
-from video_bokeh.acquire import magick
+from layerwise_bokeh.acquire import magick
 
 
 @pytest.fixture

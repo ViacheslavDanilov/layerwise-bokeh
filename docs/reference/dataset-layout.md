@@ -17,7 +17,7 @@ pull request.
 
 ## Stage A: the asset library
 
-Built once per asset pool by `video_bokeh.library.build`. Depth is estimated here and never again.
+Built once per asset pool by `layerwise_bokeh.library.build`. Depth is estimated here and never again.
 
 ```
 <library-root>/
@@ -64,9 +64,9 @@ sequence stream's `split` take `train`, `test` or `all`.
 | | train | test | rule |
 |---|---|---|---|
 | backgrounds | 15,000 | 5,000 | BG-20k's own split: an id that starts with `testval__` came from its testval folder |
-| foregrounds | 7,727 | 859 | MAGICK has no split, so the test ids are listed in `backend/src/video_bokeh/core/test_foregrounds.txt` |
+| foregrounds | 7,727 | 859 | MAGICK has no split, so the test ids are listed in `backend/src/layerwise_bokeh/core/test_foregrounds.txt` |
 
-- **The foreground list was drawn once.** `video_bokeh.library.split` took 10 % of each
+- **The foreground list was drawn once.** `layerwise_bokeh.library.split` took 10 % of each
   subject CLIP gave the published library's foregrounds: 397 people, 233 objects, 141 food,
   48 plants and 40 animals. The draw is seeded and the list is tracked, because drawing it
   again would change the fixed set.
@@ -81,7 +81,7 @@ sequence stream's `split` take `train`, `test` or `all`.
 
 ## Stage B: a generated sequence
 
-Written by `video_bokeh.scenes.generate`. This is the layout `render.run`, the preview packer and the API read.
+Written by `layerwise_bokeh.scenes.generate`. This is the layout `render.run`, the preview packer and the API read.
 
 ```
 <output>/
@@ -114,7 +114,7 @@ Written by `video_bokeh.scenes.generate`. This is the layout `render.run`, the p
 | `alpha` | TIFF, multi-page | uint8 | page `k` is object `k`'s matte, `0`–`255`, soft |
 | `disparity` | PNG, `I;16` | uint16 | `[0, 1]` disparity scaled to `[0, 65535]`, larger = closer |
 
-Both sides of these formats live in `src/video_bokeh/core/_streams.py`, so the writer and the reader
+Both sides of these formats live in `src/layerwise_bokeh/core/_streams.py`, so the writer and the reader
 cannot drift apart.
 
 **The alpha TIFF is multi-page, never multi-sample.** Pillow raises
@@ -163,7 +163,7 @@ layers/
 - **Quantized like the other streams.** Color is truncated to 8 bits as `all_in_focus` is, so
   a pixel no object covers matches it exactly. Disparity is 16-bit as `disparity` is.
 - **The TIFFs follow the alpha stream's rules**: multi-page, deflate, read with Pillow.
-  `src/video_bokeh/core/_streams.py` holds both sides of both formats.
+  `src/layerwise_bokeh/core/_streams.py` holds both sides of both formats.
 
 **The layers double the dataset and add two thirds to the write time.** Measured on the lab
 machine, five 80-frame sequences at 1024 × 1024 with 1 to 5 objects:
@@ -198,10 +198,10 @@ the flow is computed, not estimated.
   carries its surface's motion; the `occlusion/` stream below says which pixels those are.
   Valid is 0 only where a vector falls outside the ±512 px the encoding holds; it is never
   clipped.
-- **1/64 px steps.** `read_flow_png` in `video_bokeh.core._streams` reads it back as float32.
+- **1/64 px steps.** `read_flow_png` in `layerwise_bokeh.core._streams` reads it back as float32.
   **Pillow reads the file as 8-bit color and loses the flow**, so read it with
   `imagecodecs`, as `read_flow_png` does, or another reader that keeps 16 bits.
-- **It is optional.** Only `video_bokeh.preview.pack --streams flow` and the API's flow video
+- **It is optional.** Only `layerwise_bokeh.preview.pack --streams flow` and the API's flow video
   read it, to color it for the eye. The loader hands out the same flow, unquantized, as its
   `flow` stream.
 - **Writing a sequence again removes its old `flow/` first**, with or without `--flow`, so an
@@ -223,7 +223,7 @@ not the one it carries; the front-most surface is the one the flow uses, the las
 whose alpha is at least 0.5, else the background. The flow still carries the surface's motion
 where the mask is set, but the next frame cannot confirm it, so a flow method can be scored on
 the marked pixels and on the clear ones separately. `read_mask_png` in
-`video_bokeh.core._streams` reads it back as a boolean array. The loader hands out the same mask
+`layerwise_bokeh.core._streams` reads it back as a boolean array. The loader hands out the same mask
 as its `occlusion` stream. Writing a sequence again removes an old `occlusion/` too.
 
 **`occlusion_back/` is the same mask against the previous frame**, written by
@@ -264,7 +264,7 @@ An earlier one-object sequence, written with the old default compression, used 2
 ### The bokeh stream
 
 `bokeh/` holds the rendered bokeh. `scenes.generate --bokeh` writes it in the same run as the
-frames, from the layers it holds in memory, and `video_bokeh.render.run` writes it over
+frames, from the layers it holds in memory, and `layerwise_bokeh.render.run` writes it over
 sequences already written. Both write the same stream; writing a sequence again removes the
 old one.
 
@@ -376,7 +376,7 @@ code changes.
 
 ### Dataset statistics
 
-[`scenes.stats`](cli.md#video_bokehscenesstats-dataset-statistics) reads the records without
+[`scenes.stats`](cli.md#layerwise_bokehscenesstats-dataset-statistics) reads the records without
 sampling scenes again. It prints JSON and can save the same JSON to a file. It reports
 sequence and frame counts, the object-count distribution and mean, depth motion and range
 fallback shares, rejection counts, foreground and background reuse, first-frame active band

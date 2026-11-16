@@ -6,8 +6,8 @@ import { expect, type Locator, type Page, test } from "@playwright/test";
 
 // Where playwright.config.ts points the API, so a test can write into a sequence as
 // a renderer would.
-const SEQUENCES = path.join(os.tmpdir(), "video-bokeh-e2e", "sequences");
-const LIBRARIES = path.join(os.tmpdir(), "video-bokeh-e2e", "library");
+const SEQUENCES = path.join(os.tmpdir(), "layerwise-bokeh-e2e", "sequences");
+const LIBRARIES = path.join(os.tmpdir(), "layerwise-bokeh-e2e", "library");
 
 /**
  * The side, in pixels, of the sequences the tests generate. The page's own default is

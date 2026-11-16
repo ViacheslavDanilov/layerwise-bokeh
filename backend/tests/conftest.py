@@ -53,7 +53,7 @@ os.execvpe(command[0], command, env)
 @pytest.fixture(autouse=True)
 def _in_process_runner(monkeypatch: pytest.MonkeyPatch) -> None:
     """Every test starts with the default runner, whatever the shell exported."""
-    monkeypatch.delenv("VIDEO_BOKEH_RUNNER", raising=False)
+    monkeypatch.delenv("LAYERWISE_BOKEH_RUNNER", raising=False)
 
 
 @pytest.fixture
@@ -68,5 +68,5 @@ def fake_docker(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     log.touch()
     monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ['PATH']}")
     monkeypatch.setenv("FAKE_DOCKER_LOG", str(log))
-    monkeypatch.setenv("VIDEO_BOKEH_RUNNER", "docker")
+    monkeypatch.setenv("LAYERWISE_BOKEH_RUNNER", "docker")
     return log

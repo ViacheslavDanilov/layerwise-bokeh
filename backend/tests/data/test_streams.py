@@ -13,7 +13,7 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from video_bokeh.core._streams import (
+from layerwise_bokeh.core._streams import (
     read_alpha_tiff,
     read_disparity_png,
     read_disparity_tiff,

@@ -22,7 +22,7 @@ has no license file, so it stays on the machine that runs it and is not redistri
 ```bash
 comparison/setup.sh drbokeh
 # Sequences written with layers and bokeh, so that there is a focus record to match:
-cd backend && uv run python -m video_bokeh.scenes.generate \
+cd backend && uv run python -m layerwise_bokeh.scenes.generate \
   --library-root data/library/da2-large --output data/cmp --count 5 --frames 24 --size 1024 \
   --seed 0 --layers --bokeh
 cd .. && comparison/envs/render/bin/python comparison/run_drbokeh.py --data-root backend/data/cmp
@@ -131,7 +131,7 @@ and the 16-bit disparity the frame is written at add a little more. Nothing to s
 the render environment.
 
 ```bash
-VIDEO_BOKEH_LAYERED_DEVICE=cuda comparison/envs/render/bin/python \
+LAYERWISE_BOKEH_LAYERED_DEVICE=cuda comparison/envs/render/bin/python \
   comparison/run_ours_one_frame.py --data-root backend/data/cmp
 comparison/envs/render/bin/python comparison/score.py --data-root backend/data/cmp --method ours_one_frame
 ```

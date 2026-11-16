@@ -1,4 +1,4 @@
-# Video Bokeh agent conventions
+# LayerWise agent conventions
 
 Shared by `bokeh-meeting`, `bokeh-task` and `bokeh-review`. Root `AGENTS.md` holds the
 rules; this file does not repeat them.
@@ -231,9 +231,9 @@ user's decision. When nothing fits, do the work by hand.
 ## Paper repository
 
 ```
-paper_repo: ViacheslavDanilov/video-bokeh-paper
+paper_repo: ViacheslavDanilov/layerwise-bokeh-paper
 ```
 
-The paper is private, in LaTeX, checked out beside this repository at `../video-bokeh-paper`.
+The paper is private, in LaTeX, checked out beside this repository at `../layerwise-bokeh-paper`.
 Paper work runs there, under its own `AGENTS.md` and its own `bokeh-task` and
 `bokeh-review`. It reads this repository and never edits it.

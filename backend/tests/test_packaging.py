@@ -46,7 +46,7 @@ def test_dockerfile_installs_the_api_extra() -> None:
         encoding="utf-8",
     )
     assert "--extra api" in dockerfile, "the image would ship without the pipeline"
-    assert "video_bokeh.api.main:app" in dockerfile
+    assert "layerwise_bokeh.api.main:app" in dockerfile
 
 
 def test_dockerfile_installs_the_locked_versions() -> None:
@@ -65,7 +65,9 @@ def test_the_wheel_carries_the_test_foreground_list() -> None:
     """The split reads the test foregrounds from a text file, which the wheel must hold."""
     data = tomllib.loads(_PYPROJECT.read_text(encoding="utf-8"))
     wheel = data["tool"]["hatch"]["build"]["targets"]["wheel"]
-    listed = _PYPROJECT.parent / "src" / "video_bokeh" / "core" / "test_foregrounds.txt"
+    listed = (
+        _PYPROJECT.parent / "src" / "layerwise_bokeh" / "core" / "test_foregrounds.txt"
+    )
     assert listed.is_file()
     assert any(listed.is_relative_to(_PYPROJECT.parent / p) for p in wheel["packages"])
     assert not {"exclude", "only-include", "include"} & set(wheel)
@@ -75,7 +77,7 @@ def test_the_wheel_carries_the_dataset_card_template() -> None:
     """``hub pack`` reads its card from a Markdown file, which the wheel must hold too."""
     data = tomllib.loads(_PYPROJECT.read_text(encoding="utf-8"))
     wheel = data["tool"]["hatch"]["build"]["targets"]["wheel"]
-    template = _PYPROJECT.parent / "src" / "video_bokeh" / "library" / "hub_card.md"
+    template = _PYPROJECT.parent / "src" / "layerwise_bokeh" / "library" / "hub_card.md"
     assert template.is_file()
     assert any(
         template.is_relative_to(_PYPROJECT.parent / p) for p in wheel["packages"]

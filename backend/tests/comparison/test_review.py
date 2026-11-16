@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "comparison"))
 
 from review import GAP, METHODS, SIDES, main, place_boxes  # noqa: E402
 
-from video_bokeh.core._streams import write_alpha_tiff  # noqa: E402
+from layerwise_bokeh.core._streams import write_alpha_tiff  # noqa: E402
 
 SIZE = 512
 FRAMES = [f"{i:02d}" for i in range(1, 11)]

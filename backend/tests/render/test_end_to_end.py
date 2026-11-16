@@ -10,8 +10,8 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from video_bokeh.render.layered import Layered
-from video_bokeh.scenes.generate import generate_dataset, main
+from layerwise_bokeh.render.layered import Layered
+from layerwise_bokeh.scenes.generate import generate_dataset, main
 
 FRAMES, SIZE = 4, 64
 
@@ -102,7 +102,7 @@ def test_focuses_where_the_loader_does_for_the_same_seed(
     library: Path,
     tmp_path: Path,
 ) -> None:
-    from video_bokeh.loader import SequenceStream
+    from layerwise_bokeh.loader import SequenceStream
 
     out = tmp_path / "data"
     generate_dataset(library, out, 1, FRAMES, SIZE, seed=1, n_objects_max=2, bokeh=True)
@@ -176,7 +176,7 @@ def test_rendering_in_chunks_matches_rendering_at_once(
 ) -> None:
     # A whole chunk and three frames more, so the second chunk takes the focus of its own
     # frames, not the first chunk's.
-    from video_bokeh.layered import _sequence
+    from layerwise_bokeh.layered import _sequence
 
     frames = _sequence.CHUNK + 3
     chunked = tmp_path / "chunked"

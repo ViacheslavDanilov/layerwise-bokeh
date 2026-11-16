@@ -53,7 +53,7 @@ export default function Page() {
   const librariesRef = useRef<LibraryInfo[]>([]);
   // Folded away, the parameters leave their width to the panes.
   const [parametersShown, setParametersShown] = useStoredFlag(
-    "video-bokeh.parameters-shown",
+    "layerwise-bokeh.parameters-shown",
     true,
   );
 
@@ -143,7 +143,7 @@ export default function Page() {
           >
             {parametersShown ? <PanelLeftClose /> : <PanelLeftOpen />}
           </Button>
-          <h1 className="text-lg font-medium tracking-tight">Video Bokeh</h1>
+          <h1 className="text-lg font-medium tracking-tight">LayerWise</h1>
         </div>
         {library ? (
           <p className="text-muted-foreground flex flex-wrap items-baseline gap-x-4 text-xs">

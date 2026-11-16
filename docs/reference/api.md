@@ -25,22 +25,22 @@ bokeh renders on.
 
 | Variable | Default | Names |
 |---|---|---|
-| `VIDEO_BOKEH_DATA_ROOT` | `data` | the directory everything generated lives under |
-| `VIDEO_BOKEH_LIBRARY` | `$VIDEO_BOKEH_DATA_ROOT/library` | one library, or a directory of them |
+| `LAYERWISE_BOKEH_DATA_ROOT` | `data` | the directory everything generated lives under |
+| `LAYERWISE_BOKEH_LIBRARY` | `$LAYERWISE_BOKEH_DATA_ROOT/library` | one library, or a directory of them |
 | `CORS_ORIGINS` | `http://localhost:3000` | comma-separated origins a browser may call from |
-| `VIDEO_BOKEH_RENDER_BOKEH` | `1` | whether a sequence comes with its bokeh; `0` turns it off, and without torch it is off anyway |
-| `VIDEO_BOKEH_LAYERED_DEVICE` | `cpu` | the torch device the bokeh renders on: `cpu`, `mps` or `cuda` |
+| `LAYERWISE_BOKEH_RENDER_BOKEH` | `1` | whether a sequence comes with its bokeh; `0` turns it off, and without torch it is off anyway |
+| `LAYERWISE_BOKEH_LAYERED_DEVICE` | `cpu` | the torch device the bokeh renders on: `cpu`, `mps` or `cuda` |
 
 **The second one names a library or a directory of libraries.** A directory holding
 `foregrounds/` and `backgrounds/` is one library:
 
 ```bash
-VIDEO_BOKEH_LIBRARY=data/library_dev/da2-large uv run uvicorn video_bokeh.api.main:app --port 8000
+LAYERWISE_BOKEH_LIBRARY=data/library_dev/da2-large uv run uvicorn layerwise_bokeh.api.main:app --port 8000
 ```
 
 Any other directory is read one level down, and every subdirectory holding both is a library.
 That is the layout `make libraries` writes, one dev-pool library per depth estimator, into
-`data/library_dev/`. `make api` sets `VIDEO_BOKEH_LIBRARY` to serve that root:
+`data/library_dev/`. `make api` sets `LAYERWISE_BOKEH_LIBRARY` to serve that root:
 
 ```
 data/library_dev/
@@ -99,7 +99,7 @@ at another size, and it does not move when the same library is mounted somewhere
 It does not cover pixel content. The same asset ids, estimator and size over different images
 produce the same id, wherever the library sits. So a library rebuilt in place keeps its id, and
 the sequences cached against the old one are served as its own: delete
-`$VIDEO_BOKEH_DATA_ROOT/sequences/` after a rebuild, which is safe because every sequence
+`$LAYERWISE_BOKEH_DATA_ROOT/sequences/` after a rebuild, which is safe because every sequence
 regenerates. A rebuild mounted next to the original is refused, as the next paragraph says.
 
 **Two mounted libraries with one id are refused.** Both this endpoint and `POST /sequences`
@@ -251,7 +251,7 @@ comparing depth estimators means here.
 
 **The sequence id is a hash of the five numbers, the library id and the bokeh strength.**
 Stage B is deterministic, so the same request always names the same sequence. The cache is the
-directory `$VIDEO_BOKEH_DATA_ROOT/sequences/<id>/`, and there is no database. The strength
+directory `$LAYERWISE_BOKEH_DATA_ROOT/sequences/<id>/`, and there is no database. The strength
 joins the hash only when it is not 16. Every sequence cached before a request could name it
 was rendered at 16, so each keeps the id it had.
 
@@ -417,11 +417,11 @@ specifies. Firefox playback was not tested here.
 Existing cached MP4s keep their original encoding. The API re-encodes only when a video
 is missing or its stream directory's modification or change time is newer than the video. Changing the
 encoder settings alone does not invalidate cached files. The
-[CLI reference](cli.md#video_bokehpreviewpack-png-streams-to-mp4) measures file sizes,
+[CLI reference](cli.md#layerwise_bokehpreviewpack-png-streams-to-mp4) measures file sizes,
 encoding times and fidelity for all five streams.
 
 **`?colormap=` applies to `disparity` only.** It is 16-bit grayscale on disk and gets its
-color when served, so `spectral_r` (the default, matching what `video_bokeh.preview.pack`
+color when served, so `spectral_r` (the default, matching what `layerwise_bokeh.preview.pack`
 writes) and `grey` are two renderings of one stream. Each is cached as its own file,
 `disparity.mp4` and `disparity.grey.mp4`. Every other stream has one rendering, so the
 parameter is dropped rather than forking that stream's cache into identical copies. An unknown name
@@ -433,7 +433,7 @@ hash.
 ## What a sequence looks like on disk
 
 ```
-$VIDEO_BOKEH_DATA_ROOT/sequences/<id>/
+$LAYERWISE_BOKEH_DATA_ROOT/sequences/<id>/
 ├── sequence.json                 the request, the library id and the object count
 ├── all_in_focus/                 RGB uint8 PNG
 ├── alpha/                        multi-page uint8 TIFF, one page per object

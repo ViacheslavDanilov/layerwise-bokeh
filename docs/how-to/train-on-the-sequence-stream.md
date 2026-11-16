@@ -23,22 +23,22 @@ You need Python 3.13 and [uv](https://docs.astral.sh/uv/). Clone the code and in
 `loader` extra, which brings torch and the Hugging Face client:
 
 ```bash
-git clone https://github.com/ViacheslavDanilov/video-bokeh
-cd video-bokeh/backend
+git clone https://github.com/ViacheslavDanilov/layerwise-bokeh
+cd layerwise-bokeh/backend
 uv sync --no-dev --extra loader
 ```
 
 ## 2. Download the library
 
 **The library is on Hugging Face as
-[vdanilov/video-bokeh](https://huggingface.co/datasets/vdanilov/video-bokeh).** It holds 8,586
+[vdanilov/layerwise-bokeh](https://huggingface.co/datasets/vdanilov/layerwise-bokeh).** It holds 8,586
 cut-out foregrounds and 20,000 background photos in 115 GB of tar shards. Every `depth.png` holds
 disparity, larger values nearer. `fetch` downloads the shards one at a time and unpacks each
 into the folder layout Stage B reads, so the disk needs the library plus room for one 2 GB
 shard:
 
 ```bash
-uv run python -m video_bokeh.library.hub fetch --repo vdanilov/video-bokeh \
+uv run python -m layerwise_bokeh.library.hub fetch --repo vdanilov/layerwise-bokeh \
   --output data/library/da2-large
 ```
 
@@ -53,12 +53,12 @@ assets were split.
 
 ## 3. Run the example
 
-`video_bokeh.loader.example` trains a small network to turn all-in-focus frames and their
+`layerwise_bokeh.loader.example` trains a small network to turn all-in-focus frames and their
 disparity into bokeh, rendered at strength `k = 16`, on sequences of 8 frames at 256 pixels,
 for 20 steps:
 
 ```bash
-uv run python -m video_bokeh.loader.example --library-root data/library/da2-large
+uv run python -m layerwise_bokeh.loader.example --library-root data/library/da2-large
 ```
 
 It prints the loss at every step. On a 24-core machine with an RTX 5090 the 20 steps take about
@@ -86,7 +86,7 @@ from pathlib import Path
 
 from torch.utils.data import DataLoader
 
-from video_bokeh.loader import SequenceStream
+from layerwise_bokeh.loader import SequenceStream
 
 
 def main() -> None:
@@ -135,7 +135,7 @@ trained as above has seen none of their objects or backgrounds. Each has 80 fram
 occlusion. It takes 79 GB, and about 15 minutes at 100 MB/s:
 
 ```bash
-uv run python -m video_bokeh.library.hub fetch-sequences --repo vdanilov/video-bokeh \
+uv run python -m layerwise_bokeh.library.hub fetch-sequences --repo vdanilov/layerwise-bokeh \
   --output data/fixed-set
 ```
 
@@ -148,7 +148,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from video_bokeh.core._streams import (
+from layerwise_bokeh.core._streams import (
     read_alpha_tiff,
     read_disparity_png,
     read_flow_png,
@@ -190,7 +190,7 @@ nothing else:
 uv run --no-project --with datasets --with pillow python - <<'EOF'
 from datasets import load_dataset
 
-foregrounds = load_dataset("vdanilov/video-bokeh", "foregrounds", split="train", streaming=True)
+foregrounds = load_dataset("vdanilov/layerwise-bokeh", "foregrounds", split="train", streaming=True)
 item = next(iter(foregrounds))
 print(sorted(item), item["depth.png"].mode)
 EOF

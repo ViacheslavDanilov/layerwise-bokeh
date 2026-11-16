@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "comparison"))
 
 from run_ours_one_frame import render_frame  # noqa: E402
 
-from video_bokeh.layered import LayeredFrame, render_sequence  # noqa: E402
+from layerwise_bokeh.layered import LayeredFrame, render_sequence  # noqa: E402
 
 SIZE = 64
 

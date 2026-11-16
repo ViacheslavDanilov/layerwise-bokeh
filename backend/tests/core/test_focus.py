@@ -9,15 +9,15 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from video_bokeh.core import _focus
-from video_bokeh.core._focus import (
+from layerwise_bokeh.core import _focus
+from layerwise_bokeh.core._focus import (
     choose_focus_object,
     focus_seed,
     focus_track,
     frame_focus,
     visible_masks,
 )
-from video_bokeh.core._seq_io import sequence_seed
+from layerwise_bokeh.core._seq_io import sequence_seed
 
 
 def _one_hot_mask(row: int, col: int) -> np.ndarray:

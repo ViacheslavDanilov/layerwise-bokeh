@@ -10,9 +10,9 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from video_bokeh.core._library import write_background, write_foreground
-from video_bokeh.core._split import listed_test_foregrounds
-from video_bokeh.scenes.generate import generate_dataset, main
+from layerwise_bokeh.core._library import write_background, write_foreground
+from layerwise_bokeh.core._split import listed_test_foregrounds
+from layerwise_bokeh.scenes.generate import generate_dataset, main
 
 TEST_FG = sorted(listed_test_foregrounds())[:2]
 TRAIN_FG = ["fg_a", "fg_b"]

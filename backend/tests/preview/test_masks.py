@@ -3,7 +3,11 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from video_bokeh.preview._masks import OBJECT_COLORS, object_color, render_object_masks
+from layerwise_bokeh.preview._masks import (
+    OBJECT_COLORS,
+    object_color,
+    render_object_masks,
+)
 
 
 def _square(size: int, lo: int, hi: int) -> np.ndarray:

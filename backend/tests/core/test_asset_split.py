@@ -10,8 +10,8 @@ from pathlib import Path
 
 import pytest
 
-from video_bokeh.core._library import BACKGROUNDS, FOREGROUNDS
-from video_bokeh.core._split import (
+from layerwise_bokeh.core._library import BACKGROUNDS, FOREGROUNDS
+from layerwise_bokeh.core._split import (
     ALL,
     TEST,
     TRAIN,
@@ -19,7 +19,7 @@ from video_bokeh.core._split import (
     listed_test_foregrounds,
     split_of,
 )
-from video_bokeh.library.split import page_id
+from layerwise_bokeh.library.split import page_id
 
 PUBLISHED_SHA256 = "2215f492f3e03d6233a231a5f766ce6b2bf4ff85081736fb622c568081e1d24f"
 PREDICTIONS = Path(__file__).resolve().parents[2] / "data/magick/predictions.csv"
@@ -41,7 +41,7 @@ def test_listed_foregrounds_are_test_and_others_train() -> None:
 def test_the_tracked_list_is_the_published_draw() -> None:
     # library.split drew 859 of the published library's 8,586 foregrounds. A change to
     # the file changes the fixed set, so it fails here first.
-    text = resources.files("video_bokeh.core").joinpath("test_foregrounds.txt")
+    text = resources.files("layerwise_bokeh.core").joinpath("test_foregrounds.txt")
     data = text.read_bytes()
     assert hashlib.sha256(data).hexdigest() == PUBLISHED_SHA256
     ids = data.decode().splitlines()

@@ -293,7 +293,7 @@ with the next step: **the `reviewer` agent, or a new session on Opus, `/bokeh-re
 - The acceptance criteria are yours to invent and the user has not confirmed them.
 - The source contradicts the code, or contradicts an earlier meeting's decision.
 - The change alters the on-disk dataset contract (stream layout, bit depth, channel
-  count). Downstream readers like `backend/src/video_bokeh/render/layered.py` break
+  count). Downstream readers like `backend/src/layerwise_bokeh/render/layered.py` break
   silently.
 - An expansion from the CEO review changes the research direction, and Pablo and Valery
   have not agreed to it.

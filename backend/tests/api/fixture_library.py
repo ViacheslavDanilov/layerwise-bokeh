@@ -21,8 +21,8 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from video_bokeh.core._library import write_background, write_foreground
-from video_bokeh.core._metadata import write_asset_metadata
+from layerwise_bokeh.core._library import write_background, write_foreground
+from layerwise_bokeh.core._metadata import write_asset_metadata
 
 FG_SIZE = 64
 # Oversized, the way Stage A stores backgrounds, so Stage B's warp never samples past

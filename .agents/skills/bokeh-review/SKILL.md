@@ -54,16 +54,16 @@ Diff locally with `git diff <baseline>...<head>` (three dots, from the merge bas
 
 **High-risk, never trivial, always at least delta:**
 
-- the on-disk dataset contract: `backend/src/video_bokeh/core/_streams.py`,
-  `backend/src/video_bokeh/core/_seq_io.py`, `backend/src/video_bokeh/core/_metadata.py`,
-  `backend/src/video_bokeh/core/_library.py`, `backend/src/video_bokeh/core/_trajectory.py`,
-  `backend/src/video_bokeh/scenes/generate.py`,
-  `backend/src/video_bokeh/scenes/_compositor.py`,
-  `backend/src/video_bokeh/library/build.py`, `docs/reference/dataset-layout.md`;
-- the API the frontend consumes, both ends of it: `backend/src/video_bokeh/api/main.py`,
-  `backend/src/video_bokeh/api/_sequences.py`, `backend/src/video_bokeh/api/_library.py`,
-  `backend/src/video_bokeh/preview/pack.py`, `backend/src/video_bokeh/preview/_masks.py`,
-  `backend/src/video_bokeh/preview/_colormap.py`, `frontend/src/lib/api.ts`,
+- the on-disk dataset contract: `backend/src/layerwise_bokeh/core/_streams.py`,
+  `backend/src/layerwise_bokeh/core/_seq_io.py`, `backend/src/layerwise_bokeh/core/_metadata.py`,
+  `backend/src/layerwise_bokeh/core/_library.py`, `backend/src/layerwise_bokeh/core/_trajectory.py`,
+  `backend/src/layerwise_bokeh/scenes/generate.py`,
+  `backend/src/layerwise_bokeh/scenes/_compositor.py`,
+  `backend/src/layerwise_bokeh/library/build.py`, `docs/reference/dataset-layout.md`;
+- the API the frontend consumes, both ends of it: `backend/src/layerwise_bokeh/api/main.py`,
+  `backend/src/layerwise_bokeh/api/_sequences.py`, `backend/src/layerwise_bokeh/api/_library.py`,
+  `backend/src/layerwise_bokeh/preview/pack.py`, `backend/src/layerwise_bokeh/preview/_masks.py`,
+  `backend/src/layerwise_bokeh/preview/_colormap.py`, `frontend/src/lib/api.ts`,
   `docs/reference/api.md`;
 - the build, CI and agent configuration: `.github/workflows/`, `.pre-commit-config.yaml`,
   `.claude/settings.json`, `.claude/agents/`, `backend/Dockerfile`, `frontend/Dockerfile`,

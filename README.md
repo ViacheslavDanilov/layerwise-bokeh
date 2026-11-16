@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="frontend/src/app/icon.svg" width="100" alt="Video Bokeh logo">
+<img src="frontend/src/app/icon.svg" width="100" alt="LayerWise logo">
 
-# Video Bokeh
+# LayerWise
 
-[![Hugging Face Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-FFD21E.svg)](https://huggingface.co/datasets/vdanilov/video-bokeh)
+[![Hugging Face Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-FFD21E.svg)](https://huggingface.co/datasets/vdanilov/layerwise-bokeh)
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/downloads/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6.svg)](https://www.typescriptlang.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688.svg)](https://fastapi.tiangolo.com/)
@@ -20,7 +20,7 @@ https://github.com/user-attachments/assets/fb40b59c-5443-4031-8233-ef18633911cd
 
 ## Features
 
-- **Synthetic training data with known depth** – Objects composited onto backgrounds at disparities we assign, written as video sequences with one matte per object and 16-bit disparity. The library and a fixed set of 300 sequences are on [Hugging Face](https://huggingface.co/datasets/vdanilov/video-bokeh).
+- **Synthetic training data with known depth** – Objects composited onto backgrounds at disparities we assign, written as video sequences with one matte per object and 16-bit disparity. The library and a fixed set of 300 sequences are on [Hugging Face](https://huggingface.co/datasets/vdanilov/layerwise-bokeh).
 - **Swappable parts** – Depth (Depth Anything V2, Depth Pro, Depth Anything 3 or your own) in Stage A, and bokeh: our layered renderer inside Stage B, or your own over written sequences.
 - **Training on the fly** – A PyTorch stream that generates a new sequence for every item.
 - **Web demo** – Generate a sequence and compare its streams side by side.
@@ -81,9 +81,9 @@ cp .env.example .env          # only to serve something other than backend/data/
 docker compose up api
 ```
 
-The containers are `video-bokeh-api` and `video-bokeh-web`. `api` mounts the libraries
+The containers are `layerwise-bokeh-api` and `layerwise-bokeh-web`. `api` mounts the libraries
 read-only at `/data/library` and writes sequences to `/data/sequences`; both come from
-`VIDEO_BOKEH_DATA_ROOT`, which defaults to `backend/data`. Generating a sequence in the container
+`LAYERWISE_BOKEH_DATA_ROOT`, which defaults to `backend/data`. Generating a sequence in the container
 costs roughly half again what it costs natively. The numbers are in
 [docs/reference/api.md](docs/reference/api.md).
 
@@ -94,14 +94,14 @@ a link to the page that has the details.
 
 **To skip building a library, download ours.** The library of 8,586 foregrounds and 20,000
 backgrounds that step 3 builds is on
-[Hugging Face](https://huggingface.co/datasets/vdanilov/video-bokeh), in 115 GB of shards,
+[Hugging Face](https://huggingface.co/datasets/vdanilov/layerwise-bokeh), in 115 GB of shards,
 each asset in a train or a test split. Beside it is the fixed set: 300 sequences written once
 from the test split, 79 GB, for evaluation.
 [train-on-the-sequence-stream](docs/how-to/train-on-the-sequence-stream.md) explains how to
 download the library into the layout Stage B reads, in about 20 minutes, train on its train
 split as step 5 does, and evaluate on the fixed set.
 
-[cli](docs/reference/cli.md#video_bokehlibraryhub-publish-or-download-a-library-and-its-fixed-set)
+[cli](docs/reference/cli.md#layerwise_bokehlibraryhub-publish-or-download-a-library-and-its-fixed-set)
 says how the library is packed and published.
 
 1. **Install** the dataset extras from the repository root, with Python 3.13+ and
@@ -143,7 +143,7 @@ says how the library is packed and published.
 
    ```bash
    cd backend
-   uv run --frozen --no-sync python -m video_bokeh.library.build \
+   uv run --frozen --no-sync python -m layerwise_bokeh.library.build \
      --fg-data-root data/magick --bg-data-root data/bg-20k \
      --output data/library/da2-large --size 1024 --model da2-large
    ```
@@ -158,7 +158,7 @@ says how the library is packed and published.
    frame's color, mattes and disparity.
 
    ```bash
-   uv run python -m video_bokeh.scenes.generate \
+   uv run python -m layerwise_bokeh.scenes.generate \
      --library-root data/library/da2-large --output data/synth \
      --count 4 --frames 80 --size 512 --bokeh --bokeh-strength 16 --flow forward
    ```
@@ -169,18 +169,18 @@ says how the library is packed and published.
      blur radius in pixels, at a 1024-pixel width, one unit of disparity from the focus.
    - `--layers`, `--flow` and `--occlusion` each add a stream. The last two take a direction,
      `forward`, `backward` or `both`.
-     [cli](docs/reference/cli.md#video_bokehscenesgenerate-stage-b) has every flag, and
+     [cli](docs/reference/cli.md#layerwise_bokehscenesgenerate-stage-b) has every flag, and
      [dataset-layout](docs/reference/dataset-layout.md#stage-b-a-generated-sequence) every
      stream.
 
-5. **Or train on the fly.** `SequenceStream`, in `video_bokeh.loader`, generates a new
+5. **Or train on the fly.** `SequenceStream`, in `layerwise_bokeh.loader`, generates a new
    sequence from the library for every item a training loop asks for and writes nothing to
    disk, so it needs step 3's library, not step 4's sequences. It takes the same frame count,
    size, streams and bokeh strength as step 4. This example trains a small network on it for
    20 steps:
 
    ```bash
-   uv run python -m video_bokeh.loader.example --library-root data/library/da2-large
+   uv run python -m layerwise_bokeh.loader.example --library-root data/library/da2-large
    ```
 
    [train-on-the-sequence-stream](docs/how-to/train-on-the-sequence-stream.md) reads its source

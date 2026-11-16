@@ -10,7 +10,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from video_bokeh.acquire import bg20k
+from layerwise_bokeh.acquire import bg20k
 
 # The Kaggle upload: two split lists in shard 1, and images spread over numbered shards.
 _TRAIN = [f"h_{i:08x}.jpg" for i in range(12)]

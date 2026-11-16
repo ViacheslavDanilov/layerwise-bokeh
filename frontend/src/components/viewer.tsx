@@ -46,7 +46,7 @@ const MAX_PANES = 6;
 
 // What a dragged pane carries, so that nothing else dropped on the grid, such as a file,
 // moves a pane.
-const PANE_DRAG = "application/x-video-bokeh-pane";
+const PANE_DRAG = "application/x-layerwise-bokeh-pane";
 
 // How far an arrow key on a pane's grip moves the pane.
 const ARROW_MOVES: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1 };

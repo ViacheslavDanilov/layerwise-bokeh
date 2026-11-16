@@ -11,8 +11,8 @@ import pytest
 import torch
 from torch.utils.data import DataLoader
 
-from video_bokeh.loader import benchmark as mod
-from video_bokeh.loader._stream import DEFAULT_STREAMS
+from layerwise_bokeh.loader import benchmark as mod
+from layerwise_bokeh.loader._stream import DEFAULT_STREAMS
 
 
 @pytest.mark.parametrize(
@@ -220,9 +220,9 @@ def test_an_installed_copy_records_no_commit(
         ],
         check=True,
     )
-    from video_bokeh.core import _provenance
+    from layerwise_bokeh.core import _provenance
 
-    installed = tmp_path / ".venv/lib/python3.13/site-packages/video_bokeh/core"
+    installed = tmp_path / ".venv/lib/python3.13/site-packages/layerwise_bokeh/core"
     installed.mkdir(parents=True)
     monkeypatch.setattr(_provenance, "__file__", str(installed / "_provenance.py"))
 

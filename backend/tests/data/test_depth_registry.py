@@ -5,8 +5,8 @@ import pytest
 import torch
 from PIL import Image
 
-from video_bokeh.core._plugins import missing_methods
-from video_bokeh.library.depth import ESTIMATOR_METHODS, ESTIMATORS
+from layerwise_bokeh.core._plugins import missing_methods
+from layerwise_bokeh.library.depth import ESTIMATOR_METHODS, ESTIMATORS
 
 
 @pytest.mark.parametrize(("key", "cls"), sorted(ESTIMATORS.items()))
@@ -32,7 +32,7 @@ def test_transformers_models_carry_correct_hf_id(key: str, hf_id: str) -> None:
 
 @pytest.mark.parametrize("key", ["da2-small", "depth-pro"])
 def test_transformers_infer_returns_correct_shape_and_dtype(monkeypatch, key) -> None:
-    from video_bokeh.library.depth import _transformers as mod
+    from layerwise_bokeh.library.depth import _transformers as mod
 
     class _Inputs(dict):
         def to(self, _device: torch.device) -> _Inputs:
@@ -82,7 +82,7 @@ def test_transformers_float16_checkpoint_keeps_float32_precision(monkeypatch) ->
     # Depth Pro's checkpoint is float16, and transformers 5 loads a checkpoint in its
     # own dtype. Run that way, disparity keeps about a thousand levels per octave,
     # far coarser than the uint16 the library stores.
-    from video_bokeh.library.depth import _transformers as mod
+    from layerwise_bokeh.library.depth import _transformers as mod
 
     class _Inputs(dict):
         def to(self, _device: torch.device) -> _Inputs:

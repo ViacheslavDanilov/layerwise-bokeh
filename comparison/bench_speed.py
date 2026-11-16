@@ -69,7 +69,7 @@ from common import (
 )
 from PIL import Image
 
-from video_bokeh.core._seq_io import frame_names, sequence_seed
+from layerwise_bokeh.core._seq_io import frame_names, sequence_seed
 
 HERE = Path(__file__).resolve().parent
 #: Each method's frames, as its adapter writes them; the first timed frame is checked
@@ -171,7 +171,7 @@ def _chw_to_rgb(out: torch.Tensor) -> np.ndarray:
 def ours(one_frame: bool) -> Method:
     """Our renderer on the layers, as ``render.run`` reads them, or on the all-in-focus frame
     alone, as one layer, as ``run_ours_one_frame.py`` gives it."""
-    from video_bokeh.layered import render_bokeh
+    from layerwise_bokeh.layered import render_bokeh
 
     def prepare(f: Frame) -> dict:
         if one_frame:
