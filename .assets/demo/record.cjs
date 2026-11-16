@@ -10,10 +10,12 @@
 // Bokeh, and "Add pane" brings back Alpha, Optical flow and Occlusion, in that order.
 //
 // On camera: the estimator picked from its list, the seed typed, Generate and its progress bar,
-// Play and Pause on frame PAUSE_AT, three panes added, the Bokeh pane dragged next to All in focus,
-// a double-click that zooms every pane in on the hair, the position slider dragged frame by frame,
-// a double-click back to the whole frame, Play. Headless Chrome draws no pointer, so a cursor is
-// drawn, and it dips on each press.
+// Play and Pause on frame PAUSE_AT, three panes added, then two drags that put All in focus,
+// Bokeh and Occlusion in the top row and Alpha, Disparity and Optical flow in the bottom row
+// (Disparity in front of Optical flow, then Occlusion in front of Alpha), a double-click that
+// zooms every pane in on the hair, the position slider dragged frame by frame, a double-click
+// back to the whole frame, Play. Headless Chrome draws no pointer, so a cursor is drawn, and it
+// dips on each press.
 // Every step and every press is marked in frames.json for the edit and the composition, and a
 // frame in which a pane shows no frame yet carries a mark the edit leaves it out by. The cursor
 // holds still until every pane has shown a frame, so none of the frames left out hides a move; the
@@ -330,7 +332,11 @@ function watchPanes() {
   const order = await p.evaluate(() => [...document.querySelectorAll('figure')].map((f) => f.querySelector('button[aria-label^="Move"]')?.getAttribute('aria-label')));
   console.log('order', JSON.stringify(order));
   const want = ['All in focus', 'Bokeh', 'Occlusion', 'Alpha', 'Disparity', 'Optical flow'].map((n) => `Move ${n} pane`);
-  if (JSON.stringify(order) !== JSON.stringify(want)) { console.error('the panes are not in the order the film needs', JSON.stringify(want)); process.exitCode = 1; }
+  if (JSON.stringify(order) !== JSON.stringify(want)) {
+    console.error('the panes are not in the order the film needs', JSON.stringify(want));
+    await ctx.close(); await b.close();
+    process.exit(1); // before frames.json is written, so edit.py has nothing to edit
+  }
   fs.writeFileSync(`${out}/frames.json`, JSON.stringify({ frames, marks, presses, moves, sequence: id }, null, 1));
   await ctx.close(); await b.close();
   console.log(frames.length, 'frames');

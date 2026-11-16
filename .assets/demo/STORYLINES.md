@@ -125,9 +125,10 @@ six panes at once.
   71, where the recording paused, one wrap hidden under each scene's entering sheet.
 - **Where the take ends.** After the last Play the app runs to frame 80, which has no flow
   or occlusion, and wraps to frame 1, so its Optical flow pane goes white and its Occlusion
-  pane shows a bare gray frame. That is 0.18 s after the press, and the film does not show it: the strengths
-  sheet whips in over the take 0.2 s before the press is made, and has passed the Optical
-  flow pane three frames before the wrap. The take's last beat is Play, without a pull
+  pane shows a bare gray frame. In this take the press is at 57.15 s and the frame break at
+  57.53 s, 0.38 s after it, and the film does not show it: the strengths sheet starts with
+  the press, and its left edge has passed the Optical flow pane three frames before the
+  wrap. The take's last beat is Play, without a pull
   back to the whole app.
 - **The wait under the first sheet.** At 1024 px the API takes longer to encode those three
   videos than the first chapter sheet stays up. `edit.py` cuts the rest of that wait while

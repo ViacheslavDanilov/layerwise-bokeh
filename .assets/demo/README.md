@@ -131,23 +131,24 @@ it generates must not be cached, or there is no progress bar to film: find its f
    | Where | Value |
    |---|---|
    | `#sheet-add` and `#sheet-zoom` in `index.html` | `data-start`: the film times of `chapter2` and `chapter3` |
-   | `#strengths` | `data-start`: the film time of `play` minus 0.2 |
+   | `#strengths` | `data-start`: the film time of the last press, the last of the `presses, film` it prints (the press on Play) |
    | `#streams` | `data-start`: `#strengths` plus 5.4 |
    | `#end` | `data-start`: `#streams` plus 5.9; the root's `data-duration`: that plus 5.6; the music's 0.4 s less, or its 80 s if shorter |
    | `#demo` and its video | `data-duration`: from 4.8 to 0.5 s after `#strengths` starts |
    | `#dm-speed` in `demo.html` | the factor; shown at `generate` + 1.2, once the camera has settled on the progress line, and faded out from 0.45 s before the sped-up span ends |
    | the camera in `demo.html` | `estimator` - 0.25, `toGenerate` - 0.18, `generate` + 0.2, `panes` + 0.13, `add2` + 0.1 |
-   | `#click-1` to `#click-16` | each press 0.04 s early, so the click peaks a frame after it; the second of a double-click on track 13 |
+   | `#click-1` to `#click-17` | each press 0.04 s early, so the click peaks a frame after it (`#click-17`, the press on Play, at 61.91 s); the second of a double-click on track 13 |
    | `#whoosh-1` to `#whoosh-8` | each whip: the intro's exit at 5.0 s, each chapter sheet's start and its exit 2.15 s later, the starts of `#strengths`, `#streams` and `#end`; plus 0.096 s for `whoosh-a`, 0.065 s for `whoosh-b` |
 
-   The recording keeps playing after `play`, and the app wraps from frame 80, which has
-   no flow or occlusion, to frame 1, so its Optical flow pane goes white and its Occlusion
-   pane shows the bare gray frame, with no mask, 0.18 s after the press. The film must not
-   show that. The strengths sheet starts
-   0.2 s before `play`, so that three frames before the wrap its left edge, 0.28 s in, is
-   already past the Optical flow pane, and the wrap lies under the sheet. If the wrap moves,
-   find its first frame in `project/assets/ui-edit.mp4`, where the Optical flow pane goes
-   white, and start the sheet 0.38 s before it.
+   The recording keeps playing after the press on Play, and the app wraps from frame 80,
+   which has no flow or occlusion, to frame 1, so its Optical flow pane goes white and its
+   Occlusion pane shows the bare gray frame, with no mask. In this take the press is at
+   57.15 s in the edit and the first white frame at 57.53 s, 0.38 s after it. The film must
+   not show that. The strengths sheet starts with the press, so that three frames before
+   the wrap its left edge, 0.28 s in, is already past the Optical flow pane, and the wrap
+   lies under the sheet. If the wrap moves, find its first frame in
+   `project/assets/ui-edit.mp4`, where the Optical flow pane goes white, and start the sheet
+   0.38 s before it.
 
 4. Stream frames. The strengths scene needs the same sequence's bokeh at strengths 8 and
    32 as well, which the API renders as two more sequences of their own: same seed,
