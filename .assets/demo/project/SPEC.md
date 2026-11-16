@@ -6,7 +6,7 @@ GOAL:    a visitor to the repository finishes the film knowing the demo generate
          strand of hair.
 OUTPUT:  HyperFrames, 1920 x 1080 at 30 fps, rendered at 2x (3840 x 2160) and delivered
          at 1920 x 1080; H.264 High, yuv420p, AAC.
-TIME:    73.8 s at 30 fps, 2214 frames. Music bed at 100 BPM.
+TIME:    78.9 s at 30 fps, 2366 frames. Music bed at 100 BPM.
 SUBJECT: the paper's night scene: seed 245 from the demo's da2-large library, two objects,
          80 frames at 1024 x 1024. The woman with white hair, in focus; a lantern nearer the
          camera, blurred; a lake with fireworks behind them.
@@ -34,23 +34,27 @@ SHOTS (film seconds):
   2.40-5.45   poster lines rise out; "Pick an estimator and a seed" lands; the sheet whips
               out onto the app at 0.94: a falcon and a taxi in three panes, two objects in
               the header and in the sidebar.
-  5.55-26.28  sidebar at 2.0x: estimator list, da2-large, seed typed; down to Generate;
+  5.55-26.42  sidebar at 2.0x: estimator list, da2-large, seed typed; down to Generate;
               onto the progress line at 2.4x, the speed label once the camera settles;
               the woman and the lantern in one row of three panes at 1.17x; Play, Pause on
               frame 71, give or take one.
-  26.28-28.88 sheet "Every stream, side by side".
-  28.88-41.99 the row at 1.17x: Add pane twice; then both rows and the transport at
-              1.175x: the third Add pane, Bokeh dragged in front of Disparity.
-  41.99-44.59 sheet "Zoom in, frame by frame".
-  44.59-56.87 same framing: double-click on the tips of her hair (4x in all six panes),
+  26.42-29.02 sheet "Every stream, side by side".
+  29.02-46.93 the row at 1.17x: Add pane twice; then both rows and the transport at
+              1.175x: the third Add pane, then two drags: Disparity in front of Optical flow,
+              Occlusion in front of Alpha. The top row holds the image-like panes, All in focus,
+              Bokeh and Occlusion; the bottom row the data maps, Alpha, Disparity and Optical flow.
+  46.93-49.53 sheet "Zoom in, frame by frame".
+  49.53-61.95 same framing: double-click on the tips of her hair (4x in all six panes),
               slider dragged four frames, double-click back, Play; the next sheet whips in within
               0.2 s of the press, before the app wraps to frame 1, where Optical flow goes white and Occlusion loses its mask.
-  56.87-62.27 sheet "One sequence. Any blur.": All in focus and bokeh strengths 8, 16 and
+  61.95-67.35 sheet "One sequence. Any blur.": All in focus and bokeh strengths 8, 16 and
               32 in one row of four loops, labeled.
-  62.27-68.17 sheet "One sequence. Every stream.": six loops in a 3 x 2 grid, labeled. Both
+  67.35-73.25 sheet "One sequence. Every stream.": six loops in a 3 x 2 grid, labeled, in the
+              order the app left its panes (All in focus, Bokeh, Occlusion; Alpha, Disparity,
+              Optical flow). Both
               loop scenes play frames 30 to 79 and start on frame 71.
-  68.17-73.77 end card: logo and title, "Code" and "Dataset" links; music fades out from
-              70.57 s, silence from 73.37 s.
+  73.25-78.85 end card: logo and title, "Code" and "Dataset" links; music fades out from
+              75.65 s, silence from 78.45 s.
 SOUND:   bed at -16 LUFS, true peak -2.0 dBTP, low-passed at 12 kHz; a soft click one frame
          after each press; a whoosh peaking one frame after each sheet's fastest frame,
          two takes alternating.

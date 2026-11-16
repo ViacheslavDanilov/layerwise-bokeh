@@ -15,19 +15,20 @@ fine detail. The sequence is generated on camera, so the progress bar is real.
   words or fewer, and whips out to the left; inside a chapter the camera does the work.
 - **What the viewer sees and feels:** the app doing real work. An estimator is picked from
   its list, a seed is typed, the bar fills, the panes swap to the new sequence, which plays
-  and pauses where her hair moves. Three more panes are added there and one is dragged into
-  place, then a double-click zooms all six panes in on the same strands of hair at once, and
+  and pauses where her hair moves. Three more panes are added there and two are dragged into
+  place, the image-like streams in the top row and the data maps below, then a double-click zooms all six panes in on the same strands of hair at once, and
   the slider steps through them frame by frame. The same sequence then loops at three bokeh
   strengths, and then as its six streams. It feels calm and exact.
 - **First two seconds:** the poster: the aperture logo, "LayerWise" and "Synthetic video
   with exact depth, rendered bokeh and optical flow", finished at frame 0.
 - **Beats:** poster, then "Pick an estimator and a seed": estimator list, seed, Generate,
   progress bar (sped up and labeled with its factor), three new panes, Play, Pause on frame
-  71. "Every stream, side by side": Add pane three times to a 3 x 2 grid, Bokeh dragged
-  next to All in focus. "Zoom in, frame by frame": double-click on the hair, slider dragged
+  71. "Every stream, side by side": Add pane three times to a 3 x 2 grid, Disparity and
+  Occlusion dragged into place: All in focus, Bokeh and Occlusion above, Alpha, Disparity
+  and Optical flow below. "Zoom in, frame by frame": double-click on the hair, slider dragged
   four frames, double-click back, Play. "One sequence. Any blur.": All in focus beside
   bokeh strengths 8, 16 and 32, looping. "One sequence. Every stream.": the six streams
-  looping. End card: logo, the GitHub and Hugging Face addresses, held while the music
+  looping, in that same order. End card: logo, the GitHub and Hugging Face addresses, held while the music
   fades.
 - **Look:** the app's own: Inter, near-black ink, no accent color. The film's ground is
   white, one step lighter than the app's #fafafa, and pulled back the app sits on it with

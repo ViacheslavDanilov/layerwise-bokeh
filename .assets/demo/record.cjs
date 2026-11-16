@@ -249,23 +249,31 @@ function watchPanes() {
   }
   mark('six');
 
-  // 6. Reorder: Bokeh dragged next to All in focus, in front of Disparity. The cursor leaves
-  // as soon as the last pane has shown a frame, by the margin right of the panes: the last pane opens over the button, and a legend's
-  // tooltip opens as soon as the pointer is over it.
+  // 6. Reorder, in two drags, so the top row holds the image-like panes and the bottom row the
+  // data maps. The six panes open as All in focus, Disparity, Bokeh, Alpha, Optical flow,
+  // Occlusion. A drop inserts, and the panes between shift. Disparity goes in front of Optical
+  // flow: All in focus, Bokeh, Alpha, Disparity, Optical flow, Occlusion. Occlusion then goes in
+  // front of Alpha: All in focus, Bokeh, Occlusion, Alpha, Disparity, Optical flow. The cursor
+  // leaves as soon as the last pane has shown a frame, by the margin right of the panes: the last
+  // pane opens over the button, and a legend's tooltip opens as soon as the pointer is over it.
   mark('drag');
   await glide(REST.x - 10, pos.y - 60, 350);
-  const grip = await center(p.getByRole('button', { name: 'Move Bokeh pane' }));
-  await glide(grip.x, grip.y, 900);
-  await p.waitForTimeout(450);
-  mark('down');
-  await down();
-  const disparity = await center(p.getByRole('button', { name: 'Move Disparity pane' }));
-  await glide(grip.x - 20, grip.y + 6, 200);
-  await glide(disparity.x + 60, disparity.y + 40, 1300);
-  await p.waitForTimeout(500);
-  await p.mouse.up();
-  mark('drop');
-  await p.waitForTimeout(500);
+  const dragPane = async (name, before, tag) => {
+    const grip = await center(p.getByRole('button', { name: `Move ${name} pane` }));
+    await glide(grip.x, grip.y, 900);
+    await p.waitForTimeout(450);
+    mark(`down${tag}`);
+    await down();
+    const target = await center(p.getByRole('button', { name: `Move ${before} pane` }));
+    await glide(grip.x - 20, grip.y + 6, 200);
+    await glide(target.x + 60, target.y + 40, 1300); // the left half of that pane: in front of it
+    await p.waitForTimeout(500);
+    await p.mouse.up();
+    mark(`drop${tag}`);
+    await p.waitForTimeout(500);
+  };
+  await dragPane('Disparity', 'Optical flow', '');
+  await dragPane('Occlusion', 'Alpha', '2');
   await glide(REST.x, REST.y, 800);
   await p.waitForTimeout(600);
   mark('chapter3');
@@ -321,6 +329,8 @@ function watchPanes() {
   await cdp.send('Page.stopScreencast');
   const order = await p.evaluate(() => [...document.querySelectorAll('figure')].map((f) => f.querySelector('button[aria-label^="Move"]')?.getAttribute('aria-label')));
   console.log('order', JSON.stringify(order));
+  const want = ['All in focus', 'Bokeh', 'Occlusion', 'Alpha', 'Disparity', 'Optical flow'].map((n) => `Move ${n} pane`);
+  if (JSON.stringify(order) !== JSON.stringify(want)) { console.error('the panes are not in the order the film needs', JSON.stringify(want)); process.exitCode = 1; }
   fs.writeFileSync(`${out}/frames.json`, JSON.stringify({ frames, marks, presses, moves, sequence: id }, null, 1));
   await ctx.close(); await b.close();
   console.log(frames.length, 'frames');
