@@ -1,6 +1,6 @@
 # README video: storylines
 
-Subject: Video Bokeh's web demo, which generates a synthetic sequence and shows its streams
+Subject: LayerWise's web demo, which generates a synthetic sequence and shows its streams
 side by side. Viewer: someone who opened the repository and wants to know, in about a
 minute, what the dataset holds and what the demo does with it. One real sequence travels
 through every option: the paper's night scene, seed 245 from the `da2-large` library at
@@ -15,19 +15,20 @@ fine detail. The sequence is generated on camera, so the progress bar is real.
   words or fewer, and whips out to the left; inside a chapter the camera does the work.
 - **What the viewer sees and feels:** the app doing real work. An estimator is picked from
   its list, a seed is typed, the bar fills, the panes swap to the new sequence, which plays
-  and pauses where her hair moves. Three more panes are added there and one is dragged into
-  place, then a double-click zooms all six panes in on the same strands of hair at once, and
+  and pauses where her hair moves. Three more panes are added there and two are dragged into
+  place, the image-like streams in the top row and the data maps below, then a double-click zooms all six panes in on the same strands of hair at once, and
   the slider steps through them frame by frame. The same sequence then loops at three bokeh
   strengths, and then as its six streams. It feels calm and exact.
-- **First two seconds:** the poster: the aperture logo, "Video Bokeh" and "Synthetic video
+- **First two seconds:** the poster: the aperture logo, "LayerWise" and "Synthetic video
   with exact depth, rendered bokeh and optical flow", finished at frame 0.
 - **Beats:** poster, then "Pick an estimator and a seed": estimator list, seed, Generate,
   progress bar (sped up and labeled with its factor), three new panes, Play, Pause on frame
-  71. "Every stream, side by side": Add pane three times to a 3 x 2 grid, Bokeh dragged
-  next to All in focus. "Zoom in, frame by frame": double-click on the hair, slider dragged
+  71. "Every stream, side by side": Add pane three times to a 3 x 2 grid, Disparity and
+  Occlusion dragged into place: All in focus, Bokeh and Occlusion above, Alpha, Disparity
+  and Optical flow below. "Zoom in, frame by frame": double-click on the hair, slider dragged
   four frames, double-click back, Play. "One sequence. Any blur.": All in focus beside
   bokeh strengths 8, 16 and 32, looping. "One sequence. Every stream.": the six streams
-  looping. End card: logo, the GitHub and Hugging Face addresses, held while the music
+  looping, in that same order. End card: logo, the GitHub and Hugging Face addresses, held while the music
   fades.
 - **Look:** the app's own: Inter, near-black ink, no accent color. The film's ground is
   white, one step lighter than the app's #fafafa, and pulled back the app sits on it with
@@ -124,9 +125,10 @@ six panes at once.
   71, where the recording paused, one wrap hidden under each scene's entering sheet.
 - **Where the take ends.** After the last Play the app runs to frame 80, which has no flow
   or occlusion, and wraps to frame 1, so its Optical flow pane goes white and its Occlusion
-  pane shows a bare gray frame. That is 0.18 s after the press, and the film does not show it: the strengths
-  sheet whips in over the take 0.2 s before the press is made, and has passed the Optical
-  flow pane three frames before the wrap. The take's last beat is Play, without a pull
+  pane shows a bare gray frame. In this take the press is at 57.15 s and the frame break at
+  57.53 s, 0.38 s after it, and the film does not show it: the strengths sheet starts with
+  the press, and its left edge has passed the Optical flow pane three frames before the
+  wrap. The take's last beat is Play, without a pull
   back to the whole app.
 - **The wait under the first sheet.** At 1024 px the API takes longer to encode those three
   videos than the first chapter sheet stays up. `edit.py` cuts the rest of that wait while

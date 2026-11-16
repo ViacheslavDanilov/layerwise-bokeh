@@ -1,4 +1,4 @@
-// Records the real demo at :3000 through a CDP screencast: JPEG frames with wall-clock timestamps.
+// Records the real demo at DEMO_URL (default http://localhost:3000) through a CDP screencast: JPEG frames with wall-clock timestamps.
 // The window is 1920 x 1080 CSS px, the film's 16:9, on a 2x screen, so the frames are 3840 x 2160
 // and the app fills them edge to edge. The scale is the screen's (--force-device-scale-factor), not
 // Playwright's emulated one: the screencast sends emulated pages at their CSS size.
@@ -10,16 +10,18 @@
 // Bokeh, and "Add pane" brings back Alpha, Optical flow and Occlusion, in that order.
 //
 // On camera: the estimator picked from its list, the seed typed, Generate and its progress bar,
-// Play and Pause on frame PAUSE_AT, three panes added, the Bokeh pane dragged next to All in focus,
-// a double-click that zooms every pane in on the hair, the position slider dragged frame by frame,
-// a double-click back to the whole frame, Play. Headless Chrome draws no pointer, so a cursor is
-// drawn, and it dips on each press.
+// Play and Pause on frame PAUSE_AT, three panes added, then two drags that put All in focus,
+// Bokeh and Occlusion in the top row and Alpha, Disparity and Optical flow in the bottom row
+// (Disparity in front of Optical flow, then Occlusion in front of Alpha), a double-click that
+// zooms every pane in on the hair, the position slider dragged frame by frame, a double-click
+// back to the whole frame, Play. Headless Chrome draws no pointer, so a cursor is drawn, and it
+// dips on each press.
 // Every step and every press is marked in frames.json for the edit and the composition, and a
 // frame in which a pane shows no frame yet carries a mark the edit leaves it out by. The cursor
 // holds still until every pane has shown a frame, so none of the frames left out hides a move; the
 // spans of every move are in frames.json for the edit to check it.
 //
-// Usage, from this folder: node record.cjs SEED FRAMES_DIR
+// Usage, from this folder: [DEMO_URL=http://localhost:3100] node record.cjs SEED FRAMES_DIR
 const fs = require('node:fs');
 const { createRequire } = require('node:module');
 const { chromium } = createRequire(`${__dirname}/../../frontend/package.json`)('@playwright/test');
@@ -40,6 +42,8 @@ const PAUSE_AT = 71, SCRUB_FRAMES = 4;
 // against the night sky around PAUSE_AT. The 4x view keeps this point where it is.
 const HAIR = { x: 0.76, y: 0.16 };
 const API = 'http://127.0.0.1:8000';
+// The page to film. Another port when :3000 is taken; the API's CORS_ORIGINS must then name it.
+const PAGE = process.env.DEMO_URL || 'http://localhost:3000';
 // Where the cursor waits once there are six panes: in the margin right of them.
 const REST = { x: 1765, y: 600 };
 fs.mkdirSync(out, { recursive: true });
@@ -104,7 +108,7 @@ function watchPanes() {
   const ctx = await b.newContext({ viewport: null });
   const p = await ctx.newPage();
   await p.addInitScript(() => { const st = document.createElement('style'); st.textContent = 'nextjs-portal{display:none!important}'; document.documentElement.appendChild(st); });
-  await p.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+  await p.goto(PAGE, { waitUntil: 'networkidle' });
   await p.getByRole('button', { name: 'Generate sequence' }).waitFor();
   await p.waitForTimeout(500);
   await p.evaluate(installCursor);
@@ -247,23 +251,31 @@ function watchPanes() {
   }
   mark('six');
 
-  // 6. Reorder: Bokeh dragged next to All in focus, in front of Disparity. The cursor leaves
-  // as soon as the last pane has shown a frame, by the margin right of the panes: the last pane opens over the button, and a legend's
-  // tooltip opens as soon as the pointer is over it.
+  // 6. Reorder, in two drags, so the top row holds the image-like panes and the bottom row the
+  // data maps. The six panes open as All in focus, Disparity, Bokeh, Alpha, Optical flow,
+  // Occlusion. A drop inserts, and the panes between shift. Disparity goes in front of Optical
+  // flow: All in focus, Bokeh, Alpha, Disparity, Optical flow, Occlusion. Occlusion then goes in
+  // front of Alpha: All in focus, Bokeh, Occlusion, Alpha, Disparity, Optical flow. The cursor
+  // leaves as soon as the last pane has shown a frame, by the margin right of the panes: the last
+  // pane opens over the button, and a legend's tooltip opens as soon as the pointer is over it.
   mark('drag');
   await glide(REST.x - 10, pos.y - 60, 350);
-  const grip = await center(p.getByRole('button', { name: 'Move Bokeh pane' }));
-  await glide(grip.x, grip.y, 900);
-  await p.waitForTimeout(450);
-  mark('down');
-  await down();
-  const disparity = await center(p.getByRole('button', { name: 'Move Disparity pane' }));
-  await glide(grip.x - 20, grip.y + 6, 200);
-  await glide(disparity.x + 60, disparity.y + 40, 1300);
-  await p.waitForTimeout(500);
-  await p.mouse.up();
-  mark('drop');
-  await p.waitForTimeout(500);
+  const dragPane = async (name, before, tag) => {
+    const grip = await center(p.getByRole('button', { name: `Move ${name} pane` }));
+    await glide(grip.x, grip.y, 900);
+    await p.waitForTimeout(450);
+    mark(`down${tag}`);
+    await down();
+    const target = await center(p.getByRole('button', { name: `Move ${before} pane` }));
+    await glide(grip.x - 20, grip.y + 6, 200);
+    await glide(target.x + 60, target.y + 40, 1300); // the left half of that pane: in front of it
+    await p.waitForTimeout(500);
+    await p.mouse.up();
+    mark(`drop${tag}`);
+    await p.waitForTimeout(500);
+  };
+  await dragPane('Disparity', 'Optical flow', '');
+  await dragPane('Occlusion', 'Alpha', '2');
   await glide(REST.x, REST.y, 800);
   await p.waitForTimeout(600);
   mark('chapter3');
@@ -319,6 +331,12 @@ function watchPanes() {
   await cdp.send('Page.stopScreencast');
   const order = await p.evaluate(() => [...document.querySelectorAll('figure')].map((f) => f.querySelector('button[aria-label^="Move"]')?.getAttribute('aria-label')));
   console.log('order', JSON.stringify(order));
+  const want = ['All in focus', 'Bokeh', 'Occlusion', 'Alpha', 'Disparity', 'Optical flow'].map((n) => `Move ${n} pane`);
+  if (JSON.stringify(order) !== JSON.stringify(want)) {
+    console.error('the panes are not in the order the film needs', JSON.stringify(want));
+    await ctx.close(); await b.close();
+    process.exit(1); // before frames.json is written, so edit.py has nothing to edit
+  }
   fs.writeFileSync(`${out}/frames.json`, JSON.stringify({ frames, marks, presses, moves, sequence: id }, null, 1));
   await ctx.close(); await b.close();
   console.log(frames.length, 'frames');

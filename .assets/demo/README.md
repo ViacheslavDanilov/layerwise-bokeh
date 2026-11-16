@@ -1,6 +1,6 @@
 # README demo video
 
-`video-bokeh-demo.mp4` is the video the repository's README plays: 74.7 s, 1920 × 1080,
+`layerwise-bokeh-demo.mp4` is the video the repository's README plays: 78.9 s, 1920 × 1080,
 30 fps, with sound, encoded from a 3840 × 2160 master. `poster.png` is its first frame, a
 finished title card, because GitHub shows a video's first frame until it plays. The README
 links a copy uploaded to GitHub, so a new version needs a new upload too.
@@ -25,11 +25,11 @@ and the master are not tracked; the steps below remake them.
 | Time | Scene | Content |
 |---|---|---|
 | 0 to 5.5 s | `compositions/intro.html` | The poster, then the first chapter's line on the same sheet |
-| 4.8 to 58.3 s | `compositions/demo.html` | The recording, with a camera and the speed label |
-| 26.2 s, 42.6 s | `compositions/sheet-add.html`, `sheet-zoom.html` | Chapter sheets that whip across the recording |
-| 57.8 to 63.8 s | `compositions/strengths.html` | The sequence at three bokeh strengths, looping beside All in focus |
-| 63.2 to 69.7 s | `compositions/streams.html` | The six streams, looping: All in focus, Bokeh, Disparity, Alpha, Optical flow, Occlusion |
-| 69.1 to 74.7 s | `compositions/end.html` | Logo, the GitHub and Hugging Face addresses |
+| 4.8 to 62.5 s | `compositions/demo.html` | The recording, with a camera and the speed label |
+| 26.4 s, 46.9 s | `compositions/sheet-add.html`, `sheet-zoom.html` | Chapter sheets that whip across the recording |
+| 62.0 to 68.0 s | `compositions/strengths.html` | The sequence at three bokeh strengths, looping beside All in focus |
+| 67.4 to 73.9 s | `compositions/streams.html` | The six streams, looping, in the order the app left its panes: All in focus, Bokeh, Occlusion, Alpha, Disparity, Optical flow |
+| 73.3 to 78.9 s | `compositions/end.html` | Logo, the GitHub and Hugging Face addresses |
 
 The sheets sit over the recording while it waits, so the recording runs as one take under
 them. `project/assets/` also keeps the shared style (`composition.css`), the logo, Inter
@@ -97,13 +97,17 @@ it generates must not be cached, or there is no progress bar to film: find its f
    node record.cjs 245 frames
    ```
 
+   `DEMO_URL` names the page when it is not on `http://localhost:3000`, say
+   `DEMO_URL=http://localhost:3100 node record.cjs 245 frames`; the API's `CORS_ORIGINS`
+   must then name that origin too.
+
    The window is 1920 × 1080 CSS px on a 2× screen, so the frames are 3840 × 2160 and the
    app fills them. Off camera the script sets the size to 1024 × 1024 and the objects to 2
    to 2, and shows seed 6 from the first library, `da2-base`: a falcon and a taxi over the
    same lake, without the woman. It closes that sequence's Alpha and Optical flow panes,
    so the new sequence opens in three panes. On camera it picks `da2-large`, types the
    seed and generates. It plays the new sequence and pauses on frame 71 (`PAUSE_AT`, give or take one), adds
-   three panes there, drags Bokeh next to All in focus, zooms in on her hair, drags the
+   three panes there, drags Disparity in front of Optical flow and Occlusion in front of Alpha, so the top row holds All in focus, Bokeh and Occlusion and the bottom row Alpha, Disparity and Optical flow, zooms in on her hair, drags the
    position slider four frames, zooms back out and plays. It marks every step and every
    press in `frames/frames.json`. While any pane has no frame to show yet, a red square
    sits in the page's top left corner, and the cursor holds still until every pane has
@@ -127,23 +131,24 @@ it generates must not be cached, or there is no progress bar to film: find its f
    | Where | Value |
    |---|---|
    | `#sheet-add` and `#sheet-zoom` in `index.html` | `data-start`: the film times of `chapter2` and `chapter3` |
-   | `#strengths` | `data-start`: the film time of `play` minus 0.2 |
+   | `#strengths` | `data-start`: the film time of the last press, the last of the `presses, film` it prints (the press on Play) |
    | `#streams` | `data-start`: `#strengths` plus 5.4 |
    | `#end` | `data-start`: `#streams` plus 5.9; the root's `data-duration`: that plus 5.6; the music's 0.4 s less, or its 80 s if shorter |
    | `#demo` and its video | `data-duration`: from 4.8 to 0.5 s after `#strengths` starts |
    | `#dm-speed` in `demo.html` | the factor; shown at `generate` + 1.2, once the camera has settled on the progress line, and faded out from 0.45 s before the sped-up span ends |
    | the camera in `demo.html` | `estimator` - 0.25, `toGenerate` - 0.18, `generate` + 0.2, `panes` + 0.13, `add2` + 0.1 |
-   | `#click-1` to `#click-16` | each press 0.04 s early, so the click peaks a frame after it; the second of a double-click on track 13 |
+   | `#click-1` to `#click-17` | each press 0.04 s early, so the click peaks a frame after it (`#click-17`, the press on Play, at 61.91 s); the second of a double-click on track 13 |
    | `#whoosh-1` to `#whoosh-8` | each whip: the intro's exit at 5.0 s, each chapter sheet's start and its exit 2.15 s later, the starts of `#strengths`, `#streams` and `#end`; plus 0.096 s for `whoosh-a`, 0.065 s for `whoosh-b` |
 
-   The recording keeps playing after `play`, and the app wraps from frame 80, which has
-   no flow or occlusion, to frame 1, so its Optical flow pane goes white and its Occlusion
-   pane shows the bare gray frame, with no mask, 0.18 s after the press. The film must not
-   show that. The strengths sheet starts
-   0.2 s before `play`, so that three frames before the wrap its left edge, 0.28 s in, is
-   already past the Optical flow pane, and the wrap lies under the sheet. If the wrap moves,
-   find its first frame in `project/assets/ui-edit.mp4`, where the Optical flow pane goes
-   white, and start the sheet 0.38 s before it.
+   The recording keeps playing after the press on Play, and the app wraps from frame 80,
+   which has no flow or occlusion, to frame 1, so its Optical flow pane goes white and its
+   Occlusion pane shows the bare gray frame, with no mask. In this take the press is at
+   57.15 s in the edit and the first white frame at 57.53 s, 0.38 s after it. The film must
+   not show that. The strengths sheet starts with the press, so that three frames before
+   the wrap its left edge, 0.28 s in, is already past the Optical flow pane, and the wrap
+   lies under the sheet. If the wrap moves, find its first frame in
+   `project/assets/ui-edit.mp4`, where the Optical flow pane goes white, and start the sheet
+   0.38 s before it.
 
 4. Stream frames. The strengths scene needs the same sequence's bokeh at strengths 8 and
    32 as well, which the API renders as two more sequences of their own: same seed,
@@ -203,12 +208,12 @@ it generates must not be cached, or there is no progress bar to film: find its f
 
    ```bash
    ffmpeg -y -i master.mp4 -vf 'scale=1920:1080:flags=lanczos' -c:v libx264 -preset veryslow \
-     -crf 13 -profile:v high -level:v 4.1 -pix_fmt yuv420p -force_key_frames 70.75 \
-     -c:a aac -b:a 192k -movflags +faststart video-bokeh-demo.mp4
+     -crf 13 -profile:v high -level:v 4.1 -pix_fmt yuv420p -force_key_frames 74.89 \
+     -c:a aac -b:a 192k -movflags +faststart layerwise-bokeh-demo.mp4
    ```
 
    The 4K master, scaled down with Lanczos, keeps the UI text sharper than a render at
-   1080p would. CRF 13 makes a file of about 30 MB. `-force_key_frames 70.75` puts a
+   1080p would. CRF 13 makes a file of about 30 MB. `-force_key_frames 74.89` puts a
    keyframe just after the end card has settled, 1.64 s after `#end` starts, so none falls
    inside its hold, where it would show as a jump in quality.
 
@@ -223,10 +228,10 @@ it generates must not be cached, or there is no progress bar to film: find its f
 9. Check the file decodes in full on the Mac's hardware decoder:
 
    ```bash
-   ffmpeg -hwaccel videotoolbox -i video-bokeh-demo.mp4 -f null -
+   ffmpeg -hwaccel videotoolbox -i layerwise-bokeh-demo.mp4 -f null -
    ```
 
-10. Upload. Drag `video-bokeh-demo.mp4` into a GitHub comment box, and put the link it gives
+10. Upload. Drag `layerwise-bokeh-demo.mp4` into a GitHub comment box, and put the link it gives
     in place of the `user-attachments` link in the root README.
 
 `npx hyperframes@0.8.206 preview` from `project/` opens the composition in a browser for

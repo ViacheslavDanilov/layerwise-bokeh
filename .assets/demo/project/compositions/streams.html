@@ -44,11 +44,11 @@
         </figure>
         <figure class="st-card">
           <div class="st-tile">
-            <video id="st-disparity" class="clip st-video" src="assets/readme-loops/disparity.mp4"
-                   data-start="0" data-duration="6.5" data-media-start="1.54" data-track-index="3"
-                   muted playsinline preload="auto" aria-label="Disparity"></video>
+            <video id="st-occlusion" class="clip st-video" src="assets/readme-loops/occlusion.mp4"
+                   data-start="0" data-duration="6.5" data-media-start="1.54" data-track-index="6"
+                   muted playsinline preload="auto" aria-label="Occlusion"></video>
           </div>
-          <figcaption class="st-label">Disparity</figcaption>
+          <figcaption class="st-label">Occlusion</figcaption>
         </figure>
         <figure class="st-card">
           <div class="st-tile">
@@ -60,26 +60,26 @@
         </figure>
         <figure class="st-card">
           <div class="st-tile">
+            <video id="st-disparity" class="clip st-video" src="assets/readme-loops/disparity.mp4"
+                   data-start="0" data-duration="6.5" data-media-start="1.54" data-track-index="3"
+                   muted playsinline preload="auto" aria-label="Disparity"></video>
+          </div>
+          <figcaption class="st-label">Disparity</figcaption>
+        </figure>
+        <figure class="st-card">
+          <div class="st-tile">
             <video id="st-flow" class="clip st-video" src="assets/readme-loops/flow.mp4"
                    data-start="0" data-duration="6.5" data-media-start="1.54" data-track-index="5"
                    muted playsinline preload="auto" aria-label="Optical flow"></video>
           </div>
           <figcaption class="st-label">Optical flow</figcaption>
         </figure>
-        <figure class="st-card">
-          <div class="st-tile">
-            <video id="st-occlusion" class="clip st-video" src="assets/readme-loops/occlusion.mp4"
-                   data-start="0" data-duration="6.5" data-media-start="1.54" data-track-index="6"
-                   muted playsinline preload="auto" aria-label="Occlusion"></video>
-          </div>
-          <figcaption class="st-label">Occlusion</figcaption>
-        </figure>
       </div>
     </div>
   </div>
   <script>
     (function () {
-      // The payoff: the six streams the app showed, each playing on its own, in step. The sheet
+      // The payoff: the six streams the app showed, in the order the film left its panes, each playing on its own, in step. The sheet
       // whips in carrying them, as the chapter sheets do, and the heading lands word by word.
       const tl = gsap.timeline({ paused: true });
       tl.fromTo("#st-sheet", { x: 2050, filter: "blur(10px)" }, { x: 0, duration: 0.45, ease: "power3.inOut" }, 0);
