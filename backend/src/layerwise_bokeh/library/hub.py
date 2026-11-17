@@ -155,9 +155,9 @@ Disparity is drawn in the Spectral colormap, near red and far violet.*
 loop muted playsinline width="100%"></video>
 
 *Sequences the generator composed from both splits of the library, at 1024 × 1024. Top:
-the frames all in focus, their disparity and each object's matte in its own color. Bottom:
-their bokeh, the forward optical flow, colored by direction and speed, and in cyan what the
-next frame hides.*
+the frames all in focus, their bokeh, and their occlusion, the frame in gray with what the
+next frame hides in cyan. Bottom: each object's matte in its own color, the disparity, and
+the forward optical flow, colored by direction and speed.*
 """)
 
 #: What the card says while the repository holds part of the library.

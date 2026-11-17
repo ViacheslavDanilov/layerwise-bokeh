@@ -5,8 +5,8 @@ four foregrounds sit two to a row, each on a blue-tinted card as ``rgb.png`` ove
 checkerboard, ``alpha.png`` and ``depth.png`` inside the matte; up to three backgrounds sit
 in one row, each on a green-tinted card as ``rgb.png`` and ``depth.png``. The video plays
 sequences that Stage B generates from the library at 1024 pixels, in the six panes the
-demo shows: all in focus, disparity and the objects' mattes over bokeh, forward optical
-flow and occlusion, with a dot for each sequence under them. Disparity is drawn with
+demo leaves them: all in focus, bokeh and occlusion above, the objects' mattes, disparity
+and forward optical flow below, with a dot for each sequence under them. Disparity is drawn with
 Spectral_r, near red and far violet, as Depth Anything V2's figures draw it. Unless the ids
 are given, the items are spread evenly over the sorted ids; the sequences come from fixed
 seeds. The same library and arguments always give the same preview. ``depth_preview``
@@ -84,14 +84,15 @@ _FG_CAPTIONS = (
     ("Disparity", "depth.png"),
 )
 _BG_CAPTIONS = (("Color", "rgb.png"), ("Disparity", "depth.png"))
-#: The video's panes, three to a row, named as the demo names them.
+#: The video's panes, three to a row, named and ordered as the demo leaves its panes: the
+#: images on top, the maps under them.
 _VIDEO_CAPTIONS = (
     "All in focus",
-    "Disparity",
-    "Alpha",
     "Bokeh",
-    "Optical flow",
     "Occlusion",
+    "Alpha",
+    "Disparity",
+    "Optical flow",
 )
 
 
@@ -301,7 +302,7 @@ def write_preview(
     path.write_bytes(buffer.getvalue())
 
 
-def _sequence(library_root: Path, seed: int) -> Iterator[list[np.ndarray]]:
+def _sequence(library_root: Path, seed: int) -> Iterator[dict[str, np.ndarray]]:
     """The six panes of each frame of Stage B's sequence ``seed``, colored as the demo does.
 
     Optical flow is colored at the sequence's fastest motion, so its frames share one
@@ -350,14 +351,14 @@ def _sequence(library_root: Path, seed: int) -> Iterator[list[np.ndarray]]:
         if t < len(occluded):
             cyan = gray * (1 - _OVERLAY_OPACITY) + _CYAN * _OVERLAY_OPACITY
             gray = np.where(occluded[t][..., None], cyan, gray)
-        yield [
-            rgb[t],
-            apply_colormap(disparity[t]),
-            render_object_masks(list(mattes[t])),
-            bokeh[t],
-            flow_to_rgb(flow[t] if t < len(flow) else still, top_speed),
-            gray.round().astype(np.uint8),
-        ]
+        yield {
+            "All in focus": rgb[t],
+            "Disparity": apply_colormap(disparity[t]),
+            "Alpha": render_object_masks(list(mattes[t])),
+            "Bokeh": bokeh[t],
+            "Optical flow": flow_to_rgb(flow[t] if t < len(flow) else still, top_speed),
+            "Occlusion": gray.round().astype(np.uint8),
+        }
 
 
 def write_video(library_root: Path, path: Path, seeds: Sequence[int] = SEEDS) -> None:
@@ -414,9 +415,9 @@ def write_video(library_root: Path, path: Path, seeds: Sequence[int] = SEEDS) ->
             blank = np.asarray(page)
             for panes in _sequence(library_root, seed):
                 frame = blank.copy()
-                for k, pane in enumerate(panes):
+                for k, caption in enumerate(_VIDEO_CAPTIONS):
                     left, top = corner(k)
                     frame[
                         top + VIDEO_CAPTION : top + row, left : left + VIDEO_PANEL
-                    ] = pane
+                    ] = panes[caption]
                 writer.append_data(frame)
