@@ -308,6 +308,24 @@ def test_the_preview_is_a_figure_and_a_video_the_card_shows(
     assert f"datasets/{hub.REPO}/resolve/main/{hub.VIDEO}" in card
 
 
+def test_the_video_shows_the_images_on_top_in_the_order_the_demo_does(
+    library: Path,
+) -> None:
+    from layerwise_bokeh.library import _preview
+
+    assert _preview._VIDEO_CAPTIONS == (
+        "All in focus",
+        "Bokeh",
+        "Occlusion",
+        "Alpha",
+        "Disparity",
+        "Optical flow",
+    )
+    # Each pane comes with its caption, so the two cannot drift apart.
+    panes = next(_preview._sequence(library, _preview.SEEDS[0]))
+    assert set(panes) == set(_preview._VIDEO_CAPTIONS)
+
+
 def test_the_preview_draws_disparity_only_where_the_matte_reaches_its_core(
     library: Path,
 ) -> None:
