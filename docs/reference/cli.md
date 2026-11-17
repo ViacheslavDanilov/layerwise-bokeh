@@ -243,8 +243,8 @@ install, and so does `hf upload-large-folder`. The card names Depth Anything V2 
 - **The figure shows the library, and the video what Stage B makes of it.** The figure holds
   four foregrounds and three backgrounds on tinted cards under two headed sections, a JPEG
   about 2,500 pixels wide and 3 MB at most. The video plays three sequences of 96 frames at
-  1024 pixels in the demo's six panes, all in focus, disparity, mattes, bokeh, optical flow
-  and occlusion, as H.264 at 24 frames per second. Generating the sequences at that size,
+  1024 pixels in the demo's six panes, all in focus, bokeh and occlusion on top, mattes,
+  disparity and optical flow below, as H.264 at 24 frames per second. Generating the sequences at that size,
   bokeh included, needs about 45 GB of memory. `pack` spreads the items evenly over the
   sorted ids and takes seeds 0, 1 and 2. The video needs torch and imageio's ffmpeg, which
   the `library` extra installs; `--no-preview` leaves both out.
