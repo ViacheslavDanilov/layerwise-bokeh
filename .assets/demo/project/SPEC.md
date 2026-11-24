@@ -68,7 +68,7 @@ SHOTS (film seconds):
               from 96.0 s, silence from 98.6 s.
 SOUND:   the voice, Kokoro af_heart, 16 lines (voice/lines.tsv), each starting inside a
          pause or a move of the take, 0.25 s or more after any click or whoosh, and ending
-         at least 0.4 s before the next. No line overlaps a whoosh; the only clicks under a
+         at least 0.4 s before the next line. No line overlaps a whoosh; the only clicks under a
          line are two of the three Add pane presses, under V8. The two chapter sheets, the
          progress bar, the drags and the last Play carry no voice. Under it an ambient bed,
          ducked so the voice stands about 10.5 dB over it on average, 8 to 13 dB line by

@@ -95,7 +95,7 @@ The finished file measures:
 
 | | |
 |---|---|
-| Length | 98.71 s: 2961 frames at 30 fps, audio 98.70 s |
+| Length | 98.71 s: 2961 frames at 30 fps (98.70 s), audio 98.71 s |
 | Size | 44.7 MB (44,665,864 bytes), 3.6 Mbit/s |
 | Video | H.264 High, level 4.1, yuv420p, bt709, 1920 × 1080 |
 | Audio | AAC LC, 48 kHz, stereo, 192 kbit/s |
@@ -235,7 +235,7 @@ them outside the repository.
    | the camera in `demo.html` | `push` 3.9 (the first beat of the take, `BEAT.push`), 11.5 (before the cursor drifts to Generate), `generate` + 0.2, `panes` + 0.05 (0.85 s long, so it ends before the press on Play), `add2` + 0.1 |
    | `#click-1` to `#click-17` | each press 0.04 s early, so the click peaks a frame after it (`#click-17`, the press on Play, at 74.08 s); the second of a double-click on track 13 |
    | `#whoosh-1` to `#whoosh-8` | each whip: the intro's exit at 12.6 s, each chapter sheet's start and its exit 2.15 s later, the starts of `#strengths`, `#streams` and `#end`; plus 0.096 s for `whoosh-a`, 0.065 s for `whoosh-b` |
-   | `voice/lines.tsv` | each line's start and latest end, in film seconds, from the marks: a line starts in a pause or a move, 0.25 s or more after a click or a whoosh, and ends before the next click or whoosh |
+   | `voice/lines.tsv` | each line's start and latest end, in film seconds, from the marks: a line starts in a pause or a move, 0.25 s or more after a click or a whoosh, and ends before the next click or whoosh, but for V8, which runs over two clicks |
 
    The recording keeps playing after the press on Play, and the app wraps from frame 80,
    which has no flow or occlusion, to frame 1, so its Optical flow pane goes white and its
@@ -275,7 +275,7 @@ them outside the repository.
 5. Stream loops. Optical flow and Occlusion are nearly blank at the start of the
    sequence and have no last frame, so the loops play frames 30 to 79, 50 frames, not all
    80: from frame 30 their tiles are plain to see. Each stream's 50 frames at 24 fps
-   become one 1.875 s cycle at 30 fps, played seven and a third times: 400 frames, 13.3 s.
+   become one 1.875 s cycle at 30 fps, played a little over seven times: 400 frames, 13.3 s.
    Both loop scenes start them 1.54 s in, on frame 71, where the recording paused, and
    show them for 10.5 s and 10.1 s, so 12.04 s of loop is the most they use. From this
    folder, for each `NAME` of `all_in_focus`, `alpha`, `disparity`, `bokeh`, `flow` and

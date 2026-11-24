@@ -158,7 +158,7 @@ six panes at once.
   lantern's and the woman's flow and the mask's edges are plain to see. All eight loops
   share the range, so the tiles of a scene wrap together, and both scenes start on frame
   71, where the recording paused, one wrap hidden under each scene's entering sheet. Each
-  loop lasts 13.3 s, and the scenes use at most 12 s of it. In these frames the lantern
+  loop lasts 13.3 s, and the scenes use at most 12.04 s of it. In these frames the lantern
   touches the woman, in front of her, from frame 45 to frame 71, so the Alpha tile shows one
   object covering the other for about half of each cycle, which is the picture under "even
   where another covers it".
@@ -190,14 +190,18 @@ six panes at once.
   words where a line has any. The estimator line describes the pipeline, which accepts a
   depth estimator of one's own, and not a button on screen. The seed line holds for one
   library and settings, which the picture keeps fixed. The line on hair says "a hard
-  edge", softly, since only the paper's introduction calls hair an open problem for depth
-  estimators. The last streams line says the sequence "holds the targets", which is what the
-  repository says of the streams; it does not claim any task trains on them. Each line has a
+  edge" and no more, which is as far as the repository goes: a depth estimator leaves holes
+  around thin structures like hair (`docs/explanation/pipeline-explainer.md`), and a blur
+  made from the finished frame gets the edges of objects wrong
+  (`docs/explanation/layered-bokeh.md`). The last streams line says the sequence "holds
+  the targets". That is the film's word, not the repository's, which calls the sequences
+  training data and their alpha, disparity and optical flow exact; the line does not claim
+  that any task trains on them. Each line has a
   window set from the take's pauses and moves, and `mix.py` fits the clip to it by speed
   (0.97, 1.03 or 1.08), never by new wording; all 16 fit at 0.97. The voice says "Layer
   Wise" as two words, since a speech model reads "LayerWise" as one.
 - **A take sized to the voice.** The recording was made again after the lines were written
-  and their clips measured: the cursor holds still for the first line over the app, the
+  and their clips measured: the cursor holds still for most of the first line over the app, the
   list stays open while the voice names the estimator, the seed is typed slowly under its
   line, the cursor drifts to Generate as that line ends, the finished grid and the hair are
   held for the time two lines need, and the slider moves a frame about every 0.85 s under
