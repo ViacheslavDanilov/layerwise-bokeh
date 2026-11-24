@@ -12,16 +12,20 @@ fine detail. The sequence is generated on camera, so the progress bar is real.
 
 - **Device and form:** one person's task, told as one continuous take inside the real app.
   Between chapters a full-frame white sheet whips in from the right with a headline of six
-  words or fewer, and whips out to the left; inside a chapter the camera does the work.
-- **What the viewer sees and feels:** the app doing real work. An estimator is picked from
+  words or fewer, and whips out to the left; inside a chapter the camera does the work. A
+  voice reads the film's 23 lines over it.
+- **What the viewer sees and feels:** why the data is synthetic, in two cards, and then the
+  app doing real work. An estimator is picked from
   its list, a seed is typed, the bar fills, the panes swap to the new sequence, which plays
   and pauses where her hair moves. Three more panes are added there and two are dragged into
   place, the image-like streams in the top row and the data maps below, then a double-click zooms all six panes in on the same strands of hair at once, and
   the slider steps through them frame by frame. The same sequence then loops at three bokeh
   strengths, and then as its six streams. It feels calm and exact.
 - **First two seconds:** the poster: the aperture logo, "LayerWise" and "Synthetic video
-  with exact depth, rendered bokeh and optical flow", finished at frame 0.
-- **Beats:** poster, then "Pick an estimator and a seed": estimator list, seed, Generate,
+  with exact depth, rendered bokeh and optical flow", finished at frame 0, which a voice
+  says in one line.
+- **Beats:** poster; the problem card, "Real video has no exact depth"; the solution card,
+  "Synthetic video, known depth"; then "Pick an estimator and a seed": estimator list, seed, Generate,
   progress bar (sped up and labeled with its factor), three new panes, Play, Pause on frame
   71. "Every stream, side by side": Add pane three times to a 3 x 2 grid, Disparity and
   Occlusion dragged into place: All in focus, Bokeh and Occlusion above, Alpha, Disparity
@@ -29,18 +33,20 @@ fine detail. The sequence is generated on camera, so the progress bar is real.
   four frames, double-click back, Play. "One sequence. Any blur.": All in focus beside
   bokeh strengths 8, 16 and 32, looping. "One sequence. Every stream.": the six streams
   looping, in that same order. End card: logo, the GitHub and Hugging Face addresses, held while the music
-  fades.
+  fades under the last line.
 - **Look:** the app's own: Inter, near-black ink, no accent color. The film's ground is
   white, one step lighter than the app's #fafafa, and pulled back the app sits on it with
   a 1 px border and a soft shadow. Pushed in, the app fills the frame.
-- **Sound:** a light, steady bed of fingerpicked nylon guitar, a soft string pad and
-  brushed percussion at 100 BPM, a soft click on every press of the mouse, a whoosh on
-  every sheet, the music fading out under the end card.
+- **Sound:** a voice, Kokoro's `af_heart`, over a calm ambient bed, a soft click on every
+  press of the mouse and a whoosh on every sheet, both quiet under the voice, the music
+  fading out under the end card.
 
 **Why this one:** it keeps the intro and end card the owner likes and every beat of the
-previous video, and adds the three new ones (panes added, zoom, scrub) without a caption
-strip over the UI. A stranger can follow it without narration: one sequence, three short
-headlines, and every frame of the UI is the running app.
+previous video, adds the three new ones (panes added, zoom, scrub) without a caption strip
+over the UI, and says in 20 s why there is a demo at all: real video has no exact depth,
+and a synthetic sequence has the depth we assigned. The voice follows the app's own pauses,
+so every frame of the UI is still the running app, and a viewer with the sound off still
+gets the headlines.
 
 ## B. "The result first"
 
@@ -137,9 +143,33 @@ six panes at once.
   last pane. `edit.py` speeds it up by a whole number, which the label on screen states. The
   label comes in once the camera has settled on the bar and leaves before the wait ends. For
   those few seconds the app's small step spinner turns next to the bar as it fills.
-- **Headlines.** "Pick an estimator and a seed", "Every stream, side by side", "Zoom in,
-  frame by frame", "One sequence. Any blur.", "One sequence. Every stream.": six words or
-  fewer, centered, word by word.
+- **Headlines.** "Real video has no exact depth", "Synthetic video, known depth", "Pick an
+  estimator and a seed", "Every stream, side by side", "Zoom in, frame by frame", "One
+  sequence. Any blur.", "One sequence. Every stream.": six words or fewer, centered, word by
+  word. The two cards carry two lines of 46 px under the headline, in the poster's style.
+- **A problem card and a solution card.** The demo shows a tool, and a visitor needs to
+  know what for. The first card puts the problem in the explainer's own words: a model
+  that blurs by depth needs the distance of every pixel, and real video does not come with
+  it. The second gives the answer the README's first feature gives: objects composited onto
+  backgrounds at disparities we assign. They sit on the poster's white sheet, so no whoosh
+  separates them, and the sheet leaves only after the first chapter's line. The words
+  "synthetic" and "exact depth" are the product here and are allowed; the cards claim
+  nothing about speed, accuracy or savings.
+- **The voice.** 23 lines, each resting on a line of the README, `PRODUCT.md`, `CONTEXT.md`,
+  the explainer or a frame, with numbers as words: "sped up twenty-one times" says what the
+  label on screen says. Each line has a window set from the take's pauses and moves, and
+  `mix.py` fits the clip to it by speed (0.97, 1.03 or 1.08), never by new wording. The
+  voice says "Layer Wise" as two words, since a speech model reads "LayerWise" as one.
+- **No re-record, longer holds.** The recording plays as it was, from 22.9 s. The room the
+  lines needed came from outside the take: a longer title, the two cards, the first
+  chapter's sheet held 0.5 s so its line fits, and a bokeh strengths scene 2.1 s longer,
+  since the loops had 8.46 s left from their start and the scene needs 8.1 s.
+- **Silent chapter sheets.** "Every stream, side by side" and "Zoom in, frame by frame" have
+  no voice: each is a 2.6 s breath of music, whoosh and headline, and a voice there would
+  need 1 s more between the two whooshes, which would push the film past 100 s.
+- **Where the voice meets the clicks.** Nine of the 17 clicks fall under a line. They are
+  quiet and soft, and moving a line clear of them would leave long silences. The clicks on
+  Generate and on the final Play, the two that matter, stand clear of every line.
 - **Resolution.** A 3840 x 2160 master, delivered at 1920 x 1080: scaled down with
   Lanczos, the master keeps the UI text sharper than a 1080p render, and CRF 13 gives a file
-  of about 30 MB.
+  of about 35 MB.
