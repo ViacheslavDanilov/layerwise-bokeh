@@ -1,0 +1,7 @@
+{
+  "duration": 99.05,
+  "lines": "lines.tsv",
+  "voice": "vo",
+  "music": {"bed": "bed.wav", "atempo": 0.95, "fade_in": 1.2, "fade_out": [96.0, 98.8]},
+  "mix": {"target_lufs": -17.8}
+}
