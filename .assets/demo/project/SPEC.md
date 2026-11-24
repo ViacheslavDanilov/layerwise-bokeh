@@ -67,7 +67,7 @@ SHOTS (film seconds):
 SOUND:   the voice, Kokoro af_heart, 23 lines (voice/lines.tsv), each starting inside a
          pause or a move of the take and ending at least 0.3 s before the next; the chapter
          sheets "Every stream, side by side" and "Zoom in, frame by frame" carry none. Under
-         it an ambient bed, ducked so the voice stands 8 to 12 dB over it. A soft click one
+         it an ambient bed, ducked so the voice stands about 10 dB over it on average, 8 to 13 dB line by line. A soft click one
          frame after each press, quiet under the voice; a whoosh peaking one frame after each
          sheet's fastest frame, two takes alternating. The file measures -18 LUFS
          integrated, true peak at most -1.5 dBTP, and the last 0.1 s is silent.

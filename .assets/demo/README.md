@@ -50,9 +50,9 @@ Variable with its license, and GSAP, so the render needs no network.
 The voice is `af_heart` of Kokoro, in American English, made by `tts.py`. Each line has a
 window in `voice/lines.tsv`: the film second it starts and the latest second it may end,
 set from the take's pauses and moves. `mix.py` takes, per line, the first of the speeds
-0.97, 1.03 and 1.08 whose clip ends inside its window, so no line is reworded to fit. Only
-V13 needed more than 0.97, and it fits at 1.08 with 0.08 s to spare. Every clip ends at
-least 0.3 s before the next starts, and the last ends 1.15 s before the film does. The two
+0.97, 1.03 and 1.08 whose clip ends inside its window, so no line is reworded to fit. Every
+clip ends at least 0.3 s before the next starts, and the last ends 1.15 s before the film
+does. The two
 chapter sheets, "Every stream, side by side" and "Zoom in, frame by frame", have no voice.
 The name is spelled "Layer Wise" in the text sent to the voice, so that it reads as two
 words, and "LayerWise" everywhere else.
@@ -272,7 +272,11 @@ it generates must not be cached, or there is no progress bar to film: find its f
 6. Voice and music. The voice needs a Python 3.12 environment of its own, outside the
    repository, with the pinned packages. It downloads Kokoro's model on the first run,
    about 350 MB into `~/.cache/hyperframes/tts/`, and `tts.py` stops if a model file's
-   SHA-256 differs from the one it names. From this folder:
+   SHA-256 differs from the one it names. `tts.py` and `mix.py` themselves run on the
+   system Python, which needs numpy, and `ffmpeg`. The voice and its transcript use
+   `hyperframes@0.9.81`, the version the model hashes were taken with; the check and the
+   render below stay on `hyperframes@0.8.206`, the one this project is pinned to. From
+   this folder:
 
    ```bash
    uv venv --python 3.12 ~/.cache/layerwise-demo/kokoro-venv
