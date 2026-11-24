@@ -36,7 +36,7 @@ it in five steps (the commands are in `../../README.md`):
 
 1. four copies are joined with 3 s crossfades, 110.76 s;
 2. the bed is slowed to 95 % of its speed, 116.6 s;
-3. it is brought to -25 LUFS and ducked by the voice, which stands about 10.6 dB over it on
+3. it is brought to -25 LUFS and ducked by the voice, which stands about 10.5 dB over it on
    average, with a 1.2 s fade in and a fade out that ends 0.25 s before the film's end;
 4. the voice, brought to -18 LUFS on its own, is added and the sum set so that the file
    measures -18 LUFS with the click and the whooshes over it;

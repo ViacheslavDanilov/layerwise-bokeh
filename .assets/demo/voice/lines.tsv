@@ -1,25 +1,18 @@
 # id, start (s), latest end (s), text: the exact TTS input, tab separated. The product is spelled
 # "Layer Wise" for pronunciation only; the screen and the transcript write LayerWise.
-V1	0.60	4.25	Layer Wise generates synthetic video with exact depth.
-V2	5.40	9.50	A model that blurs by depth needs the distance of every pixel.
-V3	9.80	12.05	Real video does not come with it.
-V4	12.90	17.30	Layer Wise composites objects onto backgrounds at depths we assign.
-V5	17.60	19.85	So every pixel's depth is known.
-V6	20.55	22.95	Pick a depth estimator and a seed.
-V7	24.70	27.80	Each library comes from one depth estimator.
-V8	28.35	30.20	The seed picks the sequence.
-V9	34.40	36.95	The wait is sped up twenty-one times.
-V10	37.65	39.95	The sequence opens in three panes.
-V11	40.60	42.85	Play it, and pause on a frame.
-V12	47.65	49.50	Add a pane for each stream.
-V13	49.80	54.90	Six streams: all in focus, alpha, disparity, optical flow, occlusion and bokeh.
-V14	55.20	60.70	Drag them into rows: image-like streams above, data maps below.
-V15	61.00	64.84	They play in step, so you can compare them.
-V16	68.50	72.60	A double-click zooms every pane to the same strand of hair.
-V17	73.00	77.10	The slider steps through the frames, and every pane follows.
-V18	77.40	79.75	Then zoom back out, and play.
-V19	81.00	84.70	Bokeh at three strengths, beside the all-in-focus frames.
-V20	85.10	87.40	Each layer is blurred on its own.
-V21	88.47	90.45	All six streams, in step.
-V22	90.75	93.26	They all come from the same layers.
-V23	94.40	98.45	Layer Wise. Code on GitHub, dataset on Hugging Face.
+V1	2.00	6.90	To learn to blur by depth, a model must know how far every pixel is.
+V2	7.30	9.70	And what hides behind each edge.
+V3	10.10	12.20	Real video records neither.
+V4	13.50	17.60	Layer Wise builds its video from layers instead, so it knows both.
+V5	18.30	20.50	Pick a depth estimator, or bring your own.
+V6	22.10	26.90	A seed picks the sequence, and the same seed always gives it back.
+V7	35.10	40.40	One object holds the focus, and the rest blur by how far they are from it.
+V8	45.40	49.50	Add the streams you need. Every pane shows the same frame.
+V9	59.15	61.95	Hair is a hard edge, for depth and for blur.
+V10	62.20	66.70	Depth, flow and blur follow her matte, since all come from the same layers.
+V11	67.60	72.30	Step frame by frame: the occlusion mask marks what the next frame hides.
+V12	75.12	77.85	You set how strong the blur is, for any sequence.
+V13	78.10	83.50	Each layer is blurred on its own, so the lantern's soft edge shows what lies behind it.
+V14	85.00	88.55	Alpha keeps each object whole, even where another covers it.
+V15	88.80	93.30	One sequence holds the targets for depth, mattes, motion and blur.
+V16	94.50	97.80	Every seed makes another, even while your model trains.

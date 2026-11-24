@@ -5,21 +5,27 @@
 //
 // Before the screencast starts, the page is set to SIZE and to OBJECTS objects and shows an
 // earlier sequence (SETUP_SEED, from the first library, with the same number of objects) with its
-// Alpha and Optical flow panes closed. A closed pane stays closed for the next sequence when the
-// streams are the same, so the new sequence opens in three panes, All in focus, Disparity and
-// Bokeh, and "Add pane" brings back Alpha, Optical flow and Occlusion, in that order.
+// Alpha and Optical flow panes closed, playing. A closed pane stays closed for the next sequence
+// when the streams are the same, so the new sequence opens in three panes, All in focus,
+// Disparity and Bokeh, and "Add pane" brings back Alpha, Optical flow and Occlusion, in that order.
 //
-// On camera: the estimator picked from its list, the seed typed, Generate and its progress bar,
-// Play and Pause on frame PAUSE_AT, three panes added, then two drags that put All in focus,
-// Bokeh and Occlusion in the top row and Alpha, Disparity and Optical flow in the bottom row
-// (Disparity in front of Optical flow, then Occlusion in front of Alpha), a double-click that
-// zooms every pane in on the hair, the position slider dragged frame by frame, a double-click
-// back to the whole frame, Play. Headless Chrome draws no pointer, so a cursor is drawn, and it
-// dips on each press.
-// Every step and every press is marked in frames.json for the edit and the composition, and a
-// frame in which a pane shows no frame yet carries a mark the edit leaves it out by. The cursor
-// holds still until every pane has shown a frame, so none of the frames left out hides a move; the
-// spans of every move are in frames.json for the edit to check it.
+// On camera: the earlier sequence plays under the film's first answer, and stops as the camera
+// moves in on the sidebar. Then the estimator picked from its list, the seed
+// typed, Generate and its progress bar, Play, a lap of the sequence and Pause on frame PAUSE_AT,
+// three panes added, then two drags that put All in focus, Bokeh and Occlusion in the top row and
+// Alpha, Disparity and Optical flow in the bottom row (Disparity in front of Optical flow, then
+// Occlusion in front of Alpha), a double-click that zooms every pane in on the hair, held still
+// while two voice lines play, the position slider dragged frame by frame, a double-click back to
+// the whole frame, Play. Headless Chrome draws no pointer, so a cursor is drawn, and it dips on
+// each press.
+//
+// Every pause is sized to the voice (the film's lines are in voice/lines.tsv). Until Generate the
+// beats are placed on the take's own clock (BEAT, in seconds after the screencast starts), which
+// the edit does not change; after it each pause is a length. Every step and every press is
+// marked in frames.json for the edit and the composition, and a frame in which a pane shows no
+// frame yet carries a mark the edit leaves it out by. The cursor holds still until every pane has
+// shown a frame, so none of the frames left out hides a move; the spans of every move are in
+// frames.json for the edit to check it.
 //
 // Usage, from this folder: [DEMO_URL=http://localhost:3100] node record.cjs SEED FRAMES_DIR
 const fs = require('node:fs');
@@ -38,6 +44,18 @@ const SETUP_SEED = '6';
 // hair moves there, so Optical flow and Occlusion show it (frame 1 has neither), and she is in
 // focus in Bokeh. Another seed needs its own.
 const PAUSE_AT = 71, SCRUB_FRAMES = 4;
+// Seconds after the screencast starts, up to Generate (the edit leaves this stretch at 1x):
+// the camera moves in on the sidebar and the earlier sequence stops; the cursor leaves its
+// rest for the estimator list; the list opens; the cursor goes to da2-large; da2-large is
+// picked; the seed field is pressed; the seed is typed; the cursor drifts to Generate; Generate
+// is pressed. The voice lines V4 to V6 sit in the pauses between them.
+const BEAT = { push: 3.9, move: 4.4, list: 5.5, toPick: 7.0, pick: 8.3, seedClick: 9.3, type: 9.8, drift: 11.6, generate: 14.9 };
+// After the generation: how many laps the new sequence runs before it is paused, so that the
+// voice line over it ends before the press of Pause; how long the zoomed view is held still under
+// two voice lines, in seconds from the double-click to the slider's press; and the time the
+// slider takes for each frame, in ms.
+const LAPS = 1;
+const HOLD = { zoomStill: 8.4, frameStep: 850 };
 // Where the double-click zooms in, as fractions of the All in focus pane: the tips of her hair
 // against the night sky around PAUSE_AT. The 4x view keeps this point where it is.
 const HAIR = { x: 0.76, y: 0.16 };
@@ -114,8 +132,8 @@ function watchPanes() {
   await p.evaluate(installCursor);
 
   // Off camera: the size and the count of objects the film generates, then the sequence the film
-  // opens on, in three panes. Raising the fewest objects raises the most with it, and lowering
-  // the most lowers the fewest.
+  // opens on, in three panes, playing. Raising the fewest objects raises the most with it, and
+  // lowering the most lowers the fewest.
   const pick = async (trigger, option) => {
     await p.locator(trigger).click();
     await p.getByRole('option', { name: option, exact: true }).click();
@@ -129,28 +147,32 @@ function watchPanes() {
   await p.waitForFunction(ready, { seed: SETUP_SEED, count: 5 }, { timeout: 300000 });
   await p.getByRole('button', { name: 'Close Alpha pane' }).click();
   await p.getByRole('button', { name: 'Close Optical flow pane' }).click();
+  await p.getByRole('button', { name: 'Play' }).click();
 
-  // The mouse, moved along an ease-in-out path so it reads as a hand, not a jump.
+  // The mouse, moved along an ease-in-out path so it reads as a hand, not a jump. A glide lasts
+  // exactly `ms`, whatever the page's load, so the take's times hold.
   let pos = { x: 1120, y: 940 };
   await p.mouse.click(pos.x, pos.y); // off every control, so nothing keeps the focus
   await p.waitForTimeout(1500);
   const moves = [];
+  const now = () => Date.now() / 1000;
   const glide = async (x, y, ms = 700) => {
-    const n = Math.max(2, Math.round(ms / 16));
     const from = { ...pos };
-    const began = Date.now() / 1000;
-    for (let i = 1; i <= n; i++) {
-      const t = i / n, e = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
+    const began = now();
+    for (;;) {
+      const t = Math.min(1, ((now() - began) * 1000) / ms);
+      const e = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
       await p.mouse.move(from.x + (x - from.x) * e, from.y + (y - from.y) * e);
-      await p.waitForTimeout(16);
+      if (t >= 1) break;
+      await p.waitForTimeout(8);
     }
     pos = { x, y };
-    moves.push([began, Date.now() / 1000]);
+    moves.push([began, now()]);
   };
   const center = async (locator) => { const r = await locator.boundingBox(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; };
   // Every press is timed too, for the click sounds.
   const presses = [];
-  const down = async (options) => { presses.push(Date.now() / 1000); await p.mouse.down(options); };
+  const down = async (options) => { presses.push(now()); await p.mouse.down(options); };
   const press = async (count = 1) => { await down({ clickCount: count }); await p.waitForTimeout(90); await p.mouse.up({ clickCount: count }); };
   const click = async (locator, { before = 350, ms = 700 } = {}) => {
     const c = await center(locator);
@@ -159,6 +181,11 @@ function watchPanes() {
     await press();
   };
   const doubleClick = async () => { await press(1); await p.waitForTimeout(70); await press(2); };
+  // Still until every pane has shown a frame, and a moment more for that frame to be painted.
+  const settled = async (ms = 120) => {
+    await p.waitForFunction(() => window.__empty === false, null, { timeout: 60000, polling: 'raf' });
+    await p.waitForTimeout(ms);
+  };
 
   const cdp = await ctx.newCDPSession(p);
   const frames = [];
@@ -170,27 +197,50 @@ function watchPanes() {
   });
   await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 95, everyNthFrame: 1, maxWidth: W * SCALE, maxHeight: H * SCALE });
   const marks = {};
-  const mark = (s) => { marks[s] = Date.now() / 1000; console.log(s); };
+  const mark = (s) => { marks[s] = now(); console.log(s, (now() - (marks.start ?? now())).toFixed(2)); };
   await p.evaluate(watchPanes);
   mark('start');
-  await p.waitForTimeout(1000);
+  // The take's own clock, up to Generate: wait until `edit` seconds after the start.
+  const until = async (edit) => {
+    const ms = (marks.start + edit - now()) * 1000;
+    if (ms < -150) console.warn(`late by ${(-ms).toFixed(0)} ms for ${edit}`);
+    if (ms > 0) await p.waitForTimeout(ms);
+  };
+
+  // 0. The earlier sequence plays, the cursor still, under the film's first spoken answer. As
+  // the camera moves in on the sidebar it stops, by the Pause button's own handler, so that the
+  // wait for the new sequence does not speed up a playing video into a flicker.
+  await until(BEAT.push + 0.4);
+  await p.evaluate(() => document.querySelector('button[aria-label="Pause"]').click());
+  mark('stopped');
 
   // 1. The depth estimator, from its list.
+  await until(BEAT.move);
   mark('estimator');
-  await click(p.locator('#library'), { ms: 900, before: 450 });
+  const library = p.locator('#library');
+  await glide((await center(library)).x, (await center(library)).y, 900);
+  await until(BEAT.list);
+  await press();
   mark('listOpen');
-  await p.waitForTimeout(700);
-  await click(p.getByRole('option', { name: 'da2-large' }), { ms: 650, before: 450 });
+  const option = p.getByRole('option', { name: 'da2-large' });
+  await until(BEAT.toPick);
+  await glide((await center(option)).x, (await center(option)).y, 900);
+  await until(BEAT.pick);
+  await press();
   mark('picked');
-  await p.waitForTimeout(600);
 
-  // 2. The seed, typed.
+  // 2. The seed, typed slowly.
+  await p.waitForTimeout(100);
+  const seedAt = await center(seedBox);
+  await until(BEAT.seedClick - 0.8);
   mark('seed');
-  await click(seedBox, { ms: 750, before: 350 });
+  await glide(seedAt.x, seedAt.y, 700);
+  await until(BEAT.seedClick);
+  await press();
+  await until(BEAT.type);
   await p.keyboard.press('ControlOrMeta+a');
-  await p.keyboard.type(SEED, { delay: 190 });
+  await p.keyboard.type(SEED, { delay: 380 });
   mark('typed');
-  await p.waitForTimeout(600);
 
   // 3. Generate, then wait for every pane of the new sequence. Then the API is asked for the
   // videos of the streams still to be added, as an earlier look at those panes would have: it
@@ -198,9 +248,10 @@ function watchPanes() {
   // video is on disk before its pane asks for it.
   const generate = p.getByRole('button', { name: 'Generate sequence' });
   const g = await center(generate);
+  await until(BEAT.drift);
   mark('toGenerate');
-  await glide(g.x, g.y, 800);
-  await p.waitForTimeout(400);
+  await glide(g.x, g.y, 2400);
+  await until(BEAT.generate);
   mark('generate');
   await press();
   await p.waitForTimeout(300);
@@ -218,36 +269,42 @@ function watchPanes() {
     }
   };
   const warmed = Promise.all(['alpha', 'flow', 'occlusion'].map(warm));
-  await p.waitForTimeout(1200);
 
-  // 4. Play for a moment, and pause on PAUSE_AT. The press lands about three frames after it is
-  // made, so it is made that much earlier.
+  // 4. The new panes rest for a moment, then Play, LAPS laps of the sequence, and Pause on
+  // PAUSE_AT. The press lands about three frames after it is made, so it is made that much
+  // earlier. The voice line over the lap ends before the press.
+  await settled(80);
+  await p.evaluate(() => {
+    const v = document.querySelector('video');
+    let last = 0;
+    window.__laps = 0;
+    const tick = () => { const f = (v.currentTime / v.duration) * 80; if (f < last - 40) window.__laps++; last = f; requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  });
   await click(p.getByRole('button', { name: 'Play' }), { ms: 800, before: 300 });
   mark('play1');
-  await p.waitForFunction((at) => {
+  await p.waitForFunction(({ at, laps }) => {
     const v = document.querySelector('video');
-    return v.currentTime / v.duration * 80 >= at;
-  }, PAUSE_AT - 1 - 3, { polling: 'raf' });
+    return window.__laps >= laps && (v.currentTime / v.duration) * 80 >= at;
+  }, { at: PAUSE_AT - 1 - 3, laps: LAPS }, { polling: 'raf' });
   await press();
   mark('paused');
   const position = p.getByRole('slider', { name: 'Position' });
   await p.waitForTimeout(300);
   console.log('paused on', await position.getAttribute('aria-valuetext'));
-  await p.waitForTimeout(900);
+  await p.waitForTimeout(700);
   mark('chapter2');
   await Promise.all([warmed, p.waitForTimeout(2300)]); // under the chapter sheet
   mark('warmed');
 
   // 5. Three more panes, one per click on "Add pane", which moves as the grid rearranges. The
   // cursor waits for each new pane's first frame before it moves on.
-  for (const [i, ms] of [[1, 900], [2, 600], [3, 600]]) {
-    await click(p.getByRole('button', { name: 'Add pane' }), { ms, before: 300 });
+  for (const [i, ms] of [[1, 800], [2, 550], [3, 550]]) {
+    await click(p.getByRole('button', { name: 'Add pane' }), { ms, before: i === 1 ? 150 : 250 });
     mark(`add${i}`);
     await p.waitForFunction(ready, { seed: SEED, count: 3 + i }, { timeout: 60000, polling: 20 });
-    // Still until every pane has shown a frame, and a moment more for that frame to be painted.
-    await p.waitForFunction(() => window.__empty === false, null, { timeout: 60000, polling: 'raf' });
-    await p.waitForTimeout(120);
-    if (i < 3) await p.waitForTimeout(530);
+    await settled(120);
+    if (i < 3) await p.waitForTimeout(250);
   }
   mark('six');
 
@@ -262,36 +319,38 @@ function watchPanes() {
   await glide(REST.x - 10, pos.y - 60, 350);
   const dragPane = async (name, before, tag) => {
     const grip = await center(p.getByRole('button', { name: `Move ${name} pane` }));
-    await glide(grip.x, grip.y, 900);
-    await p.waitForTimeout(450);
+    await glide(grip.x, grip.y, 650);
+    await p.waitForTimeout(200);
     mark(`down${tag}`);
     await down();
     const target = await center(p.getByRole('button', { name: `Move ${before} pane` }));
-    await glide(grip.x - 20, grip.y + 6, 200);
-    await glide(target.x + 60, target.y + 40, 1300); // the left half of that pane: in front of it
-    await p.waitForTimeout(500);
+    await glide(grip.x - 20, grip.y + 6, 150);
+    await glide(target.x + 60, target.y + 40, 1000); // the left half of that pane: in front of it
+    await p.waitForTimeout(300);
     await p.mouse.up();
     mark(`drop${tag}`);
-    await p.waitForTimeout(500);
+    await p.waitForTimeout(250);
   };
   await dragPane('Disparity', 'Optical flow', '');
   await dragPane('Occlusion', 'Alpha', '2');
-  await glide(REST.x, REST.y, 800);
-  await p.waitForTimeout(600);
+  await glide(REST.x, REST.y, 700);
+  await p.waitForTimeout(450); // the finished grid, held
   mark('chapter3');
-  await p.waitForTimeout(2300); // under the chapter sheet
+  await p.waitForTimeout(1900); // under the chapter sheet, until it starts to leave
 
   // 7. Every pane zoomed in on the hair, by a double-click on All in focus.
   const view = await p.locator('figure').first().locator('[data-pane-view]').boundingBox();
-  await glide(view.x + HAIR.x * view.width, view.y + HAIR.y * view.height, 1000);
-  await p.waitForTimeout(450);
+  await glide(view.x + HAIR.x * view.width, view.y + HAIR.y * view.height, 800);
+  await p.waitForTimeout(250);
   mark('zoom');
   await doubleClick();
-  await p.waitForTimeout(1100);
+  const zoomed = now();
+  console.log('zoomed on', await p.getByRole('slider', { name: 'Position' }).getAttribute('aria-valuetext'));
 
-  // 8. The position slider, dragged one frame at a time from the frame on screen. The track maps
-  // its width to the 79 steps between frames, so the press is made where that frame sits on it, a
-  // third of a step on, rather than at the thumb's center, which can be a frame off.
+  // 8. The view is held still under two voice lines. Then the position slider, dragged one frame
+  // at a time from the frame on screen. The track maps its width to the 79 steps between frames,
+  // so the press is made where that frame sits on it, a third of a step on, rather than at the
+  // thumb's center, which can be a frame off.
   const thumb = await center(position);
   const track = await p.locator('[data-slot="slider"]', { has: position }).locator('[data-slot="slider-track"]').boundingBox();
   const shown = Number((await position.getAttribute('aria-valuetext')).match(/Frame (\d+)/)[1]);
@@ -300,19 +359,21 @@ function watchPanes() {
   // Down the first column, whose legend has no tooltip, then along the transport: a legend's
   // tooltip opens as soon as the pointer crosses it.
   const lane = view.x + 0.15 * view.width;
+  await p.waitForTimeout(Math.max(0, (zoomed + HOLD.zoomStill - 1.2 - now()) * 1000));
+  mark('still');
   await glide(lane, grab.y, 600);
   await glide(grab.x, grab.y, 500);
-  await p.waitForTimeout(300);
+  await p.waitForTimeout(100);
   mark('scrub');
   await down();
   for (let i = 1; i <= SCRUB_FRAMES; i++) {
-    await glide(grab.x + i * perFrame, grab.y, 80);
-    await p.waitForTimeout(420);
+    await glide(grab.x + i * perFrame, grab.y, 120);
+    await p.waitForTimeout(HOLD.frameStep - 120);
   }
   await p.mouse.up();
   mark('scrubbed');
   console.log('at', await position.getAttribute('aria-valuetext'));
-  await p.waitForTimeout(500);
+  await p.waitForTimeout(400);
 
   // 9. Back to the whole frame, the same way, then play.
   await glide(lane, grab.y, 450);
@@ -320,12 +381,12 @@ function watchPanes() {
   await p.waitForTimeout(250);
   mark('unzoom');
   await doubleClick();
-  await p.waitForTimeout(600);
-  await click(p.getByRole('button', { name: 'Play' }), { ms: 800, before: 300 });
+  await p.waitForTimeout(250);
+  await click(p.getByRole('button', { name: 'Play' }), { ms: 700, before: 200 });
   mark('play');
   await p.waitForTimeout(250);
   await glide(REST.x, REST.y, 900);
-  await p.waitForTimeout(2600);
+  await p.waitForTimeout(1000);
   mark('end');
 
   await cdp.send('Page.stopScreencast');
