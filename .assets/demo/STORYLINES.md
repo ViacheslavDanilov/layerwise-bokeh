@@ -12,9 +12,10 @@ generated on camera, so the progress bar is real.
 ## A. "What hides behind an edge" (chosen)
 
 - **Device and form:** one promise, made over the title and kept in the app. The voice
-  names the problem in two parts over the title card: a model that blurs by depth must
+  names the problem in two parts over the opening: a model that blurs by depth must
   know how far every pixel is, and what hides behind each edge, and real video records
-  neither. The card whips off onto a video already on screen, and the voice gives the
+  neither. The title gives way to one slide that says it in three short lines, and the slide
+  whips off onto a video already on screen, and the voice gives the
   answer: LayerWise builds its video from layers, so it knows both. The rest is one task
   told as one take inside the real app, with a full-frame white sheet between chapters
   carrying a headline of six words or fewer. Words about hiding recur on purpose ("hides",
@@ -31,8 +32,9 @@ generated on camera, so the progress bar is real.
   shows what lies behind it, and then as its six streams. It feels calm and exact.
 - **First two seconds:** the poster: the aperture logo, "LayerWise" and "Synthetic video
   with exact depth, rendered bokeh and optical flow", finished at frame 0, silent for 2 s
-  so that it reads as a poster before the voice starts.
-- **Beats:** poster, held 12.6 s under three lines; the app, with the earlier sequence
+  so that it reads as a poster before the voice starts. Its lines then rise out.
+- **Beats:** poster, held 2.0 s; one slide of three lines, built under the voice's first
+  three lines until 12.6 s; the app, with the earlier sequence
   playing (a falcon and a taxi): estimator list, `da2-large`, seed typed, Generate, progress
   bar (sped up and labeled with its factor), three new panes, Play, a lap of the sequence,
   Pause on frame 71. "Every stream, in step": Add pane three times to a 3 x 2 grid,
@@ -41,7 +43,8 @@ generated on camera, so the progress bar is real.
   view held, slider dragged four frames, double-click back, Play. "Any blur, layer by
   layer": All in focus beside bokeh strengths 8, 16 and 32, looping. "Six streams, one set
   of layers": the six streams looping, in that same order. End card: logo, the GitHub and
-  Hugging Face addresses, held while the music fades under the last line.
+  Hugging Face addresses, held while the music fades under the last line, then faded to the
+  white ground.
 - **Look:** the app's own: Inter, near-black ink, no accent color. The film's ground is
   white, one step lighter than the app's #fafafa, and pulled back the app sits on it with
   a 1 px border and a soft shadow. Pushed in, the app fills the frame.
@@ -180,12 +183,14 @@ six panes at once.
   next to the bar as it fills.
 - **Headlines.** "Every stream, in step", "Down to a strand of hair", "Any blur, layer by
   layer", "Six streams, one set of layers": six words or fewer, centered, word by word. The
-  film has no sheet before the app and none for the estimator and the seed: the title cuts
-  straight into the picture the first answer is about. Each headline names the chapter's
-  subject, and the voice never repeats it.
-- **No card text.** The earlier film's problem and solution cards are gone. The problem is
-  said in the voice over the poster, which holds still: a card of text and the voice reading
-  it would say everything twice.
+  film has no sheet before the app and none for the estimator and the seed: the opening
+  slide whips straight into the picture the first answer is about. Each headline names the
+  chapter's subject, and the voice never repeats it.
+- **No card text.** The earlier film's problem and solution cards are gone: a card of text
+  and the voice reading it would say everything twice. The problem is said in the voice, and
+  the opening slide shows only its nouns, "Distance of every pixel", "What hides behind each
+  edge" and the verdict, "Real video has neither", so that a viewer without sound gets the
+  problem and the voice adds the sentence.
 - **The voice.** 16 lines, each resting on the repository's own words, with numbers as
   words where a line has any. The estimator line describes the pipeline, which accepts a
   depth estimator of one's own, and not a button on screen. The seed line holds for one
@@ -206,6 +211,33 @@ six panes at once.
   line, the cursor drifts to Generate as that line ends, the finished grid and the hair are
   held for the time two lines need, and the slider moves a frame about every 0.85 s under
   the line about stepping. A hold costs nothing but a few seconds, and the film is 98.7 s.
+- **The opening after the owner's first look.** In the merged film the finished title card
+  held for 12.6 s while V1 to V3 played over it, and nothing on screen changed. The owner
+  watches on GitHub with the sound off and saw a frozen card that made time pass for no
+  reason; he asked for the start and the end to be finalized and said one slide in the
+  opening is enough. The poster stays frame 0 (`poster.png` is unchanged, since GitHub shows
+  it until the video plays) and holds to 2.0 s, where V1 starts. Its lines then rise out and
+  one slide builds on the same white ground, in the film's own look, with the three lines at
+  fixed positions so that nothing reflows: two gray lines, then the headline, in ink, as the
+  chapter headlines land. They are reduced echoes of V1 to V3, four or five words each.
+  Timing: the second and the third land as V2 (7.30) and V3 (10.10; the headline at 10.20)
+  start. The first lands at 3.0 s and not at V1's start, 2.0 s: from 2.3 s it would have stood
+  alone for 4.7 s before the second, and the film's rule is no stretch of identical frames
+  over about 4 s. V1's second clause, "a model must know how far every pixel is", starts at
+  about 3.7 s, so at 3.0 s the line lands a beat ahead of its words, and the longest stretch
+  is 3.7 s (3.6 to 7.3 s). The gray lines are 56 px, not 46: at the width GitHub plays the
+  video at, 46 px comes to about 20 px, which is small for the only text on screen for
+  seven seconds, and the headline still stands 1.9 times over them. Everything holds until
+  the whip at 12.6 s, so the sound, the click and the whoosh and every later time stay as
+  they were. One slide, not several: the voice says one thought in three breaths, and each
+  new slide would be a cut the voice does not make.
+- **The ending fades out.** The end card used to hold to the last frame. It now holds under
+  V16 and the music's fade, and its content fades to the bare ground over 0.8 s, from 97.67
+  s to 98.47 s, which is 0.22 s after V16's clip ends (97.45) and 0.2 s before the last
+  frame, so the file ends on a still white frame and the music's last 0.1 s of silence
+  still holds. The film is 98.7 s as before. The fade is to white, not to black, since the
+  whole film is white from the poster on: a black frame would be the only one in it, and a
+  fade to the ground makes the card go away.
 - **Silence.** The poster is silent for its first 2 s; the progress bar, both chapter sheets,
   the two drags and the last Play carry no voice; the last 1.25 s are silent too.
 - **Where the voice meets the clicks.** Every click stands clear of every line but two: the

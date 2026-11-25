@@ -13,6 +13,15 @@
       margin-top: 44px; width: 1420px; font-size: 46px; line-height: 1.4; font-weight: 400;
       letter-spacing: -0.025em; text-align: center; color: var(--muted);
     }
+    /* The one slide that builds under the voice: three lines at fixed positions, so nothing reflows. */
+    .in-line { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap; }
+    .in-gray {
+      font-size: 56px; line-height: 1.4; font-weight: 400; letter-spacing: -0.025em; color: var(--muted);
+    }
+    #in-g1 { top: 350px; }
+    #in-g2 { top: 428px; }
+    #in-head { top: 540px; font-size: 104px; line-height: 1.06; font-weight: 600; letter-spacing: -0.04em; }
+    .in-w { display: inline-block; opacity: 0; }
   </style>
   <div id="root" data-composition-id="intro" data-width="1920" data-height="1080">
     <div id="in-sheet">
@@ -23,13 +32,28 @@
         </div>
         <p id="in-subtitle">Synthetic video with exact depth,<br />rendered bokeh and optical flow</p>
       </div>
+      <p id="in-g1" class="in-line in-gray"><span class="in-w">Distance</span> <span class="in-w">of</span> <span class="in-w">every</span> <span class="in-w">pixel</span></p>
+      <p id="in-g2" class="in-line in-gray"><span class="in-w">What</span> <span class="in-w">hides</span> <span class="in-w">behind</span> <span class="in-w">each</span> <span class="in-w">edge</span></p>
+      <h2 id="in-head" class="in-line"><span class="in-w">Real</span> <span class="in-w">video</span> <span class="in-w">has</span> <span class="in-w">neither</span></h2>
     </div>
   </div>
   <script>
     (function () {
-      // Frame 0 is the finished poster, and it holds still under the voice's first three lines.
-      // The sheet carrying it whips off to the left at 12.6 s, onto the app already on screen.
+      // Frame 0 is the finished poster, and it holds until the voice starts at 2.0 s. Its lines then rise out
+      // and one slide builds under the voice, each line landing word by word as a chapter headline does, 0.16 s apart:
+      // what a depth-aware blur needs (V1, V2), then what real video lacks (V3). All three hold until the
+      // sheet carrying them whips off to the left at 12.6 s, onto the app already on screen.
       const tl = gsap.timeline({ paused: true });
+      const out = (target, t) => tl.to(target, { y: -28, opacity: 0, filter: "blur(8px)", duration: 0.6, ease: "power2.inOut" }, t);
+      out("#in-brand", 2.0);
+      out("#in-subtitle", 2.3);
+      const land = (line, t, gap) => document.querySelectorAll(line + " .in-w").forEach((w, i) => {
+        tl.fromTo(w, { opacity: 0, filter: "blur(8px)" },
+          { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, t + i * gap);
+      });
+      land("#in-g1", 3.0, 0.16);
+      land("#in-g2", 7.3, 0.16);
+      land("#in-head", 10.2, 0.16);
       tl.to("#in-sheet", { x: -2050, duration: 0.45, ease: "power3.inOut" }, 12.6);
       tl.to("#in-sheet", { filter: "blur(10px)", duration: 0.22, ease: "power2.in" }, 12.6);
       window.__timelines["intro"] = tl;
