@@ -7,12 +7,14 @@ it plays. The README links a copy uploaded to GitHub, so a new version needs a n
 too.
 
 The film opens on the title, which holds for two seconds. Its lines then rise out and one
-slide builds with the voice: three short lines for what a depth-aware blur needs and what
-real video lacks. The slide whips straight into the app, where one sequence goes from an
-estimator and a seed to a strand of her hair, and a voice reads 16 lines over it
-([the transcript](#the-voice-and-the-sound) is below). The film ends on the two addresses,
-which fade to the white ground. No subtitles are burned in, since GitHub's player has no
-sidecar track; the opening's three lines are there for a viewer who has the sound off.
+slide builds with the voice from the film's own data: the night scene's All in focus, its
+Disparity and its Occlusion tiles, looping, each with a short line for what a depth-aware
+blur needs, and a headline for what real video lacks. The slide whips straight into the app,
+where one sequence goes from an estimator and a seed to a strand of her hair, and a voice
+reads 16 lines over it ([the transcript](#the-voice-and-the-sound) is below). The film ends
+on the two addresses, which fade to the white ground. No subtitles are burned in, since
+GitHub's player has no sidecar track; the opening's tiles and three lines are there for a
+viewer who has the sound off.
 
 It shows the paper's night scene at 1024 × 1024: a woman with white hair against
 fireworks over a lake, and a lantern nearer the camera. This folder tracks the scripts and
@@ -38,7 +40,7 @@ remake them.
 
 | Time | Scene | Content |
 |---|---|---|
-| 0 to 13.1 s | `compositions/intro.html` | The poster, finished at frame 0 and held to 2.0 s; its lines rise out, and one slide builds under V1 to V3: "Distance of every pixel" at 3.0 s and "What hides behind each edge" at 7.3 s, both in ink, then "Real video has neither" at 10.2 s, as the first two turn gray; held until its sheet whips off at 12.6 s |
+| 0 to 13.1 s | `compositions/intro.html` | The poster, finished at frame 0 and held to 2.0 s; its lines rise out, and one slide builds under V1 to V3 from the sequence's loops: All in focus at 2.7 s, Disparity with "Distance of every pixel" at 3.65 s, Occlusion with "What hides behind each edge" at 7.3 s, then the headline "Real video has neither" at 10.2 s; held, the loops still playing, until its sheet whips off at 12.6 s |
 | 12.4 to 74.62 s | `compositions/demo.html` | The recording, with a camera and the speed label |
 | 42.1 s, 55.43 s | `compositions/sheet-add.html`, `sheet-zoom.html` | Chapter sheets, "Every stream, in step" and "Down to a strand of hair", that whip across the recording |
 | 74.12 to 84.62 s | `compositions/strengths.html` | "Any blur, layer by layer": the sequence at three bokeh strengths, looping beside All in focus |
@@ -46,12 +48,17 @@ remake them.
 | 93.5 to 98.7 s | `compositions/end.html` | Logo, the GitHub and Hugging Face addresses; the content fades to the white ground from 97.67 to 98.47 s, so the last 0.2 s is bare ground |
 
 The sheets sit over the recording while it waits, so the recording runs as one take under
-them. The opening's lines are reduced echoes of V1 to V3, not a transcript. The first lands
-at 3.0 s, not at V1's start (2.0 s), so that no stretch of identical frames between 0 and
-12.6 s runs past 4 s; V1's second clause, about how far every pixel is, starts at about
-3.7 s. The second lands as V2 starts, the third 0.1 s after V3 does. `project/assets/`
-also keeps the shared style (`composition.css`), the logo, Inter Variable with its license,
-and GSAP, so the render needs no network.
+them. The opening's lines are reduced echoes of V1 to V3, not a transcript. Its tiles are
+three of the six stream loops, the ones the voice names: All in focus, the video a model
+sees, rises in at 2.7 s, once the title's lines have gone; Disparity, how far every pixel is,
+at 3.65 s, where V1's second clause starts, and its line lands at 4.3 s as V1 says how far;
+Occlusion, what hides behind each edge, as V2 starts at 7.3 s; the headline 0.1 s after V3
+does. The loops keep the slide moving from 2.7 s to the whip, so the only still stretch in
+0 to 12.6 s is the poster's first 2.0 s. The tiles are 520 CSS px, larger than the 344 px
+of the other scenes, since the slide has three and nothing else to show: the 688 px frames
+are still sharper than the 1080p file needs. `project/assets/` also keeps the shared style
+(`composition.css`), the logo, Inter Variable with its license, and GSAP, so the render
+needs no network.
 
 ## The voice and the sound
 
@@ -102,13 +109,13 @@ The finished file measures:
 | | |
 |---|---|
 | Length | 98.71 s: 2961 frames at 30 fps (98.70 s), audio 98.71 s |
-| Size | 45.5 MB (45,503,812 bytes), 3.7 Mbit/s |
+| Size | 47.9 MB (47,945,522 bytes), 3.9 Mbit/s |
 | Video | H.264 High, level 4.1, yuv420p, bt709, 1920 × 1080 |
 | Audio | AAC LC, 48 kHz, stereo, 192 kbit/s |
 | Loudness | -18.0 LUFS integrated, loudness range 7.8 LU, true peak -2.1 dBTP |
 | Voice over bed | 10.5 dB on average, 8.1 to 13.3 dB per line |
 | End | the last 0.1 s is silent; the last line ends at 97.45 s; the card fades from 97.67 s to 98.47 s |
-| Opening | no stretch of identical frames over 3.7 s between 0 and 12.6 s; the poster holds 2.0 s |
+| Opening | the poster holds 2.0 s, the longest stretch of identical frames between 0 and 12.6 s; the loops move from 2.7 s on |
 | Decode | the whole file, `ffmpeg -hwaccel videotoolbox`, with no error |
 
 ## The demo's library
@@ -237,7 +244,7 @@ them outside the repository.
    | `#streams` | `data-start`: `#strengths` plus 9.88, 84.0 s; `data-duration` 10.1, which its six loop videos and the closing tween (10.0 s) follow |
    | `#end` | `data-start`: `#streams` plus 9.5, 93.5 s; the root's `data-duration`: that plus 5.2, which is also the music's, since `music.mp3` carries its own fades; the card's content fades to the white ground over 0.8 s from 4.17 s in its own time (97.67 s), 0.2 s before the last frame, after V16 has ended (97.45 s) |
    | `#demo` and its video | `data-start` 12.4 (`DEMO_START`), `data-duration`: from 12.4 to 0.5 s after `#strengths` starts, 62.22 s |
-   | `#intro` | `data-duration` 13.1; the poster holds to 2.0 s, its lines rise out from 2.0 s (the subtitle from 2.3 s), and the slide's lines land word by word, 0.16 s apart, at 3.0 s (V1's second clause starts at about 3.7 s), 7.3 s (V2) and 10.2 s (V3), where the first two turn from ink to gray over 0.5 s; its sheet whips out at 12.6 s, 0.2 s after `#demo` starts |
+   | `#intro` | `data-duration` 13.1; the poster holds to 2.0 s, its lines rise out from 2.0 s (the subtitle from 2.3 s), and the slide's tiles rise in at 2.7 s (All in focus), 3.65 s (Disparity, V1's second clause) and 7.3 s (Occlusion, V2), each line under a tile landing word by word, 0.16 s apart, at 3.1 s, 4.3 s and 7.7 s, and the headline at 10.2 s (V3); the three loops run on one clock from the scene's start, `data-media-start` 0.2 (see step 5); its sheet whips out at 12.6 s, 0.2 s after `#demo` starts |
    | `#dm-speed` in `demo.html` | the factor; shown at `generate` + 1.2 (16.1 s in the edit), once the camera has settled on the progress line, and faded out from 0.45 s before the sped-up span ends (20.55 s) |
    | the camera in `demo.html` | `push` 3.9 (the first beat of the take, `BEAT.push`), 11.5 (before the cursor drifts to Generate), `generate` + 0.2, `panes` + 0.05 (0.85 s long, so it ends before the press on Play), `add2` + 0.1 |
    | `#click-1` to `#click-17` | each press 0.04 s early, so the click peaks a frame after it (`#click-17`, the press on Play, at 74.08 s); the second of a double-click on track 13 |
@@ -283,8 +290,15 @@ them outside the repository.
    sequence and have no last frame, so the loops play frames 30 to 79, 50 frames, not all
    80: from frame 30 their tiles are plain to see. Each stream's 50 frames at 24 fps
    become one 1.875 s cycle at 30 fps, played a little over seven times: 400 frames, 13.3 s.
-   Both loop scenes start them 1.54 s in, on frame 71, where the recording paused, and
-   show them for 10.5 s and 10.1 s, so 12.04 s of loop is the most they use. From this
+   The strengths and streams scenes start them 1.54 s in, on frame 71, where the recording
+   paused, and show them for 10.5 s and 10.1 s, so 12.04 s of loop is the most they use. The
+   opening shows All in focus, Disparity and Occlusion for 13.1 s, from its start on one
+   clock, so they stay in step whenever a tile rises in: `data-start` 0 and
+   `data-media-start` 0.2, which plays to 13.3 s of the 13.33 s a loop lasts. No frame of the
+   loop is empty (Occlusion's mask is plain to see from frame 30 on), so the start is chosen
+   for the tiles, not the mask: it puts a wrap of the cycle, 1.875 s long, at 7.3 s, so that
+   Occlusion rises in on the loop's first frame, where the woman's hair and the lantern's
+   rim are outlined in cyan, and another at 12.93 s, under the whip. From this
    folder, for each `NAME` of `all_in_focus`, `alpha`, `disparity`, `bokeh`, `flow` and
    `occlusion`:
 
@@ -357,19 +371,21 @@ them outside the repository.
    ```
 
    `--frames-cache-dir off` keeps the 4K frames it extracts from piling up in the system's
-   temporary folder. The render takes about two minutes and the master is about 330 MB.
+   temporary folder. The render takes about two and a half minutes and the master is about
+   420 MB.
 
 8. Encode at 1920 × 1080. From this folder:
 
    ```bash
    ffmpeg -y -i master.mp4 -vf 'scale=1920:1080:flags=lanczos' -c:v libx264 -preset veryslow \
-     -crf 13 -profile:v high -level:v 4.1 -pix_fmt yuv420p -force_key_frames 95.14 \
+     -crf 14 -profile:v high -level:v 4.1 -pix_fmt yuv420p -force_key_frames 95.14 \
      -c:a aac -b:a 192k -movflags +faststart layerwise-bokeh-demo.mp4
    ```
 
    The 4K master, scaled down with Lanczos, keeps the UI text sharper than a render at
-   1080p would. CRF 13 makes a file of about 45 MB, under the 50 MB limit; raise the CRF if
-   a longer film or loops that compress worse push it past. `-force_key_frames 95.14` puts a
+   1080p would. CRF 14 makes a file of about 48 MB, under the 50 MB limit (CRF 13 made 54.6 MB,
+   since the opening's three larger loops compress worse); raise the CRF if a longer film or
+   loops that compress worse push it past. `-force_key_frames 95.14` puts a
    keyframe just after the end card has settled, 1.64 s after `#end` starts, so none falls
    inside its hold, where it would show as a jump in quality.
 

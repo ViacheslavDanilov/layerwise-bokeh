@@ -14,9 +14,8 @@ SUBJECT: the paper's night scene: seed 245 from the demo's da2-large library, tw
 LOOK:    ground #ffffff; ink #171717; secondary #666666; lines #e5e5e5. No accent color.
          Inter (assets/fonts): titles 600 at 104-116 px, tracking -0.04 to -0.055 em;
          the strengths and streams headings 600 at 64 px; subtitle 400 at 46 px; the
-         opening's two smaller lines 400 at 72 px, ink until its headline lands and
-         #666666 after; tile labels 500 at 32 px; the speed label 600 at 32 px; end card
-         links 42 px. No subtitles burned in.
+         opening's tile lines 500 at 40 px, ink; the other scenes' tile labels 500 at
+         32 px; the speed label 600 at 32 px; end card links 42 px. No subtitles burned in.
          The app is the screen recording, 1920 x 1080 CSS px at 2x. Pulled back it sits at
          scale 0.94 on the white ground: 14 px radius, a 1 px #dedede ring, shadows
          0 4px 12px and 0 30px 80px of #171717 at 6% and 12%. Pushed in, scale 1.17 to 2.4,
@@ -29,9 +28,10 @@ MOTION:  camera moves 1.0 s power2.inOut (0.9 s onto the progress line, 0.85 s o
          blur 10 px at its fastest. The opening slide leaves this way, chapters change this way, and
          the strengths scene, the streams scene and the end card enter this way.
          headline words: opacity 0 to 1 and blur 8 to 0 px, 0.16 s each, 0.08 s apart, no
-         move; landed lines hold still. The opening's three lines land the same way, but
-         0.16 s apart, and its two smaller lines turn from ink to #666666, 0.5 s
-         power2.out, as its headline lands.
+         move; landed lines hold still. The opening's headline lands the same way, but
+         0.16 s apart, and so do the words of the line under each of its tiles. Its tiles
+         rise 28 px into place as they fade and blur in (opacity 0 to 1, blur 8 to 0 px),
+         0.6 s power3.out.
          the end card's lines rise 28 px into place, 0.55 s power3.out, title first, then
          each link. The poster's lines rise out the same way (28 px up, 0.6 s power2.inOut,
          opacity to 0 and blur to 8 px, the title at 2.0 s and the subtitle at 2.3 s); the
@@ -40,13 +40,17 @@ MOTION:  camera moves 1.0 s power2.inOut (0.9 s onto the progress line, 0.85 s o
 SHOTS (film seconds):
   0.00-2.00   poster, finished at frame 0: logo, "LayerWise", subtitle. Held still.
   2.00-2.90   the poster's lines rise out (title, then subtitle). V1 starts at 2.00.
-  3.00-12.60  one slide, three lines at fixed positions so nothing reflows, centered on
-              the frame (ink from y 382 to 698): "Distance of every pixel" (400, 72 px,
-              #171717) lands at 3.00, a beat before V1's second clause (about 3.7);
-              "What hides behind each edge" (same) at 7.30 with V2; "Real video has
-              neither" (600, 116 px, #171717) at 10.20, 0.1 s after V3 starts, and the
-              first two turn #666666 from 10.20 to 10.70. All three hold until the whip.
-              No stretch of identical frames over 3.7 s.
+  2.70-12.60  one slide, every position fixed from the start so nothing reflows: three
+              tiles of the sequence's loops, 520 px square, 12 px radius, a 1 px #e5e5e5
+              ring, 56 px apart and centered (x 124 to 1796, y 150 to 670), each with its
+              line under it (500, 40 px, #171717), and the headline below (600, 116 px,
+              #171717, box from y 790). All in focus rises in at 2.70, its line lands at
+              3.10; Disparity at 3.65, where V1's second clause starts, "Distance of every
+              pixel" at 4.30; Occlusion at 7.30 with V2, "What hides behind each edge" at
+              7.70; "Real video has neither" at 10.20, 0.1 s after V3 starts. The three
+              loops play frames 30 to 79 on one clock from 0 s, 0.2 s into the loop, so
+              Occlusion rises in on the loop's first frame. All hold until the whip.
+              Only the poster is still for more than 0.1 s: its first 2.0 s.
   12.60-13.05 the opening slide's sheet whips off to the left, onto the app at 0.94 already on
               screen: a falcon and a taxi playing in three panes, two objects in the header
               and in the sidebar. The cursor holds still until 16.8 s.
@@ -75,8 +79,8 @@ SHOTS (film seconds):
               32 in one row of four loops, labeled.
   84.00-94.10 sheet "Six streams, one set of layers": six loops in a 3 x 2 grid, labeled,
               in the order the app left its panes (All in focus, Bokeh, Occlusion; Alpha,
-              Disparity, Optical flow). Both loop scenes play frames 30 to 79 and start on
-              frame 71.
+              Disparity, Optical flow). The two loop scenes start on frame 71; all three
+              scenes with loops play frames 30 to 79.
   93.50-98.70 end card: logo and title, "Code" and "Dataset" links; the music fades out
               from 96.0 s, silence from 98.6 s. The card's content fades to the white
               ground from 97.67 to 98.47 s, after V16 has ended (97.45 s), so the last

@@ -14,8 +14,8 @@ generated on camera, so the progress bar is real.
 - **Device and form:** one promise, made in the opening and kept in the app. The voice
   names the problem in two parts over the opening: a model that blurs by depth must
   know how far every pixel is, and what hides behind each edge, and real video records
-  neither. The title gives way to one slide that says it in three short lines, and the slide
-  whips off onto a video already on screen, and the voice gives the
+  neither. The title gives way to one slide that shows it, in tiles of the sequence itself,
+  and the slide whips off onto a video already on screen, and the voice gives the
   answer: LayerWise builds its video from layers, so it knows both. The rest is one task
   told as one take inside the real app, with a full-frame white sheet between chapters
   carrying a headline of six words or fewer. Words about hiding recur on purpose ("hides",
@@ -33,8 +33,8 @@ generated on camera, so the progress bar is real.
 - **First two seconds:** the poster: the aperture logo, "LayerWise" and "Synthetic video
   with exact depth, rendered bokeh and optical flow", finished at frame 0, silent for 2 s
   so that it reads as a poster before the voice starts. Its lines then rise out.
-- **Beats:** poster, held 2.0 s; one slide of three lines, built under the voice's first
-  three lines until 12.6 s; the app, with the earlier sequence
+- **Beats:** poster, held 2.0 s; one slide of three looping tiles, three lines and a headline,
+  built under the voice's first three lines until 12.6 s; the app, with the earlier sequence
   playing (a falcon and a taxi): estimator list, `da2-large`, seed typed, Generate, progress
   bar (sped up and labeled with its factor), three new panes, Play, a lap of the sequence,
   Pause on frame 71. "Every stream, in step": Add pane three times to a 3 x 2 grid,
@@ -58,7 +58,7 @@ The owner found that it did not flow as one story, and the reasons show in how i
 the lines were fitted around holds the recording already had, the two cards said in text what the
 voice said again, and the voice read what the screen already showed, such as a list of stream
 names. This film is written first and recorded after. The problem is said once, in the
-opening, where one slide shows only its nouns under the voice; the answer lands on a moving
+opening, where one slide shows it in the film's own data under the voice; the answer lands on a moving
 picture; each later line says what a thing is for, never what it is called; and the
 recording was made again so that its pauses,
 the still cursor, the open list, the typed seed, the finished grid and the held zoom, are the
@@ -155,14 +155,16 @@ six panes at once.
   lantern's soft edge shows what lies behind it", was checked in the tiles: at strength 32,
   and plainly at 16, the lantern's rim is soft and the lake and the smoke show through it;
   at 8 it is a thin soft line.
-- **Where the loops run.** The two loop scenes play frames 30 to 79 of the sequence, not
+- **Where the loops run.** The three loop scenes play frames 30 to 79 of the sequence, not
   all 80. Optical flow and Occlusion are nearly blank at the start, where nothing has
   moved yet (on frames 1 to 25 the flow tile is almost white, and the occlusion mask holds
   hairlines), and the last frame has neither, as it moves nowhere. From frame 30 the
   lantern's and the woman's flow and the mask's edges are plain to see. All eight loops
-  share the range, so the tiles of a scene wrap together, and both scenes start on frame
-  71, where the recording paused, one wrap hidden under each scene's entering sheet. Each
-  loop lasts 13.3 s, and the scenes use at most 12.04 s of it. In these frames the lantern
+  share the range, so the tiles of a scene wrap together, and the strengths and streams
+  scenes start on frame 71, where the recording paused, one wrap hidden under each scene's
+  entering sheet. The opening shows three of the loops and starts them for itself (see its
+  entry below). Each loop lasts 13.3 s, and the strengths and streams scenes use at most
+  12.04 s of it. In these frames the lantern
   touches the woman, in front of her, from frame 45 to frame 71, so the Alpha tile shows one
   object covering the other for about half of each cycle, which is the picture under "even
   where another covers it".
@@ -189,9 +191,9 @@ six panes at once.
   chapter's subject, and the voice never repeats it.
 - **No card text.** The earlier film's problem and solution cards are gone: a card of text
   and the voice reading it would say everything twice. The problem is said in the voice, and
-  the opening slide shows only its nouns, "Distance of every pixel", "What hides behind each
-  edge" and the verdict, "Real video has neither", so that a viewer without sound gets the
-  problem and the voice adds the sentence.
+  the opening slide shows it as tiles of the sequence, each with a noun phrase, "Distance of
+  every pixel" and "What hides behind each edge", and the verdict, "Real video has neither",
+  so that a viewer without sound gets the problem and the voice adds the sentence.
 - **The voice.** 16 lines, each resting on the repository's own words, with numbers as
   words where a line has any. The estimator line describes the pipeline, which accepts a
   depth estimator of one's own, and not a button on screen. The seed line holds for one
@@ -215,28 +217,58 @@ six panes at once.
 - **The opening after the owner's first look.** In the merged film the finished title card
   held for 12.6 s while V1 to V3 played over it, and nothing on screen changed. The owner
   watches on GitHub with the sound off and saw a frozen card that made time pass for no
-  reason; he asked for the start and the end to be finalized and said one slide in the
-  opening is enough. The poster stays frame 0 (`poster.png` is unchanged, since GitHub shows
-  it until the video plays) and holds to 2.0 s, where V1 starts. Its lines then rise out and
-  one slide builds on the same white ground, in the film's own look, with the three lines at
-  fixed positions so that nothing reflows, centered on the frame as the poster is: two
-  lines of 72 px, then the headline, 116 px and 600, as the chapter headlines land. They are
-  reduced echoes of V1 to V3, four or five words each.
-  Timing: the second and the third land as V2 (7.30) and V3 (10.10; the headline at 10.20)
-  start. The first lands at 3.0 s and not at V1's start, 2.0 s: from 2.3 s it would have stood
-  alone for 4.7 s before the second, and the film's rule is no stretch of identical frames
-  over about 4 s. V1's second clause, "a model must know how far every pixel is", starts at
-  about 3.7 s, so at 3.0 s the line lands a beat ahead of its words, and the longest stretch
-  is 3.7 s (3.6 to 7.3 s). The first line stands alone for 4.3 s, so it has to carry the
-  frame: as a gray line of 56 px, about 24 px at the width GitHub plays the video at, it
-  read as a caption that had lost its headline. The two smaller lines are therefore 72 px
-  and land in ink. As the headline lands they step back to the secondary gray over 0.5 s,
-  which leaves the headline as the only ink on the slide, 1.6 times their size, and gives
-  the eye one more change at 10.2 s. They turn together, not one at each landing: they are
-  two needs of equal rank, and "neither" answers both. Everything holds until
-  the whip at 12.6 s, so the sound, the click and the whoosh and every later time stay as
-  they were. One slide, not several: the voice says one thought in three breaths, and each
-  new slide would be a cut the voice does not make.
+  reason; he asked for the start and the end to be finalized, said one slide in the opening
+  is enough, and then asked whether that slide could use graphics, images or video instead of
+  plain text. It does, and from the film's own data, so nothing is recorded again. The poster
+  stays frame 0 (`poster.png` is unchanged, since GitHub shows it until the video plays) and
+  holds to 2.0 s, where V1 starts. Its lines then rise out and one slide builds on the same
+  white ground, in the film's own look: three tiles of the night scene in a row, each with its
+  line under it, and the headline below.
+  Which data: the tiles are three of the six stream loops, the ones the voice names. All in
+  focus is the video a model gets, the one thing real video has. Disparity is "how far every
+  pixel is", V1's second clause. Occlusion is "what hides behind each edge", V2: the cyan
+  outlines mark what the next frame hides, the woman's hair and the lantern's rim. The
+  headline, "Real video has neither", is then true of the first tile: it holds colors and
+  neither of the other two. Alpha, Bokeh and Optical flow answer neither line, and showing
+  all six would spend the streams scene's payoff early, so they stay for it. The order is the
+  voice's, after the video itself.
+  Timing: the tiles rise in as the end card's lines do (28 px, fading and blurring in, 0.6 s),
+  and each line lands word by word as a chapter headline does, so no new kind of motion comes
+  in. All in focus rises at 2.7 s, once the title's lines have gone (at 2.5 s the tile met the
+  subtitle's blur). Disparity rises at 3.65 s, where V1's second clause, "a model must know
+  how far every pixel is", starts, and its line lands at 4.3 s as V1 says how far. Occlusion
+  rises as V2 starts, 7.3 s, its line at 7.7 s, where V2 says "what". The headline lands at
+  10.2 s, 0.1 s after V3, word by word. Everything holds until the whip at 12.6 s, so the
+  sound, the click and the whoosh and every later time are as they were. One slide, not
+  several: the voice says one thought in three breaths, and each new slide would be a cut the
+  voice does not make.
+  Layout: every position is fixed from the start, so nothing reflows and nothing moves once
+  it has risen in. The tiles are 520 px, larger than the 344 px of the other scenes, since
+  the slide has three and nothing else to show; they, their gaps and the headline fill the
+  frame inside the 90 % safe box, a little above its center, with the three tiles centered on
+  the frame as the headline is. The loops are 688 px frames, so at 520 px they are still
+  sharper than the 1080p file needs. The lines under the tiles are 40 px, 500, in ink,
+  1.25 times the other scenes' labels, since here they carry the meaning, about 17 px at the
+  width GitHub plays the video at; the headline stays 116 px and 600. Until Occlusion rises
+  in, the right third is white. Two ways to fill it were weighed and dropped: an empty outline
+  where the tile will land, which in a render read as a tile that had failed to load, and an
+  order that keeps the pair centered (Occlusion in the middle) leaves a wide hole between them and puts the
+  second need left of the first. Disparity is the middle tile, so its line stands at the
+  frame's center, and the third tile completes the row.
+  Where the loops start: the other scenes start on frame 71, where the recording paused,
+  which matters there and not here, since the app behind the opening shows another sequence.
+  The opening runs its three loops on one clock from its start, so they stay in step when a
+  tile rises in, with the media offset at 0.2 s: a loop lasts 13.33 s and the opening shows
+  them for 13.1, so no larger offset fits, and a video that starts at a nonzero time inside
+  a scene is flagged by the check. Occlusion's mask is plain to see on every frame the loop
+  plays, from frame 30 on, so nothing had to start where the mask is. The 0.2 s puts a wrap
+  of the 1.875 s cycle at 7.3 s, so Occlusion rises in on the loop's first frame, where the
+  mask outlines the hair and the lantern boldest; the first wrap on screen, at 3.55 s,
+  falls 0.1 s before Disparity rises, so that the first two tiles show the beginning of the
+  cycle together, and the last, at 12.93 s, is under the whip.
+  Stillness: with the loops moving, the only still stretch in 0 to 12.6 s is the poster's
+  first 2.0 s. After it, at most two frames in a row are the same, where a loop repeats a
+  frame.
 - **The ending fades out.** The end card used to hold to the last frame. It now holds under
   V16 and the music's fade, and its content fades to the bare ground over 0.8 s, from 97.67
   s to 98.47 s, which is 0.22 s after V16's clip ends (97.45) and 0.2 s before the last
@@ -250,5 +282,6 @@ six panes at once.
   second and third presses of Add pane fall under the line that says to add the streams,
   since its 3.2 s cannot sit between presses 1.5 s apart. They are quiet and soft.
 - **Resolution.** A 3840 x 2160 master, delivered at 1920 x 1080: scaled down with
-  Lanczos, the master keeps the UI text sharper than a 1080p render, and CRF 13 gives a file
-  of about 45 MB.
+  Lanczos, the master keeps the UI text sharper than a 1080p render. CRF 14 gives a file
+  of about 48 MB: the opening's three larger loops compress worse, and CRF 13 gave 54.6 MB,
+  over the limit.
