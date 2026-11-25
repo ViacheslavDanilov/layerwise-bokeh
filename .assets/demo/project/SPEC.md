@@ -34,8 +34,8 @@ MOTION:  camera moves 1.0 s power2.inOut (0.9 s onto the progress line, 0.85 s o
          power2.out, as its headline lands.
          the end card's lines rise 28 px into place, 0.55 s power3.out, title first, then
          each link. The poster's lines rise out the same way (28 px up, 0.6 s power2.inOut,
-         opacity and blur to 0, the title at 2.0 s and the subtitle at 2.3 s); the poster
-         holds still until 2.0 s, as the film's first frame. At the end the card's content
+         opacity to 0 and blur to 8 px, the title at 2.0 s and the subtitle at 2.3 s); the
+         poster holds still until 2.0 s, as the film's first frame. At the end the card's content
          fades to the bare white ground, opacity 1 to 0 with blur to 6 px, 0.8 s power1.inOut.
 SHOTS (film seconds):
   0.00-2.00   poster, finished at frame 0: logo, "LayerWise", subtitle. Held still.

@@ -11,7 +11,7 @@ generated on camera, so the progress bar is real.
 
 ## A. "What hides behind an edge" (chosen)
 
-- **Device and form:** one promise, made over the title and kept in the app. The voice
+- **Device and form:** one promise, made in the opening and kept in the app. The voice
   names the problem in two parts over the opening: a model that blurs by depth must
   know how far every pixel is, and what hides behind each edge, and real video records
   neither. The title gives way to one slide that says it in three short lines, and the slide
@@ -57,9 +57,10 @@ and a solution card, and then ran a demo whose voice described each step as it h
 The owner found that it did not flow as one story, and the reasons show in how it was made:
 the lines were fitted around holds the recording already had, the two cards said in text what the
 voice said again, and the voice read what the screen already showed, such as a list of stream
-names. This film is written first and recorded after. The problem is said once, over the
-title, in the voice only; the answer lands on a moving picture; each later line says what a
-thing is for, never what it is called; and the recording was made again so that its pauses,
+names. This film is written first and recorded after. The problem is said once, in the
+opening, where one slide shows only its nouns under the voice; the answer lands on a moving
+picture; each later line says what a thing is for, never what it is called; and the
+recording was made again so that its pauses,
 the still cursor, the open list, the typed seed, the finished grid and the held zoom, are the
 length each line needs.
 

@@ -49,9 +49,9 @@ The sheets sit over the recording while it waits, so the recording runs as one t
 them. The opening's lines are reduced echoes of V1 to V3, not a transcript. The first lands
 at 3.0 s, not at V1's start (2.0 s), so that no stretch of identical frames between 0 and
 12.6 s runs past 4 s; V1's second clause, about how far every pixel is, starts at about
-3.7 s. The second and the third land as V2 and V3 start. `project/assets/` also keeps the
-shared style (`composition.css`), the logo, Inter Variable with its license, and GSAP, so
-the render needs no network.
+3.7 s. The second lands as V2 starts, the third 0.1 s after V3 does. `project/assets/`
+also keeps the shared style (`composition.css`), the logo, Inter Variable with its license,
+and GSAP, so the render needs no network.
 
 ## The voice and the sound
 
