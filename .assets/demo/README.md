@@ -38,7 +38,7 @@ remake them.
 
 | Time | Scene | Content |
 |---|---|---|
-| 0 to 13.1 s | `compositions/intro.html` | The poster, finished at frame 0 and held to 2.0 s; its lines rise out, and one slide builds under V1 to V3: "Distance of every pixel" at 3.0 s, "What hides behind each edge" at 7.3 s, "Real video has neither" at 10.2 s, held until its sheet whips off at 12.6 s |
+| 0 to 13.1 s | `compositions/intro.html` | The poster, finished at frame 0 and held to 2.0 s; its lines rise out, and one slide builds under V1 to V3: "Distance of every pixel" at 3.0 s and "What hides behind each edge" at 7.3 s, both in ink, then "Real video has neither" at 10.2 s, as the first two turn gray; held until its sheet whips off at 12.6 s |
 | 12.4 to 74.62 s | `compositions/demo.html` | The recording, with a camera and the speed label |
 | 42.1 s, 55.43 s | `compositions/sheet-add.html`, `sheet-zoom.html` | Chapter sheets, "Every stream, in step" and "Down to a strand of hair", that whip across the recording |
 | 74.12 to 84.62 s | `compositions/strengths.html` | "Any blur, layer by layer": the sequence at three bokeh strengths, looping beside All in focus |
@@ -102,7 +102,7 @@ The finished file measures:
 | | |
 |---|---|
 | Length | 98.71 s: 2961 frames at 30 fps (98.70 s), audio 98.71 s |
-| Size | 45.4 MB (45,409,020 bytes), 3.7 Mbit/s |
+| Size | 45.5 MB (45,503,812 bytes), 3.7 Mbit/s |
 | Video | H.264 High, level 4.1, yuv420p, bt709, 1920 × 1080 |
 | Audio | AAC LC, 48 kHz, stereo, 192 kbit/s |
 | Loudness | -18.0 LUFS integrated, loudness range 7.8 LU, true peak -2.1 dBTP |
@@ -237,7 +237,7 @@ them outside the repository.
    | `#streams` | `data-start`: `#strengths` plus 9.88, 84.0 s; `data-duration` 10.1, which its six loop videos and the closing tween (10.0 s) follow |
    | `#end` | `data-start`: `#streams` plus 9.5, 93.5 s; the root's `data-duration`: that plus 5.2, which is also the music's, since `music.mp3` carries its own fades; the card's content fades to the white ground over 0.8 s from 4.17 s in its own time (97.67 s), 0.2 s before the last frame, after V16 has ended (97.45 s) |
    | `#demo` and its video | `data-start` 12.4 (`DEMO_START`), `data-duration`: from 12.4 to 0.5 s after `#strengths` starts, 62.22 s |
-   | `#intro` | `data-duration` 13.1; the poster holds to 2.0 s, its lines rise out from 2.0 s (the subtitle from 2.3 s), and the slide's lines land word by word, 0.16 s apart, at 3.0 s (V1's second clause starts at about 3.7 s), 7.3 s (V2) and 10.2 s (V3); its sheet whips out at 12.6 s, 0.2 s after `#demo` starts |
+   | `#intro` | `data-duration` 13.1; the poster holds to 2.0 s, its lines rise out from 2.0 s (the subtitle from 2.3 s), and the slide's lines land word by word, 0.16 s apart, at 3.0 s (V1's second clause starts at about 3.7 s), 7.3 s (V2) and 10.2 s (V3), where the first two turn from ink to gray over 0.5 s; its sheet whips out at 12.6 s, 0.2 s after `#demo` starts |
    | `#dm-speed` in `demo.html` | the factor; shown at `generate` + 1.2 (16.1 s in the edit), once the camera has settled on the progress line, and faded out from 0.45 s before the sped-up span ends (20.55 s) |
    | the camera in `demo.html` | `push` 3.9 (the first beat of the take, `BEAT.push`), 11.5 (before the cursor drifts to Generate), `generate` + 0.2, `panes` + 0.05 (0.85 s long, so it ends before the press on Play), `add2` + 0.1 |
    | `#click-1` to `#click-17` | each press 0.04 s early, so the click peaks a frame after it (`#click-17`, the press on Play, at 74.08 s); the second of a double-click on track 13 |

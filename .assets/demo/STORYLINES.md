@@ -218,16 +218,21 @@ six panes at once.
   opening is enough. The poster stays frame 0 (`poster.png` is unchanged, since GitHub shows
   it until the video plays) and holds to 2.0 s, where V1 starts. Its lines then rise out and
   one slide builds on the same white ground, in the film's own look, with the three lines at
-  fixed positions so that nothing reflows: two gray lines, then the headline, in ink, as the
-  chapter headlines land. They are reduced echoes of V1 to V3, four or five words each.
+  fixed positions so that nothing reflows, centered on the frame as the poster is: two
+  lines of 72 px, then the headline, 116 px and 600, as the chapter headlines land. They are
+  reduced echoes of V1 to V3, four or five words each.
   Timing: the second and the third land as V2 (7.30) and V3 (10.10; the headline at 10.20)
   start. The first lands at 3.0 s and not at V1's start, 2.0 s: from 2.3 s it would have stood
   alone for 4.7 s before the second, and the film's rule is no stretch of identical frames
   over about 4 s. V1's second clause, "a model must know how far every pixel is", starts at
   about 3.7 s, so at 3.0 s the line lands a beat ahead of its words, and the longest stretch
-  is 3.7 s (3.6 to 7.3 s). The gray lines are 56 px, not 46: at the width GitHub plays the
-  video at, 46 px comes to about 20 px, which is small for the only text on screen for
-  seven seconds, and the headline still stands 1.9 times over them. Everything holds until
+  is 3.7 s (3.6 to 7.3 s). The first line stands alone for 4.3 s, so it has to carry the
+  frame: as a gray line of 56 px, about 24 px at the width GitHub plays the video at, it
+  read as a caption that had lost its headline. The two smaller lines are therefore 72 px
+  and land in ink. As the headline lands they step back to the secondary gray over 0.5 s,
+  which leaves the headline as the only ink on the slide, 1.6 times their size, and gives
+  the eye one more change at 10.2 s. They turn together, not one at each landing: they are
+  two needs of equal rank, and "neither" answers both. Everything holds until
   the whip at 12.6 s, so the sound, the click and the whoosh and every later time stay as
   they were. One slide, not several: the voice says one thought in three breaths, and each
   new slide would be a cut the voice does not make.

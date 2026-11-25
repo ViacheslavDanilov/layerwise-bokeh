@@ -14,8 +14,9 @@ SUBJECT: the paper's night scene: seed 245 from the demo's da2-large library, tw
 LOOK:    ground #ffffff; ink #171717; secondary #666666; lines #e5e5e5. No accent color.
          Inter (assets/fonts): titles 600 at 104-116 px, tracking -0.04 to -0.055 em;
          the strengths and streams headings 600 at 64 px; subtitle 400 at 46 px; the
-         opening's two gray lines 400 at 56 px, #666666; tile labels 500 at 32 px; the
-         speed label 600 at 32 px; end card links 42 px. No subtitles burned in.
+         opening's two smaller lines 400 at 72 px, ink until its headline lands and
+         #666666 after; tile labels 500 at 32 px; the speed label 600 at 32 px; end card
+         links 42 px. No subtitles burned in.
          The app is the screen recording, 1920 x 1080 CSS px at 2x. Pulled back it sits at
          scale 0.94 on the white ground: 14 px radius, a 1 px #dedede ring, shadows
          0 4px 12px and 0 30px 80px of #171717 at 6% and 12%. Pushed in, scale 1.17 to 2.4,
@@ -29,7 +30,8 @@ MOTION:  camera moves 1.0 s power2.inOut (0.9 s onto the progress line, 0.85 s o
          the strengths scene, the streams scene and the end card enter this way.
          headline words: opacity 0 to 1 and blur 8 to 0 px, 0.16 s each, 0.08 s apart, no
          move; landed lines hold still. The opening's three lines land the same way, but
-         0.16 s apart.
+         0.16 s apart, and its two smaller lines turn from ink to #666666, 0.5 s
+         power2.out, as its headline lands.
          the end card's lines rise 28 px into place, 0.55 s power3.out, title first, then
          each link. The poster's lines rise out the same way (28 px up, 0.6 s power2.inOut,
          opacity and blur to 0, the title at 2.0 s and the subtitle at 2.3 s); the poster
@@ -38,11 +40,13 @@ MOTION:  camera moves 1.0 s power2.inOut (0.9 s onto the progress line, 0.85 s o
 SHOTS (film seconds):
   0.00-2.00   poster, finished at frame 0: logo, "LayerWise", subtitle. Held still.
   2.00-2.90   the poster's lines rise out (title, then subtitle). V1 starts at 2.00.
-  3.00-12.60  one slide, three lines at fixed positions so nothing reflows, centered:
-              "Distance of every pixel" (400, 56 px, #666666) lands at 3.00, as V1's
-              second clause starts; "What hides behind each edge" (same) at 7.30 with V2;
-              "Real video has neither" (600, 104 px, #171717) at 10.20 with V3. All three
-              hold until the whip. No stretch of identical frames over 3.7 s.
+  3.00-12.60  one slide, three lines at fixed positions so nothing reflows, centered on
+              the frame (ink from y 382 to 698): "Distance of every pixel" (400, 72 px,
+              #171717) lands at 3.00, a beat before V1's second clause (about 3.7);
+              "What hides behind each edge" (same) at 7.30 with V2; "Real video has
+              neither" (600, 116 px, #171717) at 10.20, 0.1 s after V3 starts, and the
+              first two turn #666666 from 10.20 to 10.70. All three hold until the whip.
+              No stretch of identical frames over 3.7 s.
   12.60-13.05 the opening slide's sheet whips off to the left, onto the app at 0.94 already on
               screen: a falcon and a taxi playing in three panes, two objects in the header
               and in the sidebar. The cursor holds still until 16.8 s.
