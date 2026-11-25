@@ -192,7 +192,7 @@ six panes at once.
 - **No card text.** The earlier film's problem and solution cards are gone: a card of text
   and the voice reading it would say everything twice. The problem is said in the voice, and
   the opening slide shows it as tiles of the sequence, each with a noun phrase, "Distance of
-  every pixel" and "What hides behind each edge", and the verdict, "Real video has neither",
+  every pixel" and "What the next frame hides", and the verdict, "Real video has neither",
   so that a viewer without sound gets the problem and the voice adds the sentence.
 - **The voice.** 16 lines, each resting on the repository's own words, with numbers as
   words where a line has any. The estimator line describes the pipeline, which accepts a
@@ -226,8 +226,10 @@ six panes at once.
   line under it, and the headline below.
   Which data: the tiles are three of the six stream loops, the ones the voice names. All in
   focus is the video a model gets, the one thing real video has. Disparity is "how far every
-  pixel is", V1's second clause. Occlusion is "what hides behind each edge", V2: the cyan
-  outlines mark what the next frame hides, the woman's hair and the lantern's rim. The
+  pixel is", V1's second clause. Occlusion is V2's "what hides behind each edge": the cyan
+  outlines mark what the next frame hides, the woman's hair and the lantern's rim. Its line
+  reads "What the next frame hides", not V2's words, since the picture says what the mask
+  marks and the voice poses the question. The
   headline, "Real video has neither", is then true of the first tile: it holds colors and
   neither of the other two. Alpha, Bokeh and Optical flow answer neither line, and showing
   all six would spend the streams scene's payoff early, so they stay for it. The order is the

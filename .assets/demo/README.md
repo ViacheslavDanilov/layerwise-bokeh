@@ -40,7 +40,7 @@ remake them.
 
 | Time | Scene | Content |
 |---|---|---|
-| 0 to 13.1 s | `compositions/intro.html` | The poster, finished at frame 0 and held to 2.0 s; its lines rise out, and one slide builds under V1 to V3 from the sequence's loops: All in focus at 2.7 s, Disparity with "Distance of every pixel" at 3.65 s, Occlusion with "What hides behind each edge" at 7.3 s, then the headline "Real video has neither" at 10.2 s; held, the loops still playing, until its sheet whips off at 12.6 s |
+| 0 to 13.1 s | `compositions/intro.html` | The poster, finished at frame 0 and held to 2.0 s; its lines rise out, and one slide builds under V1 to V3 from the sequence's loops: All in focus at 2.7 s, Disparity with "Distance of every pixel" at 3.65 s, Occlusion with "What the next frame hides" at 7.3 s, then the headline "Real video has neither" at 10.2 s; held, the loops still playing, until its sheet whips off at 12.6 s |
 | 12.4 to 74.62 s | `compositions/demo.html` | The recording, with a camera and the speed label |
 | 42.1 s, 55.43 s | `compositions/sheet-add.html`, `sheet-zoom.html` | Chapter sheets, "Every stream, in step" and "Down to a strand of hair", that whip across the recording |
 | 74.12 to 84.62 s | `compositions/strengths.html` | "Any blur, layer by layer": the sequence at three bokeh strengths, looping beside All in focus |
@@ -52,7 +52,7 @@ them. The opening's lines are reduced echoes of V1 to V3, not a transcript. Its 
 three of the six stream loops, the ones the voice names: All in focus, the video a model
 sees, rises in at 2.7 s, once the title's lines have gone; Disparity, how far every pixel is,
 at 3.65 s, where V1's second clause starts, and its line lands at 4.3 s as V1 says how far;
-Occlusion, what hides behind each edge, as V2 starts at 7.3 s; the headline 0.1 s after V3
+Occlusion, which marks what the next frame hides, as V2 starts at 7.3 s; the headline 0.1 s after V3
 does. The loops keep the slide moving from 2.7 s to the whip, so the only still stretch in
 0 to 12.6 s is the poster's first 2.0 s. The tiles are 520 CSS px, larger than the 344 px
 of the other scenes, since the slide has three and nothing else to show: the 688 px frames
@@ -109,7 +109,7 @@ The finished file measures:
 | | |
 |---|---|
 | Length | 98.71 s: 2961 frames at 30 fps (98.70 s), audio 98.71 s |
-| Size | 47.9 MB (47,945,522 bytes), 3.9 Mbit/s |
+| Size | 48.5 MB (48,477,403 bytes), 3.9 Mbit/s |
 | Video | H.264 High, level 4.1, yuv420p, bt709, 1920 × 1080 |
 | Audio | AAC LC, 48 kHz, stereo, 192 kbit/s |
 | Loudness | -18.0 LUFS integrated, loudness range 7.8 LU, true peak -2.1 dBTP |

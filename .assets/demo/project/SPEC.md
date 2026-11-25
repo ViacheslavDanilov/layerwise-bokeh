@@ -46,7 +46,7 @@ SHOTS (film seconds):
               line under it (500, 40 px, #171717), and the headline below (600, 116 px,
               #171717, box from y 790). All in focus rises in at 2.70, its line lands at
               3.10; Disparity at 3.65, where V1's second clause starts, "Distance of every
-              pixel" at 4.30; Occlusion at 7.30 with V2, "What hides behind each edge" at
+              pixel" at 4.30; Occlusion at 7.30 with V2, "What the next frame hides" at
               7.70; "Real video has neither" at 10.20, 0.1 s after V3 starts. The three
               loops play frames 30 to 79 on one clock from 0 s, 0.2 s into the loop, so
               Occlusion rises in on the loop's first frame. All hold until the whip.
