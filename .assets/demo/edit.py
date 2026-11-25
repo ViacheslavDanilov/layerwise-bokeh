@@ -24,8 +24,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-GEN_EDIT = 3.6  # about how many seconds the generation wait takes in the edit
-DEMO_START = 4.8  # where the demo scene starts in the film, as in project/index.html
+GEN_EDIT = 5.8  # about how many seconds the generation wait takes in the edit
+DEMO_START = 12.4  # where the demo scene starts in the film, as in project/index.html
 CUT_FROM, CUT_TO = 0.9, 1.1  # the cut under the first chapter sheet, in seconds
 
 frames_dir = Path(sys.argv[1])

@@ -24,12 +24,12 @@
   </style>
   <div id="root" data-composition-id="streams" data-width="1920" data-height="1080">
     <div id="st-sheet">
-      <h2 id="st-heading"><span class="st-w">One</span> <span class="st-w">sequence.</span> <span class="st-w">Every</span> <span class="st-w">stream.</span></h2>
+      <h2 id="st-heading"><span class="st-w">Six</span> <span class="st-w">streams,</span> <span class="st-w">one</span> <span class="st-w">set</span> <span class="st-w">of</span> <span class="st-w">layers</span></h2>
       <div id="st-grid">
         <figure class="st-card">
           <div class="st-tile">
             <video id="st-all-in-focus" class="clip st-video" src="assets/readme-loops/all_in_focus.mp4"
-                   data-start="0" data-duration="6.5" data-media-start="1.54" data-track-index="1"
+                   data-start="0" data-duration="10.1" data-media-start="1.54" data-track-index="1"
                    muted playsinline preload="auto" aria-label="All in focus"></video>
           </div>
           <figcaption class="st-label">All in focus</figcaption>
@@ -37,7 +37,7 @@
         <figure class="st-card">
           <div class="st-tile">
             <video id="st-bokeh" class="clip st-video" src="assets/readme-loops/bokeh.mp4"
-                   data-start="0" data-duration="6.5" data-media-start="1.54" data-track-index="2"
+                   data-start="0" data-duration="10.1" data-media-start="1.54" data-track-index="2"
                    muted playsinline preload="auto" aria-label="Bokeh"></video>
           </div>
           <figcaption class="st-label">Bokeh</figcaption>
@@ -45,7 +45,7 @@
         <figure class="st-card">
           <div class="st-tile">
             <video id="st-occlusion" class="clip st-video" src="assets/readme-loops/occlusion.mp4"
-                   data-start="0" data-duration="6.5" data-media-start="1.54" data-track-index="6"
+                   data-start="0" data-duration="10.1" data-media-start="1.54" data-track-index="6"
                    muted playsinline preload="auto" aria-label="Occlusion"></video>
           </div>
           <figcaption class="st-label">Occlusion</figcaption>
@@ -53,7 +53,7 @@
         <figure class="st-card">
           <div class="st-tile">
             <video id="st-alpha" class="clip st-video" src="assets/readme-loops/alpha.mp4"
-                   data-start="0" data-duration="6.5" data-media-start="1.54" data-track-index="4"
+                   data-start="0" data-duration="10.1" data-media-start="1.54" data-track-index="4"
                    muted playsinline preload="auto" aria-label="Alpha"></video>
           </div>
           <figcaption class="st-label">Alpha</figcaption>
@@ -61,7 +61,7 @@
         <figure class="st-card">
           <div class="st-tile">
             <video id="st-disparity" class="clip st-video" src="assets/readme-loops/disparity.mp4"
-                   data-start="0" data-duration="6.5" data-media-start="1.54" data-track-index="3"
+                   data-start="0" data-duration="10.1" data-media-start="1.54" data-track-index="3"
                    muted playsinline preload="auto" aria-label="Disparity"></video>
           </div>
           <figcaption class="st-label">Disparity</figcaption>
@@ -69,7 +69,7 @@
         <figure class="st-card">
           <div class="st-tile">
             <video id="st-flow" class="clip st-video" src="assets/readme-loops/flow.mp4"
-                   data-start="0" data-duration="6.5" data-media-start="1.54" data-track-index="5"
+                   data-start="0" data-duration="10.1" data-media-start="1.54" data-track-index="5"
                    muted playsinline preload="auto" aria-label="Optical flow"></video>
           </div>
           <figcaption class="st-label">Optical flow</figcaption>
@@ -88,7 +88,7 @@
         tl.fromTo(w, { opacity: 0, filter: "blur(8px)" },
           { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, 0.45 + i * 0.09);
       });
-      tl.to({}, { duration: 0.01 }, 6.4);
+      tl.to({}, { duration: 0.01 }, 10.0);
       window.__timelines["streams"] = tl;
     })();
   </script>

@@ -1,0 +1,18 @@
+# id, start (s), latest end (s), text: the exact TTS input, tab separated. The product is spelled
+# "Layer Wise" for pronunciation only; the screen and the transcript write LayerWise.
+V1	2.00	6.90	To learn to blur by depth, a model must know how far every pixel is.
+V2	7.30	9.70	And what hides behind each edge.
+V3	10.10	12.20	Real video records neither.
+V4	13.50	17.60	Layer Wise builds its video from layers instead, so it knows both.
+V5	18.30	20.50	Pick a depth estimator, or bring your own.
+V6	22.10	26.90	A seed picks the sequence, and the same seed always gives it back.
+V7	35.10	40.40	One object holds the focus, and the rest blur by how far they are from it.
+V8	45.40	49.50	Add the streams you need. Every pane shows the same frame.
+V9	59.15	61.95	Hair is a hard edge, for depth and for blur.
+V10	62.20	66.70	Depth, flow and blur follow her matte, since all come from the same layers.
+V11	67.60	72.30	Step frame by frame: the occlusion mask marks what the next frame hides.
+V12	75.12	77.85	You set how strong the blur is, for any sequence.
+V13	78.10	83.50	Each layer is blurred on its own, so the lantern's soft edge shows what lies behind it.
+V14	85.00	88.55	Alpha keeps each object whole, even where another covers it.
+V15	88.80	93.30	One sequence holds the targets for depth, mattes, motion and blur.
+V16	94.50	97.80	Every seed makes another, even while your model trains.
