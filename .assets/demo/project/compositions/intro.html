@@ -13,6 +13,27 @@
       margin-top: 44px; width: 1420px; font-size: 46px; line-height: 1.4; font-weight: 400;
       letter-spacing: -0.025em; text-align: center; color: var(--muted);
     }
+    /* The one slide that builds under the voice: three tiles of the film's own data in a row, each with its line
+       under it, then the headline below. Every position is reserved from the start, so nothing reflows. */
+    #in-row {
+      position: absolute; left: 0; top: 150px; width: 1920px; display: flex;
+      justify-content: center; column-gap: 56px;
+    }
+    .in-card { width: 520px; }
+    .in-tile {
+      position: relative; width: 520px; height: 520px; overflow: hidden; border-radius: 12px;
+      background: #ffffff; box-shadow: 0 0 0 1px var(--line);
+    }
+    .in-video { position: absolute; left: 0; top: 0; width: 520px; height: 520px; object-fit: contain; }
+    .in-label {
+      width: max-content; margin: 22px auto 0; font-size: 40px; line-height: 48px; text-align: center;
+      font-weight: 500; letter-spacing: -0.03em; white-space: nowrap;
+    }
+    #in-head {
+      position: absolute; left: 0; top: 790px; width: 1920px; text-align: center; white-space: nowrap;
+      font-size: 116px; line-height: 1.06; font-weight: 600; letter-spacing: -0.04em;
+    }
+    .in-w { display: inline-block; opacity: 0; }
   </style>
   <div id="root" data-composition-id="intro" data-width="1920" data-height="1080">
     <div id="in-sheet">
@@ -23,13 +44,62 @@
         </div>
         <p id="in-subtitle">Synthetic video with exact depth,<br />rendered bokeh and optical flow</p>
       </div>
+      <div id="in-row">
+        <figure id="in-c1" class="in-card">
+          <div class="in-tile">
+            <video id="in-focus" class="clip in-video" src="assets/readme-loops/all_in_focus.mp4"
+                   data-start="0" data-duration="13.1" data-media-start="0.2" data-track-index="1"
+                   muted playsinline preload="auto" aria-label="All in focus"></video>
+          </div>
+          <figcaption class="in-label"><span class="in-w">All</span> <span class="in-w">in</span> <span class="in-w">focus</span></figcaption>
+        </figure>
+        <figure id="in-c2" class="in-card">
+          <div class="in-tile">
+            <video id="in-disparity" class="clip in-video" src="assets/readme-loops/disparity.mp4"
+                   data-start="0" data-duration="13.1" data-media-start="0.2" data-track-index="2"
+                   muted playsinline preload="auto" aria-label="Disparity"></video>
+          </div>
+          <figcaption class="in-label"><span class="in-w">Distance</span> <span class="in-w">of</span> <span class="in-w">every</span> <span class="in-w">pixel</span></figcaption>
+        </figure>
+        <figure id="in-c3" class="in-card">
+          <div class="in-tile">
+            <video id="in-occlusion" class="clip in-video" src="assets/readme-loops/occlusion.mp4"
+                   data-start="0" data-duration="13.1" data-media-start="0.2" data-track-index="3"
+                   muted playsinline preload="auto" aria-label="Occlusion"></video>
+          </div>
+          <figcaption class="in-label"><span class="in-w">What</span> <span class="in-w">the</span> <span class="in-w">next</span> <span class="in-w">frame</span> <span class="in-w">hides</span></figcaption>
+        </figure>
+      </div>
+      <h2 id="in-head"><span class="in-w">Real</span> <span class="in-w">video</span> <span class="in-w">has</span> <span class="in-w">neither</span></h2>
     </div>
   </div>
   <script>
     (function () {
-      // Frame 0 is the finished poster, and it holds still under the voice's first three lines.
-      // The sheet carrying it whips off to the left at 12.6 s, onto the app already on screen.
+      // Frame 0 is the finished poster, and it holds until the voice starts at 2.0 s. Its lines then rise out
+      // and one slide builds under the voice from the film's own data: All in focus, then Disparity with
+      // "Distance of every pixel" (V1), Occlusion with "What the next frame hides" (V2), and the headline
+      // (V3). A tile lands as the end card's lines do, rising 28 px with a blur-in; each line under it lands
+      // word by word as a chapter headline does. The three loops share one clock from the scene's start, 0.2 s
+      // into the loop, so they stay in step whenever a tile lands, and a cycle ends as the Occlusion tile lands
+      // (7.3 s) and again under the whip (12.93 s), so that it arrives on the loop's first frame. All hold until
+      // the sheet carrying them whips off to the left at 12.6 s, onto the app already on screen.
       const tl = gsap.timeline({ paused: true });
+      const out = (target, t) => tl.to(target, { y: -28, opacity: 0, filter: "blur(8px)", duration: 0.6, ease: "power2.inOut" }, t);
+      out("#in-brand", 2.0);
+      out("#in-subtitle", 2.3);
+      const rise = (card, t) => tl.fromTo(card, { y: 28, opacity: 0, filter: "blur(8px)" },
+        { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.6, ease: "power3.out" }, t);
+      const land = (line, t, gap) => document.querySelectorAll(line + " .in-w").forEach((w, i) => {
+        tl.fromTo(w, { opacity: 0, filter: "blur(8px)" },
+          { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, t + i * gap);
+      });
+      rise("#in-c1", 2.7);
+      land("#in-c1 .in-label", 3.1, 0.16);
+      rise("#in-c2", 3.65);
+      land("#in-c2 .in-label", 4.3, 0.16);
+      rise("#in-c3", 7.3);
+      land("#in-c3 .in-label", 7.7, 0.16);
+      land("#in-head", 10.2, 0.16);
       tl.to("#in-sheet", { x: -2050, duration: 0.45, ease: "power3.inOut" }, 12.6);
       tl.to("#in-sheet", { filter: "blur(10px)", duration: 0.22, ease: "power2.in" }, 12.6);
       window.__timelines["intro"] = tl;
