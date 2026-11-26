@@ -23,6 +23,8 @@ from layerwise_bokeh.scenes._compositor import RenderedFrame
 RENDERER = "layered"
 #: Names the torch device that renders a sequence's bokeh: ``cuda``, ``mps`` or ``cpu``.
 DEVICE_VARIABLE = "LAYERWISE_BOKEH_LAYERED_DEVICE"
+#: Caps the frames rendered together on memory-constrained deployments.
+CHUNK_VARIABLE = "LAYERWISE_BOKEH_LAYERED_CHUNK"
 #: Frames rendered at once. Eight 1024-pixel frames with five objects hold about 1 GiB of
 #: layers; a whole 80-frame sequence would hold ten.
 CHUNK = 8
@@ -82,12 +84,15 @@ def render_sequence(
     strength: float,
     device: torch.device,
 ) -> Iterator[Image.Image]:
-    """Each frame's bokeh as an RGB image, rendered ``CHUNK`` frames at a time."""
+    """Each frame's bokeh as an RGB image, rendered up to ``CHUNK`` frames at a time."""
+    chunk_size = int(os.environ.get(CHUNK_VARIABLE) or CHUNK)
+    if not 1 <= chunk_size <= CHUNK:
+        raise ValueError(f"{CHUNK_VARIABLE} must be between 1 and {CHUNK}")
     chunk: list[LayeredFrame] = []
     done = 0
     for frame in frames:
         chunk.append(frame)
-        if len(chunk) == CHUNK:
+        if len(chunk) == chunk_size:
             yield from _render_chunk(chunk, focus_disparity[done:], strength, device)
             done += len(chunk)
             chunk = []
