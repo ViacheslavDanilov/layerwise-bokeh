@@ -3,13 +3,14 @@
 import asyncio
 import re
 import shutil
+from contextlib import AsyncExitStack
 from dataclasses import replace
 
 from starlette.responses import JSONResponse
-from uvicorn._types import ASGIReceiveCallable, ASGISendCallable, Scope
+from starlette.types import Message, Receive, Scope, Send
 
 from layerwise_bokeh.api._settings import load_settings
-from layerwise_bokeh.api.main import create_app
+from layerwise_bokeh.api.main import NDJSON, create_app
 
 _CACHE_SIZE = 6
 _SEQUENCE_ID = re.compile(r"[0-9a-f]{16}")
@@ -33,55 +34,114 @@ def _prune_cache() -> None:
         shutil.rmtree(path)
 
 
-async def app(
-    scope: Scope, receive: ASGIReceiveCallable, send: ASGISendCallable
-) -> None:
-    if scope["type"] != "http":
-        await _api(scope, receive, send)
+async def _generate(scope: Scope, receive: Receive, send: Send) -> None:
+    if _generation.locked():
+        await JSONResponse(
+            {"detail": "A sequence is generating. Try again when it finishes."},
+            status_code=429,
+        )(scope, receive, send)
         return
 
-    path = scope["path"].removeprefix(scope.get("root_path", ""))
-    if scope["method"] == "POST" and path in ("/sequences", "/sequences/"):
-        if _generation.locked():
-            await JSONResponse(
-                {"detail": "A sequence is generating. Try again when it finishes."},
-                status_code=429,
-            )(scope, receive, send)
+    body_complete = False
+    disconnected = False
+    messages = asyncio.Queue[Message | None]()
+    response_end = None
+
+    async def receive_until_body_complete() -> Message:
+        nonlocal body_complete, disconnected
+        message = await receive()
+        if message["type"] == "http.request" and not message.get("more_body"):
+            body_complete = True
+        if message["type"] == "http.disconnect" and body_complete:
+            disconnected = True
+            await asyncio.Future()
+        return message
+
+    async def queue_response(message: Message) -> None:
+        nonlocal response_end
+        if message["type"] == "http.response.body" and not message.get("more_body"):
+            response_end = message
             return
+        if message["type"] == "http.response.start":
+            headers = list(message.get("headers", ()))
+            if (b"content-type", NDJSON.encode()) in headers:
+                message = {
+                    **message,
+                    "headers": [*headers, (b"x-accel-buffering", b"no")],
+                }
+        messages.put_nowait(message)
 
-        # The API continues generation in its worker after a browser disconnects.
-        # Keep consuming its progress so the admission slot is held until it finishes.
-        body_complete = False
-        disconnected = False
+    async def run_generation() -> None:
+        try:
+            try:
+                await _api(scope, receive_until_body_complete, queue_response)
+            finally:
+                async with _video:
+                    await asyncio.to_thread(_prune_cache)
+        finally:
+            _generation.release()
+            # Finishing the response tells the client it can start another generation.
+            if response_end is not None:
+                messages.put_nowait(response_end)
+            messages.put_nowait(None)
 
-        async def receive_until_body_complete():
-            nonlocal body_complete, disconnected
-            message = await receive()
-            if message["type"] == "http.request" and not message.get("more_body"):
-                body_complete = True
-            if message["type"] == "http.disconnect" and body_complete:
-                disconnected = True
-                await asyncio.Future()
-            return message
-
-        async def send_if_connected(message):
-            nonlocal disconnected
+    # Progress is bounded by the frame limit. Drain it independently of network
+    # writes so generation keeps its slot until the work and cache cleanup finish.
+    await _generation.acquire()
+    producer = asyncio.create_task(run_generation())
+    try:
+        while (message := await messages.get()) is not None:
             if not disconnected:
                 try:
                     await send(message)
                 except OSError:
                     disconnected = True
+    finally:
+        await asyncio.shield(producer)
 
-        async with _generation:
-            await _api(scope, receive_until_body_complete, send_if_connected)
-            async with _video:
-                await asyncio.to_thread(_prune_cache)
-        return
 
-    if path.startswith("/sequences/"):
-        # Encode at most one video at once and keep the file available until it is sent.
-        async with _video:
-            await _api(scope, receive, send)
-        return
+async def _serve_video(scope: Scope, receive: Receive, send: Send) -> None:
+    async with AsyncExitStack() as lookup:
+        await lookup.enter_async_context(_video)
+        start = None
 
+        async def send_video(message: Message) -> None:
+            nonlocal start
+            if message["type"] == "http.response.start":
+                start = message
+                return
+            if start is not None:
+                # FileResponse opens the MP4 before its first body message, even
+                # for Range requests. The open file survives cache eviction.
+                await lookup.aclose()
+                await send(start)
+                start = None
+            await send(message)
+
+        # Require FileResponse to open the file itself if a server offers pathsend.
+        if "http.response.pathsend" in scope.get("extensions", {}):
+            scope = {
+                **scope,
+                "extensions": {
+                    name: data
+                    for name, data in scope["extensions"].items()
+                    if name != "http.response.pathsend"
+                },
+            }
+        await _api(scope, receive, send_video)
+
+
+async def app(scope: Scope, receive: Receive, send: Send) -> None:
+    if scope["type"] == "http":
+        path = scope["path"].removeprefix(scope.get("root_path", ""))
+        if scope["method"] == "POST" and path in ("/sequences", "/sequences/"):
+            await _generate(scope, receive, send)
+            return
+        if (
+            scope["method"] == "GET"
+            and path.startswith("/sequences/")
+            and path.endswith(".mp4")
+        ):
+            await _serve_video(scope, receive, send)
+            return
     await _api(scope, receive, send)

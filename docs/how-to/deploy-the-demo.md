@@ -9,18 +9,20 @@ tags: [how-to, demo, deployment]
 Build and test the CPU demo locally, then run the same image on a virtual machine.
 Run the local commands from the repository root in Bash. You need Docker, Python 3, Git,
 curl, jq, and the [demo library](../../.assets/demo/README.md#the-demos-library).
-Keep the same shell open between steps so the variables stay set.
+Keep the same local shell open through the build, checks, and archive export.
 
 ## 1. Assemble and build
 
 Choose an empty output directory outside the checkout. A second assembly with the same
-inputs leaves the folder as it is.
+inputs leaves the folder as it is. For a VM deployment, run `uname -m` on the VM first.
+Use `linux/amd64` for `x86_64`, including when building on an ARM64 Mac. Use
+`linux/arm64` for `aarch64` or for a native build on an ARM64 Mac.
 
 ```bash
 work=$(mktemp -d "${TMPDIR:-/tmp}/layerwise-demo.XXXXXX")
 image=layerwise-demo:local
 python3 scripts/assemble_demo.py --out "$work/demo"
-BUILDX_CONFIG="$work/buildx" docker build -t "$image" "$work/demo"
+BUILDX_CONFIG="$work/buildx" docker build --platform linux/amd64 -t "$image" "$work/demo"
 ```
 
 ## 2. Start and measure
@@ -95,13 +97,10 @@ reverse proxy in front of the container if visitors will use a public domain.
 | RAM | 8 GB, or 16 GB if available |
 | Disk | 20 GB |
 
-The steps over SSH were not run on the virtual machine.
-
-1. Ship an image built for the VM's CPU architecture. If you use a registry, pull
-   the image on the VM and set `image` to the pulled tag. To ship an archive, save it
-   on the build host and copy it to the VM over SSH. In the VM's SSH session, set
-   `work` to the directory containing the copied archive and load it. Use the
-   tag printed by the load command if it differs from the tag below.
+1. Build for the VM's CPU architecture as shown in [Assemble and build](#1-assemble-and-build).
+   To ship an archive, save it on the build host and copy it into your home directory
+   on the VM over SSH. Load the archive in an SSH session. If you ship through a
+   registry, pull the image on the VM instead.
 
    ```bash
    set -o pipefail
@@ -109,21 +108,22 @@ The steps over SSH were not run on the virtual machine.
    ```
 
    ```bash
-   docker load -i "$work/layerwise-demo.tar.gz"
-   image=layerwise-demo:local
+   docker load -i "$HOME/layerwise-demo.tar.gz"
    ```
 
-2. Start the demo on port 7860 on the VM's loopback interface. Docker restarts the
-   container after a reboot unless it was explicitly stopped. For a local rehearsal,
-   set `host_port` to 17860 before starting.
+2. Start or update the demo on port 7860 on the VM's loopback interface. For an
+   update, repeat step 1 with the new image, then run this block in any SSH session.
+   It replaces the previous container and clears its sequence cache. Docker restarts
+   the container after a reboot unless it was explicitly stopped. Set `image` in the
+   current session if the loaded or pulled tag differs from `layerwise-demo:local`.
+   For a local rehearsal, set `host_port` to 17860 before running the block.
 
    ```bash
-   container=layerwise-demo
-   start_vm_demo() {
-     docker run -d --restart unless-stopped --name "$container" \
-       -p "127.0.0.1:${host_port:-7860}:7860" "$image"
-   }
-   start_vm_demo
+   if docker container inspect layerwise-demo >/dev/null 2>&1; then
+     docker stop layerwise-demo && docker rm layerwise-demo || exit 1
+   fi
+   docker run -d --restart unless-stopped --name layerwise-demo \
+     -p "127.0.0.1:${host_port:-7860}:7860" "${image:-layerwise-demo:local}"
    ```
 
 3. Check the page and library list. The first request should succeed, and the second
@@ -133,12 +133,4 @@ The steps over SSH were not run on the virtual machine.
    url="http://127.0.0.1:${host_port:-7860}"
    curl -fsS -o /dev/null -w 'Page HTTP %{http_code}\n' "$url/"
    curl -fsS "$url/api/libraries" | jq -e 'select(length == 4) | map(.name)'
-   ```
-
-4. To update, repeat step 1 with the new image. Stop and remove the old container,
-   then start the replacement. This clears the sequence cache. Repeat the checks
-   in step 3.
-
-   ```bash
-   docker stop "$container" && docker rm "$container" && start_vm_demo
    ```

@@ -15,13 +15,11 @@ ESTIMATORS = ("da2-base", "da2-large", "da2-small", "depth-pro")
 DEMO_FILES = (
     ".dockerignore",
     "Dockerfile",
-    "README.md",
     "nginx.conf",
     "demo_api.py",
     "start.sh",
 )
 SOURCE_PATHS = (
-    "LICENSE",
     "pyproject.toml",
     "uv.lock",
     "backend/pyproject.toml",
