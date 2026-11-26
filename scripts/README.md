@@ -1,8 +1,13 @@
 # Scripts
 
-These scripts set up model environments, check the prose of a change, and analyze the MAGICK
-asset pool.
+These scripts assemble the demo container build context, set up model environments, check
+the prose of a change, and analyze the MAGICK asset pool.
 Run commands from the repository root.
+
+## Assemble the demo container
+
+`assemble_demo.py` copies the web app, API, and demo library into a standalone build
+context. See [Assemble and build](../docs/how-to/deploy-the-demo.md#1-assemble-and-build).
 
 ## Set up Depth Anything 3
 

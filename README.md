@@ -87,6 +87,8 @@ read-only at `/data/library` and writes sequences to `/data/sequences`; both com
 costs roughly half again what it costs natively. The numbers are in
 [docs/reference/api.md](docs/reference/api.md).
 
+[Deploy the demo as a container](docs/how-to/deploy-the-demo.md).
+
 ## Generate Your Own Dataset
 
 Five steps take you from the source images to written sequences or a training loop, each with
