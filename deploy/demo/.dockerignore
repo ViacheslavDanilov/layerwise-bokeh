@@ -1,0 +1,14 @@
+**
+!Dockerfile
+!nginx.conf
+!start.sh
+!demo_api.py
+!pyproject.toml
+!uv.lock
+!backend/pyproject.toml
+!backend/src/**
+!backend/data/library_demo/**
+!frontend/**
+frontend/.next
+frontend/node_modules
+frontend/.env*

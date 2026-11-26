@@ -6,7 +6,10 @@
  * sequence that had none) shows in the interface without a change on this side.
  */
 
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const SAME_ORIGIN = process.env.NEXT_PUBLIC_LAYERWISE_SAME_ORIGIN === "1";
+const BASE = SAME_ORIGIN
+  ? "/api"
+  : (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000");
 
 export type LibraryInfo = {
   id: string;
@@ -103,6 +106,9 @@ async function readError(response: Response): Promise<never> {
 
 /** Turn a failed connection into the one thing the person can act on. */
 function unreachable(cause: unknown): never {
+  if (SAME_ORIGIN) {
+    throw new ApiError(`Cannot reach the demo API. (${String(cause)})`);
+  }
   throw new ApiError(
     `Cannot reach the API at ${BASE}. Start it with "uv run uvicorn layerwise_bokeh.api.main:app" ` +
       `from backend/, or set NEXT_PUBLIC_API_URL. (${String(cause)})`,
@@ -240,16 +246,19 @@ export function streamUrl(
     backward,
   }: { colormap?: string; overlay?: boolean; backward?: boolean } = {},
 ): string {
+  const resolve = (path: string) =>
+    SAME_ORIGIN
+      ? new URL(`${BASE}${path}`, window.location.origin)
+      : new URL(path, BASE);
   if (backward && stream.backward) {
     const direction =
       overlay && stream.overlay_backward
         ? stream.overlay_backward
         : stream.backward;
-    return new URL(direction, BASE).toString();
+    return resolve(direction).toString();
   }
-  if (overlay && stream.overlay)
-    return new URL(stream.overlay, BASE).toString();
-  const url = new URL(stream.url, BASE);
+  if (overlay && stream.overlay) return resolve(stream.overlay).toString();
+  const url = resolve(stream.url);
   if (
     colormap &&
     colormap !== stream.default &&
