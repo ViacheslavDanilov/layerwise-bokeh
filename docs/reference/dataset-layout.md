@@ -36,7 +36,8 @@ Built once per asset pool by `layerwise_bokeh.library.build`. Depth is estimated
 **Depth in the library is 16-bit, not 8-bit.** Each map is min/max-normalized to the full
 `[0, 65535]` range on write and read back as float32 in `[0, 1]`
 (`_library.py:_write_depth_png`). The absolute scale is dropped on purpose: the compositor
-percentile-stretches every map into a band, so only relative structure survives, and 16 bits
+percentile-stretches every map into a band, by the range of the whole stored map and not of
+the frame, so only relative structure survives, and 16 bits
 carry it without visible banding.
 
 `depth_raw.png` and `depth_input.png` are optional diagnostics written by Stage A.

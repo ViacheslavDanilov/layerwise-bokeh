@@ -23,6 +23,7 @@ from layerwise_bokeh.core._fusion import (
     assign_depth_slots,
     bg_normalize,
     place_in_band,
+    source_range,
 )
 from layerwise_bokeh.core._library import (
     BACKGROUNDS,
@@ -384,6 +385,10 @@ def iter_frames(
 ) -> Iterator[RenderedFrame]:
     """``render_scene`` one frame at a time, so a writer never holds the whole clip."""
     size = scene.size
+    # The relief ranges, once per clip and from the assets as stored: a range taken from
+    # each warped frame would change as an object scales, leaves the frame or is cropped.
+    bg_range = source_range(scene.background.depth)
+    object_ranges = [source_range(o.asset.depth, o.asset.alpha) for o in scene.objects]
 
     for i in range(scene.n_frames):
         t = 0.0 if scene.n_frames == 1 else i / (scene.n_frames - 1)
@@ -421,7 +426,7 @@ def iter_frames(
 
         rgb = bg_rgb.copy()
         union_alpha = np.zeros((size, size), dtype=np.float32)
-        disparity = bg_normalize(bg_disp, bg_band_top=scene.bg_band_top)
+        disparity = bg_normalize(bg_disp, bg_range, bg_band_top=scene.bg_band_top)
         # Indexed by object, not by draw order: the spec fixes each object to
         # one alpha channel for the whole clip, and paint order changes per
         # frame.
@@ -454,6 +459,7 @@ def iter_frames(
                 a,
                 band_lo,
                 band_hi,
+                object_ranges[idx],
             )
 
             a3 = a[..., None]
