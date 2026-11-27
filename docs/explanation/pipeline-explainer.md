@@ -178,6 +178,14 @@ than written. The manifest records the rejection count.
    this frame, alpha-composite it onto the canvas, and record its mask separately.
 4. Write the three streams.
 
+**Each layer is stretched by one range for the whole clip, never the frame's.** An object's
+range is the 1st to 99th percentile of its disparity under its matte, as the library stores
+it, so a point of the object keeps its place in its interval however the warp crops or scales
+the object. The background's range is that of the pixels any frame of the clip shows, found by
+warping the background once for every frame before rendering. The library stores each
+background larger than the frame, for panning. A range over the whole map would include
+margins no frame shows and leave the visible part a slice of the band.
+
 **Paint order is recomputed every frame.** Two objects that swap depth mid-clip swap which one
 occludes the other, which is the whole point of letting them move.
 

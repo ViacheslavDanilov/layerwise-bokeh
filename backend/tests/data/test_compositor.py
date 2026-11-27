@@ -391,6 +391,203 @@ def test_shrunk_range_still_shapes_the_object(tmp_path) -> None:
     assert spread > 0.006, f"object collapsed to a depth plate: spread={spread}"
 
 
+def test_a_surface_point_keeps_its_disparity_when_the_object_leaves_the_frame(
+    tmp_path,
+) -> None:
+    # The band is constant here, so a point of the object may not change disparity as the
+    # object slides out of the frame. Stretching each frame's visible depth into the band
+    # would move it, because the cut-off part changes the percentiles.
+    from layerwise_bokeh.core._library import (
+        load_background,
+        load_foreground,
+        write_background,
+        write_foreground,
+    )
+    from layerwise_bokeh.core._sequence_geometry import Pose
+    from layerwise_bokeh.core._trajectory import DepthRange
+    from layerwise_bokeh.scenes._compositor import ObjectTrack, Scene
+
+    size = 32
+    rgba = np.zeros((size, size, 4), dtype=np.uint8)
+    rgba[4:28, 4:28, :3] = 180
+    rgba[4:28, 4:28, 3] = 255
+    depth = np.tile(np.linspace(0.1, 0.9, size, dtype=np.float32), (size, 1))
+    write_foreground(
+        tmp_path,
+        "fg_grad",
+        Image.fromarray(rgba, "RGBA"),
+        (rgba[..., 3] / 255.0).astype(np.float32),
+        depth,
+    )
+    write_background(
+        tmp_path,
+        "bg",
+        Image.new("RGB", (size, size), (30, 30, 30)),
+        np.full((size, size), 0.02, dtype=np.float32),
+    )
+    band = DepthRange(0.40, 0.50)
+    obj = ObjectTrack(
+        asset=load_foreground(tmp_path, "fg_grad"),
+        slot=(0.20, 0.80),
+        pose_start=Pose(tx=0.0, scale=0.5),
+        pose_end=Pose(tx=0.4, scale=0.5),
+        easing="easeInOutSine",
+        depth_start=band,
+        depth_end=band,
+    )
+    scene = Scene(
+        background=load_background(tmp_path, "bg"),
+        objects=[obj],
+        bg_pose_start=Pose(scale=1.0),
+        bg_pose_end=Pose(scale=1.0),
+        bg_easing="easeInOutSine",
+        n_frames=2,
+        size=size,
+    )
+    first, last = render_scene(scene)
+
+    # The object slides 0.4 frames, 12.8 pixels, to the right: the point at column 18 is
+    # now at the frame's last column, the cut-off edge of what stays visible.
+    here = first.disparity[16, 18]
+    there = last.disparity[16, 31]
+    assert last.alpha[16, 31] > 0.99
+    assert abs(float(here) - float(there)) < 0.01
+
+
+def test_a_zoomed_background_keeps_the_disparity_of_what_stays_in_view(
+    tmp_path,
+) -> None:
+    # Zooming in crops the background to its middle half. Its disparity there stays what
+    # it was, the middle half of the band, and does not stretch to fill the band again.
+    from layerwise_bokeh.core._library import load_background
+    from layerwise_bokeh.core._sequence_geometry import Pose
+    from layerwise_bokeh.scenes._compositor import Scene
+
+    size = 32
+    write_background(
+        tmp_path,
+        "bg",
+        Image.new("RGB", (size, size), (30, 30, 30)),
+        np.tile(np.linspace(0.0, 1.0, size, dtype=np.float32), (size, 1)),
+    )
+    scene = Scene(
+        background=load_background(tmp_path, "bg"),
+        objects=[],
+        bg_pose_start=Pose(scale=1.0),
+        bg_pose_end=Pose(scale=2.0),
+        bg_easing="easeInOutSine",
+        n_frames=2,
+        size=size,
+    )
+    first, last = render_scene(scene)
+
+    spread_first = float(first.disparity.max() - first.disparity.min())
+    spread_last = float(last.disparity.max() - last.disparity.min())
+    assert spread_last < 0.7 * spread_first
+    assert abs(float(first.disparity[16, 16]) - float(last.disparity[16, 16])) < 0.002
+
+
+def test_the_background_range_ignores_the_margin_no_frame_shows(tmp_path) -> None:
+    # The library keeps a background larger than the frame for panning. Its depth falls
+    # from 0 at the left edge to 1 at the right, and the frame shows the middle two
+    # thirds. That part must still fill the band, not the middle third of it.
+    from layerwise_bokeh.core._library import load_background
+    from layerwise_bokeh.core._sequence_geometry import Pose
+    from layerwise_bokeh.scenes._compositor import Scene
+
+    size = 32
+    src = 48
+    write_background(
+        tmp_path,
+        "bg",
+        Image.new("RGB", (src, src), (30, 30, 30)),
+        np.tile(np.linspace(0.0, 1.0, src, dtype=np.float32), (src, 1)),
+    )
+    scene = Scene(
+        background=load_background(tmp_path, "bg"),
+        objects=[],
+        bg_pose_start=Pose(scale=1.0),
+        bg_pose_end=Pose(scale=1.0),
+        bg_easing="easeInOutSine",
+        n_frames=2,
+        size=size,
+    )
+    frame = render_scene(scene)[0]
+
+    assert float(frame.disparity.min()) < 0.005
+    assert float(frame.disparity.max()) > 0.045
+
+
+def test_a_panning_background_keeps_one_range_for_the_clip(tmp_path) -> None:
+    # The camera pans across a background twice the frame's width: the first frame shows
+    # source columns 8 to 40, the last 24 to 56. A point both frames show keeps its
+    # disparity, and the two frames together fill the band, not each one alone.
+    from layerwise_bokeh.core._library import load_background
+    from layerwise_bokeh.core._sequence_geometry import Pose
+    from layerwise_bokeh.scenes._compositor import Scene
+
+    size = 32
+    src = 64
+    write_background(
+        tmp_path,
+        "bg",
+        Image.new("RGB", (src, src), (30, 30, 30)),
+        np.tile(np.linspace(0.0, 1.0, src, dtype=np.float32), (src, 1)),
+    )
+    scene = Scene(
+        background=load_background(tmp_path, "bg"),
+        objects=[],
+        bg_pose_start=Pose(tx=-0.25, scale=1.0),
+        bg_pose_end=Pose(tx=0.25, scale=1.0),
+        bg_easing="easeInOutSine",
+        n_frames=2,
+        size=size,
+    )
+    first, last = render_scene(scene)
+    top = scene.bg_band_top
+
+    # Source column 32 is the first frame's column 24 and the last frame's column 8.
+    assert abs(float(first.disparity[16, 24]) - float(last.disparity[16, 8])) < 1e-4
+    assert float(first.disparity.min()) < 0.1 * top
+    assert float(first.disparity.max()) < 0.8 * top
+    assert float(last.disparity.max()) > 0.9 * top
+
+
+def test_a_frame_above_the_range_grid_takes_its_range_from_all_of_it(tmp_path) -> None:
+    # Above _RANGE_GRID pixels a side, the range comes from a coarser warp of each frame.
+    # That warp must still cover the whole frame: a range from part of it would pin the
+    # rest to an end of the band, and one from beyond it would leave the ends unused.
+    from layerwise_bokeh.core._library import load_background
+    from layerwise_bokeh.core._sequence_geometry import Pose
+    from layerwise_bokeh.scenes._compositor import _RANGE_GRID, Scene
+
+    size = _RANGE_GRID + 64
+    src = size * 3 // 2
+    write_background(
+        tmp_path,
+        "bg",
+        Image.new("RGB", (src, src), (30, 30, 30)),
+        np.tile(np.linspace(0.0, 1.0, src, dtype=np.float32), (src, 1)),
+    )
+    scene = Scene(
+        background=load_background(tmp_path, "bg"),
+        objects=[],
+        bg_pose_start=Pose(scale=1.0),
+        bg_pose_end=Pose(scale=1.0),
+        bg_easing="easeInOutSine",
+        n_frames=1,
+        size=size,
+    )
+    disparity = render_scene(scene)[0].disparity
+    top = scene.bg_band_top
+
+    assert float(disparity.min()) < 0.1 * top
+    assert float(disparity.max()) > 0.9 * top
+    # The 1st and 99th percentiles pin about 1 % of the frame to each end of the band.
+    assert float(np.mean(disparity <= 1e-6)) < 0.03
+    assert float(np.mean(disparity >= top - 1e-6)) < 0.03
+
+
 def test_unrestricted_mode_moves_disparity_over_the_clip(tmp_path) -> None:
     _tiny_library(tmp_path)
     scene = sample_scene(

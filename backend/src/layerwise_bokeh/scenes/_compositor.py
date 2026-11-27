@@ -23,6 +23,7 @@ from layerwise_bokeh.core._fusion import (
     assign_depth_slots,
     bg_normalize,
     place_in_band,
+    source_range,
 )
 from layerwise_bokeh.core._library import (
     BACKGROUNDS,
@@ -56,6 +57,8 @@ from layerwise_bokeh.core._trajectory import (
 _ACTIVE_WIDTH = 0.08
 _MAX_SAMPLE_TRIES = 50
 _MAX_RANGE_TRIES = 100
+_RANGE_GRID = 256
+_FULL_COVERAGE = 0.999
 
 
 class CollisionRetriesExhausted(RuntimeError):
@@ -330,6 +333,30 @@ def _background_homography(scene: Scene, t: float) -> np.ndarray:
     return build_bg_homography(pose, scene.background.rgb.size[0], scene.size)
 
 
+def _visible_background_range(scene: Scene) -> tuple[float, float]:
+    """The relief range of the background pixels that some frame of the clip shows.
+
+    The library stores a background larger than the frame, to leave room for panning, so
+    its whole map would reach into margins no frame shows and the visible part would fill
+    only a slice of the band. Pixels a warp leaves empty are left out. Each frame is
+    warped onto a grid of at most ``_RANGE_GRID`` pixels a side. That keeps the pass to a
+    few percent of a render, and moves the stretched disparity by a few 16-bit steps at
+    most against warps at full size.
+    """
+    depth = scene.background.depth
+    ones = np.ones_like(depth)
+    grid = min(scene.size, _RANGE_GRID)
+    shrink = np.diag([grid / scene.size, grid / scene.size, 1.0])
+    seen = []
+    for i in range(scene.n_frames):
+        t = 0.0 if scene.n_frames == 1 else i / (scene.n_frames - 1)
+        h = shrink @ _background_homography(scene, t)
+        warped = warp_depth(depth, h, grid)
+        covered = warp_depth(ones, h, grid) > _FULL_COVERAGE
+        seen.append(warped[covered])
+    return source_range(np.concatenate(seen))
+
+
 def _object_homography(scene: Scene, obj: ObjectTrack, t: float) -> np.ndarray:
     """An object's forward homography at time ``t`` in [0, 1]."""
     pose = obj.pose_start.lerp(obj.pose_end, EASING_FNS[obj.easing](t))
@@ -384,6 +411,11 @@ def iter_frames(
 ) -> Iterator[RenderedFrame]:
     """``render_scene`` one frame at a time, so a writer never holds the whole clip."""
     size = scene.size
+    # The relief ranges, once per clip: a range taken from each warped frame would change
+    # as an object scales, leaves the frame or is cropped. An object's is its whole matte,
+    # the background's is the part of it any frame shows.
+    bg_range = _visible_background_range(scene)
+    object_ranges = [source_range(o.asset.depth, o.asset.alpha) for o in scene.objects]
 
     for i in range(scene.n_frames):
         t = 0.0 if scene.n_frames == 1 else i / (scene.n_frames - 1)
@@ -421,7 +453,7 @@ def iter_frames(
 
         rgb = bg_rgb.copy()
         union_alpha = np.zeros((size, size), dtype=np.float32)
-        disparity = bg_normalize(bg_disp, bg_band_top=scene.bg_band_top)
+        disparity = bg_normalize(bg_disp, bg_range, bg_band_top=scene.bg_band_top)
         # Indexed by object, not by draw order: the spec fixes each object to
         # one alpha channel for the whole clip, and paint order changes per
         # frame.
@@ -454,6 +486,7 @@ def iter_frames(
                 a,
                 band_lo,
                 band_hi,
+                object_ranges[idx],
             )
 
             a3 = a[..., None]
