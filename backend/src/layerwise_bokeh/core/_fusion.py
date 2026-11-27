@@ -23,12 +23,13 @@ def _unit_position(disp: np.ndarray, p_lo: float, p_hi: float) -> np.ndarray:
 def source_range(
     disp: np.ndarray, alpha: np.ndarray | None = None
 ) -> tuple[float, float]:
-    """The 1st and 99th percentile of an asset's own disparity: the range its relief spans.
+    """The 1st and 99th percentile of a layer's disparity: the range its relief spans.
 
-    Taken once per asset, from the map as the library stores it, never from a warped frame:
-    a warp that crops, zooms or hides part of the asset would move the percentiles, and the
-    same surface point would then get a different disparity from one frame to the next.
-    With ``alpha``, only the pixels where ``alpha > 0`` count, as an object's relief does.
+    Taken once per clip, never from a single warped frame: a warp that crops, zooms or
+    hides part of the layer would move the percentiles, and the same surface point would
+    then get a different disparity from one frame to the next. An object passes its map
+    as the library stores it, with ``alpha``, so only the pixels where ``alpha > 0``
+    count. The background passes the pixels that some frame of the clip shows.
     """
     region = disp if alpha is None else disp[alpha > 0]
     if region.size == 0:

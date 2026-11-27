@@ -339,8 +339,9 @@ def _visible_background_range(scene: Scene) -> tuple[float, float]:
     The library stores a background larger than the frame, to leave room for panning, so
     its whole map would reach into margins no frame shows and the visible part would fill
     only a slice of the band. Pixels a warp leaves empty are left out. Each frame is
-    warped onto a grid of at most ``_RANGE_GRID`` pixels a side, which moves a percentile
-    by far less than a disparity step and costs a sixteenth of a full warp at 1024 pixels.
+    warped onto a grid of at most ``_RANGE_GRID`` pixels a side. That keeps the pass to a
+    few percent of a render, and moves the stretched disparity by a few 16-bit steps at
+    most against warps at full size.
     """
     depth = scene.background.depth
     ones = np.ones_like(depth)
