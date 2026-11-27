@@ -708,6 +708,7 @@ def test_written_layers_give_back_the_written_frame(tmp_path) -> None:
             "--layers",
         ],
     )
+    opaque_pixels = 0
     for seq in sorted((out / "sequences").iterdir()):
         layers = seq / "layers"
         order = read_paint_order(layers / "paint_order.json")
@@ -728,23 +729,31 @@ def test_written_layers_give_back_the_written_frame(tmp_path) -> None:
             disparity = read_disparity_png(
                 layers / "background_disparity" / f"{stem}.png",
             )
+            front = np.full(rgb.shape[:2], -1)
             for k in frame_order:
                 a = alphas[k]
                 rgb = a[..., None] * colors[k] + (1.0 - a[..., None]) * rgb
                 disparity = a * disparities[k] + (1.0 - a) * disparity
+                front[a > 0] = k
 
             aif = _read_png(seq / "all_in_focus" / f"{stem}.png")
             uncovered = np.stack(alphas).max(axis=0) == 0
             assert uncovered.any()
             np.testing.assert_array_equal(rgb[uncovered], aif[uncovered])
-            # The frame and each layer are truncated to 8 bits on their own: under one
-            # and a half levels apart, measured under one.
-            assert np.abs(rgb - aif).max() < 1.5
+            # Where the nearest object is opaque, the frame holds its color exactly.
+            for k in frame_order:
+                opaque = (front == k) & (alphas[k] == 1.0)
+                opaque_pixels += int(opaque.sum())
+                np.testing.assert_array_equal(aif[opaque], colors[k][opaque])
+            # The layers hold whole levels and the fixture's alpha is exact, so the
+            # composite is the frame before it was rounded: half a level at most.
+            assert np.abs(rgb - aif).max() <= 0.5
             written = read_disparity_png(seq / "disparity" / f"{stem}.png")
             # The fixture's alpha comes from 8-bit images, so the stored alpha is exact.
             # Each disparity map is off by half a 16-bit step at most, so the two sides
             # differ by one step.
             assert np.abs(disparity - written).max() <= 1 / 65535 + 1e-6
+    assert opaque_pixels
 
 
 def test_no_layers_are_written_unless_asked(tmp_path) -> None:
