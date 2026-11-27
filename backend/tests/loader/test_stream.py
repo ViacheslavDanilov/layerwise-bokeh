@@ -92,8 +92,8 @@ def test_matches_what_the_dataset_writer_writes(library: Path, tmp_path: Path) -
         [np.asarray(Image.open(p)) for p in sorted((seq / "all_in_focus").iterdir())],
     )
     streamed_rgb = item["rgb"].permute(0, 2, 3, 1).numpy() * 255.0
-    # The writer truncates to uint8; one level either way is float rounding.
-    assert np.abs(written_rgb - streamed_rgb).max() <= 1.0
+    # The writer rounds to uint8, half a level at most; the rest is float error.
+    assert np.abs(written_rgb - streamed_rgb).max() <= 0.5 + 1e-4
 
     written_disp = np.stack(
         [read_disparity_png(p) for p in sorted((seq / "disparity").iterdir())],
@@ -530,7 +530,7 @@ def test_draws_the_split_the_writer_draws(tmp_path: Path) -> None:
         ],
     )
     streamed = item["rgb"].permute(0, 2, 3, 1).numpy() * 255.0
-    assert np.abs(written - streamed).max() <= 1.0
+    assert np.abs(written - streamed).max() <= 0.5 + 1e-4
 
 
 def test_a_split_without_assets_is_refused_up_front(library: Path) -> None:
