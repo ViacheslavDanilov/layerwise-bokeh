@@ -76,6 +76,11 @@ def quantize_alpha(mask: np.ndarray) -> np.ndarray:
     return (np.clip(mask, 0.0, 1.0) * _U8_MAX).round().astype(np.uint8)
 
 
+def quantize_rgb(image: np.ndarray) -> np.ndarray:
+    """A color image in ``[0, 255]`` as the uint8 every color stream stores, rounded."""
+    return np.clip(image, 0, _U8_MAX).round().astype(np.uint8)
+
+
 def read_alpha_tiff(path: Path) -> list[np.ndarray]:
     """Read the pages back as float32 in [0, 1], preserving order."""
     return [page / _U8_MAX for page in _read_pages(path)]
@@ -84,10 +89,10 @@ def read_alpha_tiff(path: Path) -> list[np.ndarray]:
 def write_rgb_tiff(path: Path, images: list[np.ndarray]) -> None:
     """Write one RGB uint8 page per ``(H, W, 3)`` image in ``[0, 255]``, in order.
 
-    Page ``k`` is object ``k``, as in the alpha stream. Values are truncated, as the
+    Page ``k`` is object ``k``, as in the alpha stream. Values are rounded, as the
     all-in-focus stream's are, so an opaque pixel matches that stream's byte for byte.
     """
-    pages = np.stack([np.clip(im, 0, _U8_MAX).astype(np.uint8) for im in images])
+    pages = np.stack([quantize_rgb(im) for im in images])
     _write_pages(path, pages, "rgb")
 
 

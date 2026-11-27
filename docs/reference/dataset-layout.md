@@ -160,7 +160,7 @@ layers/
   is `all_in_focus`, and the same with the disparities gives `disparity`, up to the rounding of
   each file. The order is recorded because it changes from frame to frame, and because soft
   edges of objects at similar disparity may overlap.
-- **Quantized like the other streams.** Color is truncated to 8 bits as `all_in_focus` is, so
+- **Quantized like the other streams.** Color is rounded to 8 bits as `all_in_focus` is, so
   a pixel no object covers matches it exactly. Disparity is 16-bit as `disparity` is.
 - **The TIFFs follow the alpha stream's rules**: multi-page, deflate, read with Pillow.
   `src/layerwise_bokeh/core/_streams.py` holds both sides of both formats.
