@@ -57,6 +57,8 @@ from layerwise_bokeh.core._trajectory import (
 _ACTIVE_WIDTH = 0.08
 _MAX_SAMPLE_TRIES = 50
 _MAX_RANGE_TRIES = 100
+_RANGE_GRID = 256
+_FULL_COVERAGE = 0.999
 
 
 class CollisionRetriesExhausted(RuntimeError):
@@ -331,6 +333,29 @@ def _background_homography(scene: Scene, t: float) -> np.ndarray:
     return build_bg_homography(pose, scene.background.rgb.size[0], scene.size)
 
 
+def _visible_background_range(scene: Scene) -> tuple[float, float]:
+    """The relief range of the background pixels that some frame of the clip shows.
+
+    The library stores a background larger than the frame, to leave room for panning, so
+    its whole map would reach into margins no frame shows and the visible part would fill
+    only a slice of the band. Pixels a warp leaves empty are left out. Each frame is
+    warped onto a grid of at most ``_RANGE_GRID`` pixels a side, which moves a percentile
+    by far less than a disparity step and costs a sixteenth of a full warp at 1024 pixels.
+    """
+    depth = scene.background.depth
+    ones = np.ones_like(depth)
+    grid = min(scene.size, _RANGE_GRID)
+    shrink = np.diag([grid / scene.size, grid / scene.size, 1.0])
+    seen = []
+    for i in range(scene.n_frames):
+        t = 0.0 if scene.n_frames == 1 else i / (scene.n_frames - 1)
+        h = shrink @ _background_homography(scene, t)
+        warped = warp_depth(depth, h, grid)
+        covered = warp_depth(ones, h, grid) > _FULL_COVERAGE
+        seen.append(warped[covered])
+    return source_range(np.concatenate(seen))
+
+
 def _object_homography(scene: Scene, obj: ObjectTrack, t: float) -> np.ndarray:
     """An object's forward homography at time ``t`` in [0, 1]."""
     pose = obj.pose_start.lerp(obj.pose_end, EASING_FNS[obj.easing](t))
@@ -385,9 +410,10 @@ def iter_frames(
 ) -> Iterator[RenderedFrame]:
     """``render_scene`` one frame at a time, so a writer never holds the whole clip."""
     size = scene.size
-    # The relief ranges, once per clip and from the assets as stored: a range taken from
-    # each warped frame would change as an object scales, leaves the frame or is cropped.
-    bg_range = source_range(scene.background.depth)
+    # The relief ranges, once per clip: a range taken from each warped frame would change
+    # as an object scales, leaves the frame or is cropped. An object's is its whole matte,
+    # the background's is the part of it any frame shows.
+    bg_range = _visible_background_range(scene)
     object_ranges = [source_range(o.asset.depth, o.asset.alpha) for o in scene.objects]
 
     for i in range(scene.n_frames):

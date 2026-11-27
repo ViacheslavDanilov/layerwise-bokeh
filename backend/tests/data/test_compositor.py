@@ -487,6 +487,70 @@ def test_a_zoomed_background_keeps_the_disparity_of_what_stays_in_view(
     assert abs(float(first.disparity[16, 16]) - float(last.disparity[16, 16])) < 0.002
 
 
+def test_the_background_range_ignores_the_margin_no_frame_shows(tmp_path) -> None:
+    # The library keeps a background larger than the frame for panning. Its depth falls
+    # from 0 at the left edge to 1 at the right, and the frame shows the middle two
+    # thirds. That part must still fill the band, not the middle third of it.
+    from layerwise_bokeh.core._library import load_background
+    from layerwise_bokeh.core._sequence_geometry import Pose
+    from layerwise_bokeh.scenes._compositor import Scene
+
+    size = 32
+    src = 48
+    write_background(
+        tmp_path,
+        "bg",
+        Image.new("RGB", (src, src), (30, 30, 30)),
+        np.tile(np.linspace(0.0, 1.0, src, dtype=np.float32), (src, 1)),
+    )
+    scene = Scene(
+        background=load_background(tmp_path, "bg"),
+        objects=[],
+        bg_pose_start=Pose(scale=1.0),
+        bg_pose_end=Pose(scale=1.0),
+        bg_easing="easeInOutSine",
+        n_frames=2,
+        size=size,
+    )
+    frame = render_scene(scene)[0]
+
+    assert float(frame.disparity.min()) < 0.005
+    assert float(frame.disparity.max()) > 0.045
+
+
+def test_a_panning_background_keeps_one_range_for_the_clip(tmp_path) -> None:
+    # The camera pans across a background twice the frame's width. A point shown in both
+    # frames keeps its disparity, and across the clip the band is filled.
+    from layerwise_bokeh.core._library import load_background
+    from layerwise_bokeh.core._sequence_geometry import Pose
+    from layerwise_bokeh.scenes._compositor import Scene
+
+    size = 32
+    src = 64
+    write_background(
+        tmp_path,
+        "bg",
+        Image.new("RGB", (src, src), (30, 30, 30)),
+        np.tile(np.linspace(0.0, 1.0, src, dtype=np.float32), (src, 1)),
+    )
+    scene = Scene(
+        background=load_background(tmp_path, "bg"),
+        objects=[],
+        bg_pose_start=Pose(tx=-0.5, scale=1.0),
+        bg_pose_end=Pose(tx=0.5, scale=1.0),
+        bg_easing="easeInOutSine",
+        n_frames=2,
+        size=size,
+    )
+    first, last = render_scene(scene)
+
+    # The first frame shows source columns 0 to 32, the last 32 to 64: the whole map in
+    # all, so the first fills the lower half of the band and the last the upper half.
+    assert float(first.disparity.max()) < 0.03
+    assert float(last.disparity.min()) > 0.02
+    assert float(last.disparity.max()) > 0.045
+
+
 def test_unrestricted_mode_moves_disparity_over_the_clip(tmp_path) -> None:
     _tiny_library(tmp_path)
     scene = sample_scene(
