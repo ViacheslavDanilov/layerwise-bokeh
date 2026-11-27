@@ -175,11 +175,15 @@ than written. The manifest records the rejection count.
 1. Warp the background's color and depth by its homography.
 2. Sort objects by the center of their disparity interval **for this frame**, far to near.
 3. For each, in that order: warp its color and depth, stretch its depth into its interval for
-   this frame, alpha-composite it onto the canvas, and record its mask separately. The
-   stretch maps the asset's own 1st to 99th percentile of depth onto the interval, so a point
-   of the object keeps its place in it however the warp crops or scales the object. The
-   background is stretched the same way into its band.
+   this frame, alpha-composite it onto the canvas, and record its mask separately.
 4. Write the three streams.
+
+**The stretch uses one range per asset, never the frame's.** An object's range is the 1st to
+99th percentile of its disparity under its matte, as the library stores it, so a point of the
+object keeps its place in its interval however the warp crops or scales the object. The
+background's range is that of its whole map. The library stores each background larger than
+the frame, for panning, so a frame shows only part of it, and its disparity can span less than
+the background band.
 
 **Paint order is recomputed every frame.** Two objects that swap depth mid-clip swap which one
 occludes the other, which is the whole point of letting them move.

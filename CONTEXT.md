@@ -147,8 +147,8 @@ _Avoid_: depth range
 
 **Relief**:
 The shape of disparity inside one layer: the asset's disparity map from the library,
-stretched, by the percentile range of the asset's whole map, to fill the object's active
-band on every frame, or the background band.
+stretched into the object's active band on every frame, or into the background band, by one
+range taken from the asset itself, never from the frame.
 _Avoid_: depth detail, in-object depth
 
 **Trajectory**:
