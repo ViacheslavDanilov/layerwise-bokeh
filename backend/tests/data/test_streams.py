@@ -14,6 +14,7 @@ import pytest
 from PIL import Image
 
 from layerwise_bokeh.core._streams import (
+    quantize_rgb,
     read_alpha_tiff,
     read_disparity_png,
     read_disparity_tiff,
@@ -28,6 +29,7 @@ from layerwise_bokeh.core._streams import (
     write_paint_order,
     write_rgb_tiff,
 )
+from layerwise_bokeh.scenes.generate import _write_rgb_png
 
 _U8_STEP = 1.0 / 255.0
 _U16_STEP = 1.0 / 65535.0
@@ -186,9 +188,34 @@ def test_object_colors_round_trip_one_page_each(tmp_path: Path, n: int) -> None:
     for original, restored in zip(images, back, strict=True):
         assert restored.dtype == np.float32
         assert restored.shape == (16, 16, 3)
-        assert np.abs(restored - original).max() < 1.0  # truncated, not rounded
+        assert np.abs(restored - original).max() <= 0.5  # rounded, not truncated
     with Image.open(path) as im:
         assert im.mode == "RGB"
+
+
+def test_rgb_is_rounded_to_the_nearest_level() -> None:
+    """127.6 is stored as 128, not 127, and out-of-range values are clipped."""
+    rgb = np.array([[[127.6, 0.4, 254.5], [-3.0, 300.0, 1.5]]], np.float32)
+
+    assert quantize_rgb(rgb).dtype == np.uint8
+    assert quantize_rgb(rgb).tolist() == [[[128, 0, 254], [0, 255, 2]]]
+
+
+def test_all_in_focus_png_matches_the_layers_color_byte_for_byte(
+    tmp_path: Path,
+) -> None:
+    """An opaque pixel reads the same in the frame and in its object's page."""
+    rgb = np.random.default_rng(0).uniform(0, 255, (8, 8, 3)).astype(np.float32)
+    png = tmp_path / "01.png"
+    tif = tmp_path / "01.tif"
+
+    _write_rgb_png(png, rgb)
+    write_rgb_tiff(tif, [rgb])
+
+    with Image.open(png) as im:
+        frame = np.asarray(im)
+    assert np.array_equal(frame, read_rgb_tiff(tif)[0].astype(np.uint8))
+    assert np.abs(frame - rgb).max() <= 0.5
 
 
 @pytest.mark.parametrize("n", [1, 3, 4, 5])

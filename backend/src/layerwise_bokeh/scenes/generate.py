@@ -53,6 +53,7 @@ from layerwise_bokeh.core._split import SPLITS, TRAIN
 from layerwise_bokeh.core._streams import (
     BOKEH_STRENGTH,
     quantize_alpha,
+    quantize_rgb,
     staged_stream,
     write_alpha_tiff,
     write_bokeh,
@@ -144,7 +145,7 @@ def _save_frame(
 
 
 def _write_rgb_png(path: Path, rgb: np.ndarray) -> None:
-    Image.fromarray(np.clip(rgb, 0, 255).astype(np.uint8), "RGB").save(
+    Image.fromarray(quantize_rgb(rgb), "RGB").save(
         path,
         compress_level=6,
     )
