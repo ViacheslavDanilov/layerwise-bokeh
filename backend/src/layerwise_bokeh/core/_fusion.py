@@ -10,6 +10,16 @@ _P_LO = 1.0
 _P_HI = 99.0
 
 
+def _unit_position(disp: np.ndarray, p_lo: float, p_hi: float) -> np.ndarray:
+    """Where each value sits in ``[p_lo, p_hi]``, as a float64 in ``[0, 1]``.
+
+    float64, because the range is a Python float and float32 arithmetic would round its
+    ends: a range a few float32 steps wide could then put a value outside ``[0, 1]``.
+    """
+    unit = (np.asarray(disp, dtype=np.float64) - p_lo) / (p_hi - p_lo)
+    return np.clip(unit, 0.0, 1.0)
+
+
 def source_range(
     disp: np.ndarray, alpha: np.ndarray | None = None
 ) -> tuple[float, float]:
@@ -54,8 +64,7 @@ def place_in_band(
         out[mask] = band_mid
         return out
 
-    clipped = np.clip(disp, p_lo, p_hi)
-    scaled = (clipped - p_lo) / src_extent
+    scaled = _unit_position(disp, p_lo, p_hi)
     rescaled = band_lo + scaled * band_size
     out[mask] = rescaled[mask]
     return out
@@ -72,8 +81,7 @@ def bg_normalize(
     if src_extent <= 1e-8:
         return np.full_like(disp, bg_band_top / 2.0, dtype=np.float32)
 
-    clipped = np.clip(disp, p_lo, p_hi)
-    scaled = (clipped - p_lo) / src_extent
+    scaled = _unit_position(disp, p_lo, p_hi)
     return (scaled * bg_band_top).astype(np.float32)
 
 

@@ -58,6 +58,19 @@ def test_source_range_counts_only_the_pixels_the_alpha_covers() -> None:
     assert source_range(disp, np.zeros_like(alpha)) == (0.0, 0.0)
 
 
+def test_a_range_a_few_float32_steps_wide_stays_inside_the_band() -> None:
+    disp = np.full((10, 10), 0.8, dtype=np.float32)
+    disp[9, 9] = np.float32(0.8 + 51 * 2**-24)
+    src = source_range(disp)
+    alpha = np.ones_like(disp)
+
+    placed = place_in_band(disp, alpha, 0.30, 0.40, src)
+    background = bg_normalize(disp, src, bg_band_top=0.05)
+
+    assert placed.max() <= 0.40 + 1e-6
+    assert background.max() <= 0.05 + 1e-6
+
+
 def test_assign_depth_slots_are_disjoint_and_ordered() -> None:
     slots = assign_depth_slots(n_objects=3, bg_band_top=0.05, gap=0.02)
     assert len(slots) == 3
